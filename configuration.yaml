@@ -195,7 +195,6 @@ sensor:
       - exchangerate
       - trade_volume_btc
 
-
   ###### Sensor for vacuum cleaner
   - platform: template
     sensors:
