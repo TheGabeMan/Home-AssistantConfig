@@ -155,12 +155,14 @@ sensor:
     value_template: '​{{ value_json.tag_name }}​'
     scan_interval: 3600
 
+
 ## Om de github versie te vergelijken met de "running" versie van s0tool
   - platform: template
     sensors:
       s0tool_gelijk_github:
         friendly_name: "s0Tool versie gelijk github versie"
-        value_template: "{{ is_state( states('sensor.s0tool_versie_github'), states('sensor.s0tool_versie') ) }}"
+        value_template: "{{ states('sensor.s0tool_versie_github') | replace(states('sensor.s0tool_versie_github')[0:1],'') == states('sensor.s0tool_versie') }}"
+        
 
 
   #####################################################
