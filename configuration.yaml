@@ -154,7 +154,8 @@ sensor:
     name: s0tool_versie_github
     value_template: '​{{ value_json.tag_name }}​'
     scan_interval: 3600
-    
+
+## Om de github versie te vergelijken met de "running" versie
   - platform: template
     sensors:
       s0tool_gelijk_github:
