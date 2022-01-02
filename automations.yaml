@@ -1132,3 +1132,21 @@
         tts: 0
         priority: high
   mode: single
+- id: '1641128829998'
+  alias: AUT047 Warm water gevraagd
+  description: Notificatie wanneer er warm water gevraagd wordt
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.auxiliary_dhw_state
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 3
+      seconds: 0
+  condition: []
+  action:
+  - service: notify.telegram
+    data:
+      message: Wordt er gedouched?
+  mode: single
