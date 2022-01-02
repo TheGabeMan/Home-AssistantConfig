@@ -1,0 +1,256 @@
+scr001_flashlightzolderbas:
+  alias: SCR001_FlashLightZolderBas
+  sequence:
+  - repeat:
+      count: '8'
+      sequence:
+      - delay: '0.6'
+      - service: light.toggle
+        data: {}
+        target:
+          device_id:
+          - 76b327b9329cc08343049931bb61b716
+          - 38fbf0caec931547b7491e450a4046d2
+      - type: toggle
+        device_id: 3b5ccf9a9f01cd0429958a4d12623ea1
+        entity_id: switch.tz3000_g5xawfcq_ts0121_b3b93afe_on_off
+        domain: switch
+  mode: restart
+scr002_spotify_my_top_songs_2019:
+  alias: SCR002 Spotify My Top Songs 2019
+  sequence:
+  - service: media_player.play_media
+    data:
+      media_content_id: spotify:playlist:37i9dQZF1DZ06evO0DW7KX
+      media_content_type: playlist
+    entity_id: media_player.spotify_gabrie_van_zanten
+  mode: single
+scr004_flashlightbureau:
+  alias: SCR004_FlashLightBureau
+  sequence:
+  - service: light.toggle
+    data: {}
+    target:
+      device_id:
+      - 44b1d58487b404c5363bf0acf7d932c8
+  - repeat:
+      count: '3'
+      sequence:
+      - delay: '0.4'
+      - service: light.toggle
+        data: {}
+        target:
+          device_id:
+          - 44b1d58487b404c5363bf0acf7d932c8
+  mode: restart
+rolgordijnen_omlaag:
+  alias: SCR005 Gordijnen dicht
+  sequence:
+  - device_id: 2676c14df386a6dfbc95c12a49ba136e
+    domain: cover
+    entity_id: cover.rollerblind_0003
+    type: set_position
+    position: 2
+  - device_id: e7680b4e4246c3ff3c6e254e1b9ecd9d
+    domain: cover
+    entity_id: cover.rollerblind_0004
+    type: set_position
+    position: 2
+  mode: single
+  icon: hass:blinds
+scr006_gordijnen_overdag:
+  alias: SCR006 Gordijnen overdag
+  sequence:
+  - device_id: 2676c14df386a6dfbc95c12a49ba136e
+    domain: cover
+    entity_id: cover.rollerblind_0003
+    type: set_position
+    position: 35
+  - device_id: e7680b4e4246c3ff3c6e254e1b9ecd9d
+    domain: cover
+    entity_id: cover.rollerblind_0004
+    type: set_position
+    position: 35
+  mode: single
+  icon: hass:blinds
+scr007_gordijnen_veel_licht:
+  alias: SCR007 Gordijnen veel licht
+  sequence:
+  - device_id: 2676c14df386a6dfbc95c12a49ba136e
+    domain: cover
+    entity_id: cover.rollerblind_0003
+    type: set_position
+    position: 90
+  - device_id: e7680b4e4246c3ff3c6e254e1b9ecd9d
+    domain: cover
+    entity_id: cover.rollerblind_0004
+    type: set_position
+    position: 90
+  mode: single
+  icon: hass:blinds
+scr008_badkamer_fellicht:
+  alias: SCR008 Badkamer fellicht
+  sequence:
+  - type: turn_on
+    device_id: 015ec03b60ee8ce94100b348b3984d9b
+    entity_id: light.badkamerlamp
+    domain: light
+    brightness_pct: 90
+  mode: single
+scr009_badkamer_zachtlicht:
+  alias: SCR009 Badkamer zachtlicht
+  sequence:
+  - type: turn_on
+    device_id: 015ec03b60ee8ce94100b348b3984d9b
+    entity_id: light.badkamerlamp
+    domain: light
+    brightness_pct: 26
+  mode: single
+sc010_woonkamer_licht_uit:
+  alias: SCR010 Woonkamer licht uit
+  sequence:
+  - service: light.toggle
+    target:
+      entity_id: light.woonkamertotaal
+  mode: single
+scr011_garagepoort_open_dicht:
+  alias: SCR011 Garagepoort open / dicht
+  sequence:
+  - type: toggle
+    device_id: 1e270732dce9e0e2f4ea45c1c2ae021d
+    entity_id: switch.relais002_relaisstate
+    domain: switch
+  mode: single
+scr012_slaapkamer_gabrie:
+  sequence:
+  - type: toggle
+    device_id: b7125a2c255c7161289d3c3b3d86cedc
+    entity_id: light.slaapkamergabrie
+    domain: light
+  mode: single
+  alias: SCR012 Slaapkamer Gabrie
+scr013_ik_ga_naar_bed:
+  sequence:
+  - service: light.turn_off
+    target:
+      area_id: 23e6c7fb9f204e3eb18fe60dcaf3c181
+  - service: climate.set_preset_mode
+    target:
+      device_id: 3667d1f5372390ea6b5a97ce1c603c8c
+    data:
+      preset_mode: asleep
+  - service: light.turn_on
+    target:
+      device_id: b7125a2c255c7161289d3c3b3d86cedc
+    data:
+      transition: 60
+  - delay:
+      hours: 0
+      minutes: 3
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    target:
+      device_id: b7125a2c255c7161289d3c3b3d86cedc
+  mode: single
+  alias: SCR013 Ik ga naar bed
+  icon: mdi:sleep
+scr014_bas_vertraagd_led_slang_uit:
+  alias: SCR014 Bas vertraagd LED Slang uit
+  sequence:
+  - type: turn_on
+    device_id: 3b5ccf9a9f01cd0429958a4d12623ea1
+    entity_id: switch.tz3000_g5xawfcq_ts0121_b3b93afe_on_off
+    domain: switch
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 30
+      milliseconds: 0
+  - type: turn_off
+    device_id: 3b5ccf9a9f01cd0429958a4d12623ea1
+    entity_id: switch.tz3000_g5xawfcq_ts0121_b3b93afe_on_off
+    domain: switch
+  - service: light.turn_off
+    target:
+      device_id:
+      - 76b327b9329cc08343049931bb61b716
+      - 38fbf0caec931547b7491e450a4046d2
+  mode: single
+scr015_bank_led_instellen:
+  alias: SCR015 Bank LED instellen
+  sequence:
+  - service: light.turn_on
+    target:
+      device_id:
+      - ad71aedd70d6e6cb098662f2c4045ceb
+    data:
+      rgb_color:
+      - 255
+      - 200
+      - 38
+      brightness: 97
+  mode: single
+  icon: mdi:candle
+scr016_raam_lamp_fel:
+  alias: SCR016 Raam Lamp fel
+  sequence:
+  - service: light.turn_on
+    target:
+      device_id:
+      - 129ec6eb861678dbd065daeb705dba51
+    data:
+      brightness: 255
+      color_temp: 153
+  mode: single
+  icon: mdi:spotlight
+scr017_raam_lamp_sfeer:
+  alias: SCR017 Raam Lamp sfeer
+  sequence:
+  - service: light.turn_on
+    target:
+      device_id:
+      - 129ec6eb861678dbd065daeb705dba51
+    data:
+      brightness: 1
+      color_temp: 500
+  mode: single
+  icon: mdi:spotlight
+scr018_achterkamer_spots:
+  alias: SCR018 Achterkamer spots
+  sequence:
+  - service: light.turn_on
+    target:
+      device_id:
+      - 54382fc554a265abdd703d4d38dd6bd8
+      - 836fa2cb9a00c58f3881acc332cf5d3a
+      - dfd58c0a195722d15246db03cc7e5e33
+    data:
+      brightness: 3
+      color_temp: 462
+  mode: single
+  icon: mdi:spotlight-beam
+scr019_kalender_vissen_gevoerd:
+  alias: SCR019 kalender vissen voeren (now)
+  sequence:
+  - service: google.add_event
+    data:
+      calendar_id: qvd0rfdl2cvtponrubvnfpbb8g@group.calendar.google.com
+      summary: Vissen Voeren
+      description: Tijd om de vissen te voeren.
+      start_date_time: '{{ now() + timedelta(minutes=3) }}'
+      end_date_time: '{{ now() + timedelta(minutes=5) }}'
+  mode: single
+  icon: mdi:fishbowl
+scr020_kalender_vissen_voeren_14dgn:
+  alias: SCR020 kalender vissen voeren 14dgn
+  sequence:
+  - service: google.add_event
+    data:
+      calendar_id: qvd0rfdl2cvtponrubvnfpbb8g@group.calendar.google.com
+      summary: Vissen Voeren
+      description: Tijd om de vissen te voeren.
+      start_date_time: '{{ now() + timedelta(days=14)}}'
+      end_date_time: '{{ now() + timedelta(days=14) }}'
+  mode: single
+  icon: mdi:fishbowl

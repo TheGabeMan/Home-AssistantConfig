@@ -1,0 +1,71 @@
+
+- cal_id: thegabeman@gmail.com
+  entities:
+  - device_id: gabrie_van_zanten_werk
+    ignore_availability: true
+    name: Gabrie van Zanten (Werk)
+    track: false
+
+- cal_id: t4cq7ktd4elos4mebda0r5q1ac@group.calendar.google.com
+  entities:
+  - device_id: late_diensten
+    ignore_availability: true
+    name: Late diensten
+    track: false
+
+- cal_id: 8tbjd605c1oob8jlkkvvlh68io@group.calendar.google.com
+  entities:
+  - device_id: nachtdiensten
+    ignore_availability: true
+    name: Nachtdiensten
+    track: false
+
+- cal_id: vraf5ou8ob65b88527uhh4uu0s@group.calendar.google.com
+  entities:
+  - device_id: vroege_diensten
+    ignore_availability: true
+    name: Vroege diensten
+    track: false
+
+- cal_id: lln6to31c5uimm2jku2017ki24@group.calendar.google.com
+  entities:
+  - device_id: sport_events
+    ignore_availability: true
+    name: Sport Events
+    track: false
+
+- cal_id: r70picjtfpps730sklpl6ur5f0@group.calendar.google.com
+  entities:
+  - device_id: dames
+    ignore_availability: true
+    name: 'Dames '
+    track: false
+
+- cal_id: ev1s6bvp7m8e90k2rdj7ppb1dc@group.calendar.google.com
+  entities:
+  - device_id: gravel_events
+    ignore_availability: true
+    name: 'Gravel Events '
+    track: false
+
+- cal_id: addressbook#contacts@group.v.calendar.google.com
+  entities:
+  - device_id: birthdays
+    ignore_availability: true
+    name: Birthdays
+    track: false
+
+- cal_id: qvd0rfdl2cvtponrubvnfpbb8g@group.calendar.google.com
+  entities:
+  - device_id: gab_bas_daan
+    ignore_availability: true
+    name: Gab-Bas-Daan
+    track: true
+    search: "Vissen Voeren"
+
+- cal_id: 271q0upfs3pogocbdh24fvski99ajd6l@import.calendar.google.com
+  entities:
+  - device_id: 2021_fia_formula_one_world_championship_race_calendar
+    ignore_availability: true
+    name: 2021 FIA Formula One World Championship Race Calendar
+    track: false

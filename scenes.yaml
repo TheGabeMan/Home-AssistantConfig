@@ -1,0 +1,255 @@
+- id: '1611485358238'
+  name: Lezen op de bank
+  entities:
+    light.085484012462ab4be30b:
+      min_mireds: 153
+      max_mireds: 370
+      brightness: 255
+      color_temp: 56
+      friendly_name: BankLamp
+      supported_features: 3
+      state: 'on'
+  icon: mdi:book-open
+- id: '1618267847533'
+  name: TV Kijken
+  entities:
+    light.computerlamp:
+      min_mireds: 153
+      max_mireds: 370
+      supported_color_modes:
+      - color_temp
+      friendly_name: Computerlamp
+      supported_features: 3
+      state: 'off'
+    light.tafellamp:
+      min_mireds: 153
+      max_mireds: 370
+      supported_color_modes:
+      - color_temp
+      friendly_name: Tafellamp
+      supported_features: 3
+      state: 'off'
+    light.muurlamp:
+      min_mireds: 153
+      max_mireds: 370
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: hs
+      brightness: 3
+      hs_color:
+      - 0
+      - 0
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      xy_color:
+      - 0.323
+      - 0.329
+      color_temp: 320
+      friendly_name: Muurlamp
+      supported_features: 19
+      state: 'on'
+    light.boekenlamp:
+      min_mireds: 153
+      max_mireds: 370
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: hs
+      brightness: 3
+      hs_color:
+      - 0
+      - 0
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      xy_color:
+      - 0.323
+      - 0.329
+      color_temp: 320
+      friendly_name: Boekenlamp
+      supported_features: 19
+      state: 'on'
+    light.tvlamp:
+      min_mireds: 153
+      max_mireds: 370
+      supported_color_modes:
+      - color_temp
+      - hs
+      color_mode: hs
+      brightness: 1
+      hs_color:
+      - 30
+      - 85
+      rgb_color:
+      - 255
+      - 146
+      - 38
+      xy_color:
+      - 0.579
+      - 0.388
+      color_temp: 320
+      friendly_name: TV lamp
+      supported_features: 19
+      state: 'on'
+    light.raamlamp:
+      min_mireds: 153
+      max_mireds: 370
+      supported_color_modes:
+      - color_temp
+      color_mode: color_temp
+      brightness: 3
+      color_temp: 320
+      friendly_name: Raamlamp
+      supported_features: 3
+      state: 'on'
+    cover.rollerblind_links:
+      current_position: 0
+      friendly_name: RollerBlind-Links
+      supported_features: 15
+      device_class: shade
+      state: closed
+    cover.rollerblind_rechts:
+      current_position: 0
+      friendly_name: RollerBlind-Rechts
+      supported_features: 15
+      device_class: shade
+      state: closed
+  icon: hass:netflix
+- id: '1635863797530'
+  name: Set Film Lights
+  entities:
+    light.computerlamp:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      - onoff
+      friendly_name: Computerlamp
+      supported_features: 0
+      state: 'off'
+    light.boekenlamp:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      - onoff
+      color_mode: color_temp
+      brightness: 3
+      color_temp: 462
+      hs_color:
+      - 29.929
+      - 86.298
+      rgb_color:
+      - 255
+      - 144
+      - 34
+      xy_color:
+      - 0.583
+      - 0.387
+      friendly_name: Boekenlamp
+      supported_features: 0
+      state: 'on'
+    light.tafellamp:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      - onoff
+      friendly_name: Tafellamp
+      icon: mdi:spotlight-beam
+      supported_features: 0
+      state: 'off'
+    light.muurlamp:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      - onoff
+      color_mode: color_temp
+      brightness: 3
+      color_temp: 462
+      hs_color:
+      - 29.929
+      - 86.298
+      rgb_color:
+      - 255
+      - 144
+      - 34
+      xy_color:
+      - 0.583
+      - 0.387
+      friendly_name: Muurlamp
+      supported_features: 0
+      state: 'on'
+    light.tv_lamp:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      - onoff
+      friendly_name: TV lamp
+      icon: mdi:ceiling-light
+      supported_features: 0
+      state: 'off'
+    light.raamlamp:
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - onoff
+      color_mode: color_temp
+      brightness: 3
+      color_temp: 428
+      hs_color:
+      - 29.343
+      - 78.812
+      rgb_color:
+      - 255
+      - 152
+      - 54
+      xy_color:
+      - 0.564
+      - 0.389
+      friendly_name: Raamlamp
+      supported_features: 0
+      state: 'on'
+    cover.rollerblind_0001:
+      current_position: 0
+      friendly_name: RollerBlind-0001
+      supported_features: 15
+      device_class: shade
+      state: closed
+    cover.rollerblind_0002:
+      current_position: 0
+      friendly_name: RollerBlind-0002
+      supported_features: 15
+      device_class: shade
+      state: closed
+    media_player.woonkamer_thuis:
+      volume_level: 1
+      is_volume_muted: false
+      media_content_id: https://www.home-assistant.io/images/cast/splash.png
+      media_position: 0
+      media_position_updated_at: '2021-11-02T14:36:33.451539+00:00'
+      app_id: CC1AD845
+      app_name: Default Media Receiver
+      entity_picture_local:
+      friendly_name: Google TV
+      supported_features: 152451
+      state: idle
+  icon: mdi:video-vintage
