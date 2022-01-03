@@ -1150,3 +1150,70 @@
     data:
       message: Wordt er gedouched?
   mode: single
+- id: '1641166600532'
+  alias: AUT048 Ganglamp boven
+  description: Ganglamp boven
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.lumi_lumi_sensor_motion_51663602_ias_zone
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.slaaptijd
+        state: 'on'
+      sequence:
+      - service: light.turn_on
+        target:
+          device_id: 015ec03b60ee8ce94100b348b3984d9b
+        data:
+          brightness: 1
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.ochtend
+        state: 'on'
+      sequence:
+      - service: light.turn_on
+        target:
+          device_id: bbe5047608db678cc05d6aee4f538302
+        data:
+          brightness: 1
+    default:
+    - service: light.turn_on
+      target:
+        device_id: bbe5047608db678cc05d6aee4f538302
+      data:
+        brightness: 255
+  - wait_for_trigger:
+    - platform: state
+      entity_id: binary_sensor.lumi_lumi_sensor_motion_51663602_ias_zone
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 1
+        seconds: 0
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.lumi_motionsensor_badkamer
+        state: 'off'
+      sequence:
+      - service: light.turn_off
+        target:
+          device_id:
+          - 015ec03b60ee8ce94100b348b3984d9b
+          - bbe5047608db678cc05d6aee4f538302
+    - conditions:
+      - condition: state
+        entity_id: binary_sensor.lumi_motionsensor_badkamer
+        state: 'on'
+      sequence:
+      - service: light.turn_off
+        target:
+          device_id: bbe5047608db678cc05d6aee4f538302
+    default: []
+  mode: restart
+  max_exceeded: silent
