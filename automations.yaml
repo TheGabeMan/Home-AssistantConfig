@@ -70,6 +70,10 @@
       data:
         tts: 0
         priority: high
+  - service: notify.gabriechrome
+    data:
+      message: De wasmachine is klaar
+      title: Wasmachine is klaar
   mode: single
 - id: '1606679482142'
   alias: AUT004 Deurbel
@@ -80,6 +84,16 @@
     to: 'on'
   condition: []
   action:
+  - service: scene.create
+    data:
+      scene_id: voordeurlamp_bewaren
+      snapshot_entities: light.voordeurlamp
+  - service: light.turn_on
+    target:
+      entity_id: light.voordeurlamp
+    data:
+      brightness: 255
+      color_temp: 153
   - service: notify.telegram
     data:
       message: Er is iemand aan de voordeur!
@@ -106,6 +120,14 @@
       data:
         tts: 0
         priority: high
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - service: scene.turn_on
+    target:
+      entity_id: scene.voordeurlamp_bewaren
   mode: single
 - id: '1607202607844'
   alias: AUT005 NFC opent Garage
@@ -168,67 +190,6 @@
         tts: 0
         priority: high
   mode: single
-- id: '1607377869717'
-  alias: AUT007 Anna - HOME na 7u
-  description: Om 7u verwarming naar HOME weekdag
-  trigger:
-  - platform: time
-    at: 07:00:00
-  condition:
-  - condition: and
-    conditions:
-    - condition: time
-      weekday:
-      - mon
-      - tue
-      - wed
-      - thu
-      - fri
-    - condition: state
-      entity_id: device_tracker.oneplusgabrie
-      state: home
-  action:
-  - service: climate.set_preset_mode
-    data:
-      preset_mode: home
-    entity_id: climate.anna
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      title: Thermostaat AUT007
-      message: Thermo gaat naar "home" stand.
-      data:
-        tts: 0
-        priority: high
-  mode: single
-- id: '1607379086845'
-  alias: AUT008 Anna - HOME na 9u (weekend)
-  description: Om 9u verwarming naar HOME weekend
-  trigger:
-  - platform: time
-    at: 09:00:00
-  condition:
-  - condition: and
-    conditions:
-    - condition: time
-      weekday:
-      - sat
-      - sun
-    - condition: state
-      entity_id: device_tracker.oneplusgabrie
-      state: home
-  action:
-  - service: climate.set_preset_mode
-    data:
-      preset_mode: home
-    entity_id: climate.anna
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      title: Thermostaat AUT008
-      message: Thermo gaat naar homestand (weekend).
-      data:
-        tts: 0
-        priority: high
-  mode: single
 - id: '1608073935353'
   alias: AUT009 - Stofzuiger - Stofzuigen
   description: Weekschema voor stofzuiger start
@@ -260,16 +221,21 @@
     entity_id: input_boolean.baswekker_enabled
     state: 'on'
   action:
-  - type: turn_on
-    device_id: 79c35614a886a989aa300b8259bc744e
-    entity_id: light.05047501c82b9640d53f
-    domain: light
-    brightness_pct: 100
   - service: tts.google_translate_say
     data:
-      entity_id: media_player.zolder_bas
+      entity_id: media_player.googlehome5415
       message: Goedemorgen Bas, tijd om op te staan.
       language: nl
+  - service: media_player.play_media
+    data:
+      media_content_type: audio/mp4
+      media_content_id: media-source://media_source/local/goodmorning.mp3
+    target:
+      device_id: df277b4f1ff1e4ab939aac6342f175ee
+  - service: light.turn_on
+    data: {}
+    target:
+      area_id: 37d65e06028c11ebb6270dd149645529
   mode: single
 - id: '1608572982289'
   alias: AUT011 Uitzetten electrische deken
@@ -642,11 +608,15 @@
   action:
   - service: notify.mobile_app_oneplus7progabrie
     data:
-      message: De koffie springt uit (Stroom)
+      message: De koffie springt uit
   - service: notify.lgtv
     data:
-      message: De koffie springt uit (Stroom)
+      message: De koffie springt uit
       title: Koffie
+  - service: notify.gabriechrome
+    data:
+      message: De koffie springt uit
+      title: De koffie springt uit
   mode: single
 - id: '1633772441628'
   alias: AUT038-1 Badkamer lamp hard aan
@@ -721,121 +691,6 @@
     target:
       entity_id:
       - light.badkamerlamp
-  mode: restart
-  max_exceeded: silent
-- id: '1634021390474'
-  alias: AUT016 Koffie timer starten
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.coffee_machine
-    from: 'off'
-    to: 'on'
-  condition:
-  - condition: not
-    conditions:
-    - condition: state
-      entity_id: timer.koffietimer
-      state: active
-  action:
-  - service: timer.start
-    data:
-      duration: 00:45:00
-    target:
-      entity_id: timer.koffietimer
-  mode: single
-- id: '1634021819380'
-  alias: AUT017 Koffie timer klaar
-  description: ''
-  trigger:
-  - platform: event
-    event_type: timer.finished
-    event_data:
-      entity_id: timer.koffietimer
-  condition: []
-  action:
-  - service: notify.telegram
-    data:
-      message: Koffie timer klaar 017
-  mode: single
-- id: '1636700089115'
-  alias: AUT040-0 Ganglamp boven zacht
-  description: Ganglamp boven zacht bij Nacht
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.lumi_lumi_sensor_motion_51663602_ias_zone
-    from: 'off'
-    to: 'on'
-  condition:
-  - condition: state
-    entity_id: binary_sensor.nacht
-    state: 'on'
-  - condition: state
-    entity_id: binary_sensor.daanslaapt
-    state: 'off'
-  action:
-  - service: light.turn_on
-    target:
-      entity_id:
-      - light.ganglampboven
-    data:
-      brightness_pct: 1
-      color_temp: 500
-  - wait_for_trigger:
-    - platform: state
-      entity_id: binary_sensor.lumi_lumi_sensor_motion_51663602_ias_zone
-      to: 'off'
-      for:
-        hours: 0
-        minutes: 1
-        seconds: 0
-        milliseconds: 0
-  - service: light.turn_off
-    target:
-      entity_id:
-      - light.ganglampboven
-  mode: restart
-  max_exceeded: silent
-- id: '1636700207306'
-  alias: 'AUT040-1 Ganglamp boven hard '
-  description: Ganglamp boven hard bij dag
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.lumi_lumi_sensor_motion_51663602_ias_zone
-    from: 'off'
-    to: 'on'
-  condition:
-  - condition: state
-    entity_id: binary_sensor.daanslaapt
-    state: 'off'
-  - condition: or
-    conditions:
-    - condition: state
-      entity_id: binary_sensor.ochtend
-      state: 'on'
-    - condition: state
-      entity_id: binary_sensor.avond
-      state: 'on'
-  action:
-  - service: light.turn_on
-    target:
-      entity_id:
-      - light.ganglampboven
-    data:
-      brightness_pct: 60
-  - wait_for_trigger:
-    - platform: state
-      entity_id: binary_sensor.lumi_lumi_sensor_motion_51663602_ias_zone
-      to: 'off'
-      for:
-        hours: 0
-        minutes: 1
-        seconds: 0
-        milliseconds: 0
-  - service: light.turn_off
-    target:
-      entity_id:
-      - light.ganglampboven
   mode: restart
   max_exceeded: silent
 - id: '1636700304483'
@@ -1072,22 +927,49 @@
   description: ''
   trigger:
   - platform: time
-    at: 07:30:00
+    at: 07:00:00
   condition: []
   action:
-  - service: climate.set_preset_mode
-    target:
-      entity_id: climate.anna
-    data:
-      preset_mode: '{{ "home" if is_state(''device_tracker.oneplusgabrie'', ''home'')
-        else "away" }}'
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      title: Thermostaat AUT045
-      message: Thermo gaat naar "home" of "away" stand.
-      data:
-        tts: 0
-        priority: high
+  - choose:
+    - alias: Ga naar home als Gabrie thuis is
+      conditions:
+      - condition: state
+        entity_id: device_tracker.oneplusgabrie
+        state: home
+      sequence:
+      - service: climate.set_preset_mode
+        target:
+          device_id: 3667d1f5372390ea6b5a97ce1c603c8c
+        data:
+          preset_mode: home
+      - service: notify.mobile_app_oneplus7progabrie
+        data:
+          title: Thermostaat AUT045
+          message: Thermo gaat naar "home" stand.
+          data:
+            tts: 0
+            priority: high
+    - alias: Ga naar away als Gabrie niet thuis is
+      conditions:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: device_tracker.oneplusgabrie
+          state: home
+      sequence:
+      - service: climate.set_preset_mode
+        target:
+          device_id: 3667d1f5372390ea6b5a97ce1c603c8c
+        data:
+          preset_mode: away
+      - service: notify.mobile_app_oneplus7progabrie
+        data:
+          title: Thermostaat AUT045
+          message: Thermo gaat naar "away" stand.
+          data:
+            tts: 0
+            priority: high
+    default: []
   mode: single
 - id: '1639991884878'
   alias: AUT000 Tuya devices reload
@@ -1119,7 +1001,12 @@
   - platform: state
     entity_id: sensor.climacell_tree_pollen_index
     from: none
-  condition: []
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: sensor.climacell_tree_pollen_index
+      state: unavailable
   action:
   - service: notify.telegram
     data:
@@ -1217,3 +1104,69 @@
     default: []
   mode: restart
   max_exceeded: silent
+- id: '1641853856806'
+  alias: AUT049-aan Voordeurlamp
+  description: ''
+  trigger:
+  - platform: time
+    at: '18:00:00'
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      device_id: 97497fba42099be65878acee4699431a
+    data:
+      color_temp: 500
+      brightness: 15
+  mode: single
+- id: '1641853907085'
+  alias: AUT049-uit Voordeurlamp
+  description: ''
+  trigger:
+  - platform: time
+    at: 01:00:00
+  condition: []
+  action:
+  - service: light.turn_off
+    target:
+      device_id: 97497fba42099be65878acee4699431a
+  mode: single
+- id: '1642262339885'
+  alias: AUT008 Airco Bas uit 's nachts
+  description: ''
+  trigger:
+  - platform: time
+    at: 02:00:00
+  condition:
+  - condition: or
+    conditions:
+    - condition: device
+      device_id: a5cbe79e266846ddf54c5fb4a2b7157c
+      domain: climate
+      entity_id: climate.airco_bas
+      type: is_hvac_mode
+      hvac_mode: heat
+    - condition: device
+      device_id: a5cbe79e266846ddf54c5fb4a2b7157c
+      domain: climate
+      entity_id: climate.airco_bas
+      type: is_hvac_mode
+      hvac_mode: cool
+  action:
+  - device_id: a5cbe79e266846ddf54c5fb4a2b7157c
+    domain: climate
+    entity_id: climate.airco_bas
+    type: set_hvac_mode
+    hvac_mode: 'off'
+  - service: notify.mobile_app_ac2003
+    data:
+      title: Airco
+      message: Airco gaat uit
+      data:
+        tts: 0
+        priority: high
+  - service: notify.mobile_app_oneplus7progabrie
+    data:
+      message: Airco Bas uit
+      title: Airco Bas uit
+  mode: single

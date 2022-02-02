@@ -5,7 +5,6 @@ homeassistant:
   customize: !include customize.yaml
   latitude: !secret latitude
   longitude: !secret longitude
-  
 
 frontend:
   themes: !include_dir_merge_named themes/
@@ -15,6 +14,9 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 utility_meter: !include utility_meter.yaml
+plant: !include plant.yaml
+
+#### PLANTEN Stuk
 
 #######
 ####### Configureer logging levels
@@ -54,7 +56,7 @@ binary_sensor:
     name: ochtend
     after: "06:00"
     before: "9:00"
-    
+
   - platform: tod
     name: Overdag
     after: "9:00"
@@ -64,10 +66,6 @@ binary_sensor:
     name: Avond
     after: "15:30"
     before: "22:00"
-  
-
-
-  
 
   ## Ping section
   - platform: ping
@@ -152,17 +150,15 @@ sensor:
   - platform: rest
     resource: https://api.github.com/repos/huizebruin/s0tool/releases/latest
     name: s0tool_versie_github
-    value_template: '​{{ value_json.tag_name }}​'
+    value_template: "​{{ value_json.tag_name }}​"
     scan_interval: 3600
 
-## Om de github versie te vergelijken met de "running" versie van s0tool
+  ## Om de github versie te vergelijken met de "running" versie van s0tool
   - platform: template
     sensors:
       s0tool_gelijk_github:
         friendly_name: "s0Tool versie gelijk github versie"
         value_template: "{{ states('sensor.s0tool_versie_github') | replace(states('sensor.s0tool_versie_github')[0:1],'') == states('sensor.s0tool_versie') }}"
-        
-
 
   #####################################################
   ### Toegevoegd om Airco in Energy dashboard te krijgen
@@ -314,7 +310,6 @@ sensor:
         unit_of_measurement: "degrees"
         value_template: "{{ state_attr('climate.airco_daan', 'temperature') }}"
 
-
   - platform: systemmonitor
     resources:
       - type: disk_use_percent
@@ -339,6 +334,8 @@ sensor:
       - restafval
       - trash_type_today
       - trash_type_tomorrow
+      - kerstboom
+      - papier
     location: maastricht # (required, default = sliedrecht) name of the 'gemeente'
     postcode: 6228GG # (required, default = 3361AB)
     streetnumber: 177 # (required, default = 1)
@@ -368,22 +365,53 @@ sensor:
       sunrising:
         value_template: "{{ state_attr('sun.sun', 'rising') }}"
 
-# Example configuration.yaml entry
+  # Example configuration.yaml entry
   - platform: time_date
     display_options:
-      - 'time'
-      - 'date'
-      - 'date_time'
-      - 'date_time_utc'
-      - 'date_time_iso'
-      - 'time_date'
-      - 'time_utc'
-      - 'beat'
+      - "time"
+      - "date"
+      - "date_time"
+      - "date_time_utc"
+      - "date_time_iso"
+      - "time_date"
+      - "time_utc"
+      - "beat"
+
+  ########################################
+  ## Plant moisture sectie alarm
+  ########################################
+  - platform: template
+    sensors:
+      dracaena_marginata_alarm:
+        friendly_name: "dracaena_marginata alarm moisture (boekenkast)"
+        value_template: "{{ state_attr('plant.dracaena_marginata','moisture') | default(0) < 20  }}"
+
+  - platform: template
+    sensors:
+      anthurium_andraeanum_white_champion_alarm:
+        friendly_name: "anthurium_andraeanum_white_champion (Witte bloem)"
+        value_template: "{{ state_attr('plant.anthurium_andraeanum_white_champion','moisture') | default(0) < 20  }}"
+
+  - platform: template
+    sensors:
+      aglaonema_sp_light_star_alarm:
+        friendly_name: "plant.aglaonema_sp_light_star (Rode plant)"
+        value_template: "{{ state_attr('plant.aglaonema_sp_light_star','moisture') | default(0) < 20  }}"
+
+  ###################################
+  ## BMW Tank alarm
+  ###################################
+  - platform: template
+    sensors:
+      bmw_tanken:
+        friendly_name: "Tijd om de BMW te tanken"
+        value_template: "{{ states('sensor.218i_remaining_range_fuel') | float(0) < 75  }}"
+        icon_template: mdi:gas-station
 
 ##########
 ### Daan Slaapt
 #########
-template: 
+template:
   binary_sensor:
     - name: daanslaapt
       unique_id: daanslaapt
@@ -392,7 +420,6 @@ template:
         and is_state('device_tracker.oneplus_daan','home')
         and is_state('light.daanlamp','off') 
         }}
-
 
 #####################################################
 ### Toegevoegd voor Roborock S5 Max
@@ -406,7 +433,7 @@ camera:
     password: !secret xiaomi_cloud_password
     colors:
       color_path: [255, 255, 255]
-    draw: ['all']
+    draw: ["all"]
     map_transformation:
       scale: 1
       trim:
@@ -450,7 +477,6 @@ switch:
 ## End of SWITCH SECTION
 ########################################
 
-
 #######
 ####### InfluxDB section
 #######
@@ -488,7 +514,15 @@ notify:
   - name: Telegram
     platform: telegram
     chat_id: 17513465
-# End of telegram configuration
+  # End of telegram configuration
+
+  #### Chrome push notifications: https://www.home-assistant.io/integrations/html5
+  #### Reference email van firebase: firebase-adminsdk-ok1nu@homeass-chromenotify.iam.gserviceaccount.com
+  - platform: html5
+    name: GabrieChrome
+    vapid_pub_key: !secret vapid_pub_key
+    vapid_prv_key: !secret vapid_prv_key
+    vapid_email: !secret vapid_email
 
 #######
 ####### Spotcast
@@ -507,7 +541,6 @@ spotify:
   client_secret: !secret spotify_client_secret
 
 light:
-
   - platform: switch
     name: Kerstboom
     entity_id: switch.tz3000_g5xawfcq_ts0121_on_off
@@ -515,34 +548,20 @@ light:
   - platform: group
     name: WoonkamerTotaal
     entities:
+      - light.staanderaamlamp_level_light_color_on_off ## light.ty_raamlamp
       - light.tv_lamp ## light.ty_tvlamp
+      - light.led_bank_level_light_color_on_off ## LED strip achter de bank
       - light.computerlamp ## light.ty_computerlamp
       - light.boekenlamp ## light.ty_boekenlamp
       - light.tafellamp ## light.ty_tafellamp
       - light.muurlamp ## light.ty_muurlamp
-      - light.led_bank_level_light_color_on_off ## LED Strip achter de bank
-      - light.staanderaamlamp_level_light_color_on_off ## Staande lamp bij het raam
-
 
   - platform: group
     name: Voorkamer
     entities:
-      - light.raamlamp ## light.ty_raamlamp
+      - light.staanderaamlamp_level_light_color_on_off ## light.ty_raamlamp
       - light.tv_lamp ## light.ty_tvlamp
       - light.led_bank_level_light_color_on_off ## LED strip achter de bank
-
-  - platform: group
-    name: KamerBas
-    entities:
-      - light.led_bas_bed
-      - light.led_bas_bureau
-
-
-  - platform: group
-    name: Tuinverlichting
-    entities:
-      - light.twinkley_tuinslinger
-      - light.tuinlamp_links
 
   - platform: group
     name: Achterkamer
@@ -557,49 +576,26 @@ light:
     entities:
       - light.ganglampbeneden
       - light.ganglampboven
+      - light.voordeurlamp
 
-###############
-### Planten opvoeren met hun minimale en maximale waardes
-###############
-plant:
-  dracaena_marginata:
-    sensors:
-      moisture: sensor.esp32ble_dracaena_marginata_moisture
-      temperature: sensor.esp32ble_dracaena_marginata_temperature
-      conductivity: sensor.esp32ble_dracaena_marginata_conductivity
-      brightness: sensor.esp32ble_dracaena_marginata_illuminance
-    min_moisture: 15
-    max_moisture: 60
-    min_temperature: 10
-    max_temperature: 32
-    min_conductivity: 350
-    max_conductivity: 2000
+  - platform: group
+    name: SlaapkamerGabrie
+    entities:
+      - light.slaapkamergabrie
+      - light.plafondlamp_gabrie
 
-  aglaonema_sp_light_star:
-    sensors:
-      moisture: sensor.esp32ble_aglaonema_sp_light_star_moisture
-      temperature: sensor.esp32ble_aglaonema_sp_light_star_temperature
-      conductivity: sensor.esp32ble_aglaonema_sp_light_star_conductivity
-      brightness: sensor.esp32ble_aglaonema_sp_light_star_illuminance
-    min_moisture: 15
-    max_moisture: 60
-    min_temperature: 12
-    max_temperature: 32
-    min_conductivity: 350
-    max_conductivity: 2000
+  - platform: group
+    name: KamerBas
+    entities:
+      - light.led_bas_bed
+      - light.led_bas_bureau
 
-  anthurium_andraeanum_white_champion:
-    sensors:
-      moisture: sensor.esp32ble_anthurium_andraeanum_white_champion_moisture
-      temperature: sensor.esp32ble_anthurium_andraeanum_white_champion_temperature
-      conductivity: sensor.esp32ble_anthurium_andraeanum_white_champion_conductivity
-      brightness: sensor.esp32ble_anthurium_andraeanum_white_champion_illuminance
-    min_moisture: 15
-    max_moisture: 65
-    min_temperature: 15
-    max_temperature: 32
-    min_conductivity: 350
-    max_conductivity: 2000
+  - platform: group
+    name: Tuinverlichting
+    entities:
+      - light.twinkley_tuinslinger
+      - light.tuinlamp_links
+      - light.tuinschijnwerper
 
 #####################################
 ## Google Calendar integratie
@@ -616,4 +612,3 @@ google:
 withings:
   client_id: !secret withings_CLIENT_ID
   client_secret: !secret withings_CONSUMER_SECRET
-

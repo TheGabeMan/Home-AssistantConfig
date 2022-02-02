@@ -1,0 +1,98 @@
+###############
+### Planten opvoeren met hun minimale en maximale waardes
+###############
+
+## Planten database via https://open.plantbook.io/ui/my-plants/
+## Github link: https://github.com/Olen/homeassistant-plant
+openplantbook:
+  client_id: !secret plantbook_client_id
+  secret: !secret plantbook_secret
+
+## Volledige match
+dracaena_marginata:
+  species: dracaena marginata
+  name: Grote bij boekenkast
+  image: openplantbook
+  warn_low_brightness: false
+  sensors:
+    moisture: sensor.esp32ble_dracaena_marginata_moisture
+    temperature: sensor.esp32ble_dracaena_marginata_temperature
+    conductivity: sensor.esp32ble_dracaena_marginata_conductivity
+    brightness: sensor.esp32ble_dracaena_marginata_illuminance
+
+## Volledige match
+aglaonema_sp_light_star:
+  species: aglaonema sp
+  name: Rode Light Star
+  image: openplantbook
+  warn_low_brightness: false
+  sensors:
+    moisture: sensor.esp32ble_aglaonema_sp_light_star_moisture
+    temperature: sensor.esp32ble_aglaonema_sp_light_star_temperature
+    conductivity: sensor.esp32ble_aglaonema_sp_light_star_conductivity
+    brightness: sensor.esp32ble_aglaonema_sp_light_star_illuminance
+
+## Volledige match
+anthurium_andraeanum_white_champion:
+  species: anthurium andraeanum
+  name: 'White champion'
+  image: openplantbook
+  warn_low_brightness: false
+  sensors:
+    moisture: sensor.esp32ble_anthurium_andraeanum_white_champion_moisture
+    temperature: sensor.esp32ble_anthurium_andraeanum_white_champion_temperature
+    conductivity: sensor.esp32ble_anthurium_andraeanum_white_champion_conductivity
+    brightness: sensor.esp32ble_anthurium_andraeanum_white_champion_illuminance
+
+## Onderstaande reeks is nog zonder sensor
+
+
+## Aangepaste naam gebruikt, maar wel redelijk goede match omdat het de "vader" is
+philodendron_hybrida:
+  species: philodendron 'con go'
+  name: Philodendron 'White Measure'
+  image: openplantbook
+  warn_low_brightness: false
+  sensors:
+    moisture: sensor.esp32ble_anthurium_andraeanum_white_champion_moisture
+    temperature: sensor.esp32ble_anthurium_andraeanum_white_champion_temperature
+    conductivity: sensor.esp32ble_anthurium_andraeanum_white_champion_conductivity
+    brightness: sensor.esp32ble_anthurium_andraeanum_white_champion_illuminance
+
+## Volledige match
+epiphyllum_anguliger:
+  species: epiphyllum anguliger
+  name: Naast TV
+  image: openplantbook
+  warn_low_brightness: false
+  sensors:
+    moisture: sensor.esp32ble_anthurium_andraeanum_white_champion_moisture
+    temperature: sensor.esp32ble_anthurium_andraeanum_white_champion_temperature
+    conductivity: sensor.esp32ble_anthurium_andraeanum_white_champion_conductivity
+    brightness: sensor.esp32ble_anthurium_andraeanum_white_champion_illuminance
+
+## Geen passende match
+## Dichtsbijzijnde is: guzmania lingulata 'scarlet star'
+bromelia_botanica:
+  species: guzmania lingulata 'scarlet star'
+  name: Bromelia Botanica
+  image: openplantbook
+  warn_low_brightness: false
+  sensors:
+    moisture: sensor.esp32ble_anthurium_andraeanum_white_champion_moisture
+    temperature: sensor.esp32ble_anthurium_andraeanum_white_champion_temperature
+    conductivity: sensor.esp32ble_anthurium_andraeanum_white_champion_conductivity
+    brightness: sensor.esp32ble_anthurium_andraeanum_white_champion_illuminance
+
+## Pannenkoekenplant - volledige match
+pilea_peperomioides:
+  species: pilea peperomioides
+  name: Pannenkoekenplant
+  image: openplantbook
+  warn_low_brightness: false
+  sensors:
+    moisture: sensor.esp32ble_anthurium_andraeanum_white_champion_moisture
+    temperature: sensor.esp32ble_anthurium_andraeanum_white_champion_temperature
+    conductivity: sensor.esp32ble_anthurium_andraeanum_white_champion_conductivity
+    brightness: sensor.esp32ble_anthurium_andraeanum_white_champion_illuminance
+  
