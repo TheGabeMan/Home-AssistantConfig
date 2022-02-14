@@ -144,6 +144,28 @@ binary_sensor:
 #######
 
 sensor:
+
+  #####################################################
+  ### Toegevoegd om van de s0Tool de versie info uit github op te halen
+  #####################################################
+  - platform: scrape
+    scan_interval: 1800     ## Scrape elk half uur ipv default 30 seconden
+    resource: https://www.opgevenisgeenoptie.nl/fundraisers/GabrievanZanten/alpe-dhuzes-2022
+    name: donaties 
+    select: "#template-profile > main > section.content.section.position-relative.pb20 > div > div.amountRaised.col-sm-6.col-md-8 > div > div.col-xs-6.right > h1 > span"
+    unit_of_measurement: "Euro"
+    ###########
+    ## Er is ook nog een template waarde "vorigdonatiebedrag" dat de vorige staat bijhoudt
+    ##########
+  - platform: template
+    sensors:
+      vorigedonatietotaal:
+        friendly_name: "Vorige Donatatie totaal"
+        value_template: "{{ states('sensor.donaties') }}"
+
+
+
+
   #####################################################
   ### Toegevoegd om van de s0Tool de versie info uit github op te halen
   #####################################################
@@ -382,9 +404,9 @@ sensor:
   ########################################
   - platform: template
     sensors:
-      dracaena_marginata_alarm:
+      plant_01_alarm:
         friendly_name: "dracaena_marginata alarm moisture (boekenkast)"
-        value_template: "{{ state_attr('plant.dracaena_marginata','moisture') | default(0) < 20  }}"
+        value_template: "{{ state_attr('plant.plant_01','moisture') | default(0) < 20  }}"
 
   - platform: template
     sensors:
@@ -407,6 +429,13 @@ sensor:
         friendly_name: "Tijd om de BMW te tanken"
         value_template: "{{ states('sensor.218i_remaining_range_fuel') | float(0) < 75  }}"
         icon_template: mdi:gas-station
+
+  - platform: template
+    sensors:
+      tijdtotalp:
+        friendly_name: "Tijd tot Alpe d'HuZes"
+        value_template: "{{ (as_timestamp('2022-06-02') - as_timestamp(now()) ) | timestamp_custom('%j')| int }}"
+        icon_template: mdi:clock
 
 ##########
 ### Daan Slaapt
@@ -612,3 +641,4 @@ google:
 withings:
   client_id: !secret withings_CLIENT_ID
   client_secret: !secret withings_CONSUMER_SECRET
+

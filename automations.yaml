@@ -1170,3 +1170,25 @@
       message: Airco Bas uit
       title: Airco Bas uit
   mode: single
+- id: '1644784971435'
+  alias: AUT050 Donatie ontvangen
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.donaties
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: sensor.donaties
+      state: unknown
+  action:
+  - service: notify.mobile_app_oneplus7progabrie
+    data:
+      title: Donatie ontvangen
+      message: Dontatie totaalbedrag is gewijzigd van {{ trigger.from_state.state
+        }} Euro naar {{ trigger.to_state.state }} Euro
+      data:
+        tts: 0
+        priority: high
+  mode: single
