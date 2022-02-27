@@ -1,0 +1,20 @@
+########################################
+## SWITCH SECTION
+########################################
+- platform: template
+  switches:
+    scene_set_film_lights:
+      turn_on:
+        service: scene.turn_on
+        entity_id: scene.set_film_lights
+      turn_off:
+        service: scene.turn_on
+        entity_id: scene.set_film_lights
+    script_ik_ga_naar_bed:
+      turn_on:
+        service: script.scr013_ik_ga_naar_bed
+      turn_off:
+        service: script.scr013_ik_ga_naar_bed
+########################################
+## End of SWITCH SECTION
+########################################

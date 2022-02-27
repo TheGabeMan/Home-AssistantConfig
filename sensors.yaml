@@ -1,0 +1,296 @@
+#######
+####### Sensor section
+#######
+
+
+#####################################################
+### Toegevoegd om van de s0Tool de versie info uit github op te halen
+#####################################################
+- platform: scrape
+  scan_interval: 1800     ## Scrape elk half uur ipv default 30 seconden
+  resource: https://www.opgevenisgeenoptie.nl/fundraisers/GabrievanZanten/alpe-dhuzes-2022
+  name: donaties 
+  select: "#template-profile > main > section.content.section.position-relative.pb20 > div > div.amountRaised.col-sm-6.col-md-8 > div > div.col-xs-6.right > h1 > span"
+  unit_of_measurement: "Euro"
+  ###########
+  ## Er is ook nog een template waarde "vorigdonatiebedrag" dat de vorige staat bijhoudt
+  ##########
+- platform: template
+  sensors:
+    vorigedonatietotaal:
+      friendly_name: "Vorige Donatatie totaal"
+      value_template: "{{ states('sensor.donaties') }}"
+
+
+
+
+#####################################################
+### Toegevoegd om van de s0Tool de versie info uit github op te halen
+#####################################################
+- platform: rest
+  resource: https://api.github.com/repos/huizebruin/s0tool/releases/latest
+  name: s0tool_versie_github
+  value_template: "​{{ value_json.tag_name }}​"
+  scan_interval: 3600
+
+## Om de github versie te vergelijken met de "running" versie van s0tool
+- platform: template
+  sensors:
+    s0tool_gelijk_github:
+      friendly_name: "s0Tool versie gelijk github versie"
+      value_template: "{{ states('sensor.s0tool_versie_github') | replace(states('sensor.s0tool_versie_github')[0:1],'') == states('sensor.s0tool_versie') }}"
+
+#####################################################
+### Toegevoegd om Airco in Energy dashboard te krijgen
+#####################################################
+- platform: integration
+  source: sensor.airco_bas_energy_current
+  name: verbruik_airco_bas
+  unit_prefix: k
+  round: 2
+
+- platform: integration
+  source: sensor.airco_daan_energy_current
+  name: verbruik_airco_daan
+  unit_prefix: k
+  round: 2
+
+- platform: integration
+  source: sensor.airco_woonkamer_energy_current
+  name: verbruik_airco_woonkamer
+  unit_prefix: k
+  round: 2
+#####################################################
+### EINDE Toegevoegd om Airco in Energy dashboard te krijgen
+#####################################################
+
+###### Bitcoin Sesnor
+###### https://www.home-assistant.io/integrations/bitcoin/
+- platform: bitcoin
+  currency: EUR
+  display_options:
+    - exchangerate
+    - trade_volume_btc
+
+#################################
+###### Sensor for vacuum cleaner
+#################################
+- platform: template
+  sensors:
+    next_vacuum_date:
+      friendly_name: "Stofzuiger - Volgende Stofzuigmoment"
+      value_template: >-
+        {% set day_values = [ states('input_boolean.vacuum_monday'), 
+        states('input_boolean.vacuum_tuesday'), 
+        states('input_boolean.vacuum_wednesday'), 
+        states('input_boolean.vacuum_thursday'), 
+        states('input_boolean.vacuum_friday'), 
+        states('input_boolean.vacuum_saturday'), 
+        states('input_boolean.vacuum_sunday')] %}
+        {% set start_time = states('input_datetime.vacuum_schedule_start_time') %}
+        {% set start_index = 0 %}
+        {% if as_timestamp(now()) > as_timestamp((as_timestamp(now()) | timestamp_custom('%Y-%m-%d')) + ' ' + start_time) %}
+          {% set start_index = 1 %}
+        {% endif %}
+        {% set ns = namespace(next_vacuum_date = undefined) %}
+        {% for i in range(start_index, 6) if ns.next_vacuum_date is undefined %}
+          {% set weekday = now().weekday() + i %}
+          {% if weekday > 6 %}
+            {% set weekday = weekday - 7 %}
+          {% endif %}
+          {% if day_values[weekday] == 'on' %}
+            {% set vacuum_date = ((as_timestamp(now()) | int) + (i * 24 * 3600)) | timestamp_custom('%Y-%m-%d') %}
+            {% set ns.next_vacuum_date = strptime(vacuum_date + ' ' + start_time, '%Y-%m-%d %H:%M:%S') %}
+          {% endif %}
+        {% endfor%}  
+        {{ ns.next_vacuum_date }}
+
+###### Sensor for vacuum cleaner
+- platform: template
+  sensors:
+    vacuum_day:
+      friendly_name: "Stofzuiger - Stofzuigdag"
+      value_template: >-
+        {% set weekday = as_timestamp(now()) | timestamp_custom('%A') | lower %}
+        {{ states('input_boolean.vacuum_' + weekday) }}
+
+##### Sensor voor Bas Wekker
+- platform: template
+  sensors:
+    baswekker_day:
+      friendly_name: "Bas Wekker dag"
+      value_template: >-
+        {% set weekday = as_timestamp(now()) | timestamp_custom('%A') | lower %}
+        {{ states('input_boolean.baswekker_' + weekday) }}
+
+# Optional/example
+# A template to ease access to the data as "sensor.pv_outputpower" etc.
+- platform: template
+  sensors:
+    pv_outputpower:
+      value_template: "{{ states.sensor.inverter_goodwe.attributes.outputpower }}"
+      unit_of_measurement: "W"
+      friendly_name: "PV Power output"
+    pv_temperature:
+      value_template: "{{ states.sensor.inverter_goodwe.attributes.tempperature }}"
+      unit_of_measurement: "C"
+      friendly_name: "PV Temperature"
+    pv_eday:
+      value_template: "{{ states.sensor.inverter_goodwe.attributes.eday }}"
+      unit_of_measurement: "kWh"
+      friendly_name: "PV energy day"
+    pv_etotal:
+      value_template: "{{ states.sensor.inverter_goodwe.attributes.etotal }}"
+      unit_of_measurement: "kWh"
+      friendly_name: "PV energy total"
+    pv_iday:
+      value_template: "{{ states.sensor.inverter_goodwe.attributes.iday }}"
+      unit_of_measurement: "€"
+      friendly_name: "PV income day"
+    pv_itotal:
+      value_template: "{{ states.sensor.inverter_goodwe.attributes.itotal }}"
+      unit_of_measurement: "€"
+      friendly_name: "PV income total"
+    pv_excess:
+      value_template: "{{ states.sensor.inverter_goodwe.attributes.pmeter }}"
+      unit_of_measurement: "W"
+      friendly_name: "PV spare"
+    # battery soc
+    pv_soc:
+      value_template: "{{ states.sensor.inverter_goodwe.attributes.soc }}"
+      unit_of_measurement: "%"
+      friendly_name: "Battery power"
+
+- platform: template
+  sensors:
+    airco_bas_current_temp:
+      friendly_name: "Airco Bas kamer temperatuur"
+      unit_of_measurement: "degrees"
+      value_template: "{{ state_attr('climate.airco_bas', 'current_temperature') }}"
+    airco_bas_target_temp:
+      friendly_name: "Airco Bas doel temperatuur"
+      unit_of_measurement: "degrees"
+      value_template: "{{ state_attr('climate.airco_bas', 'temperature') }}"
+
+    airco_woonkamer_current_temp:
+      friendly_name: "Airco Woonkamer temperatuur"
+      unit_of_measurement: "degrees"
+      value_template: "{{ state_attr('climate.airco_woonkamer', 'current_temperature') }}"
+    airco_woonkamer_target_temp:
+      friendly_name: "Airco Woonkamer doel temperatuur"
+      unit_of_measurement: "degrees"
+      value_template: "{{ state_attr('climate.airco_woonkamer', 'temperature') }}"
+
+    airco_daan_current_temp:
+      friendly_name: "Airco Daan kamer temperatuur"
+      unit_of_measurement: "degrees"
+      value_template: "{{ state_attr('climate.airco_daan', 'current_temperature') }}"
+    airco_daan_target_temp:
+      friendly_name: "Airco Daan kamer doel temperatuur"
+      unit_of_measurement: "degrees"
+      value_template: "{{ state_attr('climate.airco_daan', 'temperature') }}"
+
+- platform: systemmonitor
+  resources:
+    - type: disk_use_percent
+      arg: /
+    - type: disk_use
+      arg: /
+    - type: disk_free
+      arg: /
+    - type: memory_use_percent
+    - type: memory_use
+    - type: memory_free
+    - type: swap_use_percent
+    - type: swap_use
+    - type: swap_free
+    - type: processor_use
+
+### https://github.com/heyajohnny/afvalinfo
+### Afvalinfo configuratie:
+- platform: afvalinfo
+  resources: # (at least 1 required)
+    - gft
+    - restafval
+    - trash_type_today
+    - trash_type_tomorrow
+    - kerstboom
+    - papier
+  location: maastricht # (required, default = sliedrecht) name of the 'gemeente'
+  postcode: 6228GG # (required, default = 3361AB)
+  streetnumber: 177 # (required, default = 1)
+  dateformat: "%d-%m-%Y" # (optional, default = %d-%m-%Y) day-month-year
+  locale: "nl" # (optional, default = 'en')
+  timespanindays: 14 # (optional, default = 365) number of days to look into the future
+
+## Sensor om de attributen van sun.sun in automations te kunnen gebruiken
+- platform: template
+  sensors:
+    solar_angle:
+      friendly_name: "Sun angle"
+      unit_of_measurement: "degrees"
+      value_template: "{{ state_attr('sun.sun', 'elevation') }}"
+    solar_azimuth:
+      friendly_name: "Sun azimuth"
+      unit_of_measurement: "degrees"
+      value_template: "{{ state_attr('sun.sun', 'azimuth') }}"
+    sunrise:
+      value_template: "{{ state_attr('sun.sun', 'next_rising') }}"
+    sunset:
+      value_template: "{{ state_attr('sun.sun', 'next_setting') }}"
+    sundawn:
+      value_template: "{{ state_attr('sun.sun', 'next_dawn') }}"
+    sundusk:
+      value_template: "{{ state_attr('sun.sun', 'next_dusk') }}"
+    sunrising:
+      value_template: "{{ state_attr('sun.sun', 'rising') }}"
+
+# Example configuration.yaml entry
+- platform: time_date
+  display_options:
+    - "time"
+    - "date"
+    - "date_time"
+    - "date_time_utc"
+    - "date_time_iso"
+    - "time_date"
+    - "time_utc"
+    - "beat"
+
+########################################
+## Plant moisture sectie alarm
+########################################
+- platform: template
+  sensors:
+    plant_01_alarm:
+      friendly_name: "dracaena_marginata alarm moisture (boekenkast)"
+      value_template: "{{ state_attr('plant.plant_01','moisture') | default(0) < 20  }}"
+
+- platform: template
+  sensors:
+    anthurium_andraeanum_white_champion_alarm:
+      friendly_name: "anthurium_andraeanum_white_champion (Witte bloem)"
+      value_template: "{{ state_attr('plant.plant_03','moisture') | default(0) < 20  }}"
+
+- platform: template
+  sensors:
+    aglaonema_sp_light_star_alarm:
+      friendly_name: "plant.aglaonema_sp_light_star (Rode plant)"
+      value_template: "{{ state_attr('plant.plant_02','moisture') | default(0) < 20  }}"
+
+###################################
+## BMW Tank alarm
+###################################
+- platform: template
+  sensors:
+    bmw_tanken:
+      friendly_name: "Tijd om de BMW te tanken"
+      value_template: "{{ states('sensor.218i_remaining_range_fuel') | float(0) < 75  }}"
+      icon_template: mdi:gas-station
+
+- platform: template
+  sensors:
+    tijdtotalp:
+      friendly_name: "Tijd tot Alpe d'HuZes"
+      value_template: "{{ (as_timestamp('2022-06-02') - as_timestamp(now()) ) | timestamp_custom('%j')| int }}"
+      icon_template: mdi:clock

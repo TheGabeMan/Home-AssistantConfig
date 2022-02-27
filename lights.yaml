@@ -1,0 +1,55 @@
+- platform: switch
+  name: Kerstboom
+  entity_id: switch.tz3000_g5xawfcq_ts0121_on_off
+
+- platform: group
+  name: WoonkamerTotaal
+  entities:
+    - light.staanderaamlamp_level_light_color_on_off ## light.ty_raamlamp
+    - light.tv_lamp ## light.ty_tvlamp
+    - light.led_bank_level_light_color_on_off ## LED strip achter de bank
+    - light.computerlamp ## light.ty_computerlamp
+    - light.boekenlamp ## light.ty_boekenlamp
+    - light.tafellamp ## light.ty_tafellamp
+    - light.muurlamp ## light.ty_muurlamp
+
+- platform: group
+  name: Voorkamer
+  entities:
+    - light.staanderaamlamp_level_light_color_on_off ## light.ty_raamlamp
+    - light.tv_lamp ## light.ty_tvlamp
+    - light.led_bank_level_light_color_on_off ## LED strip achter de bank
+
+- platform: group
+  name: Achterkamer
+  entities:
+    - light.computerlamp ## light.ty_computerlamp
+    - light.boekenlamp ## light.ty_boekenlamp
+    - light.tafellamp ## light.ty_tafellamp
+    - light.muurlamp ## light.ty_muurlamp
+
+- platform: group
+  name: gang
+  entities:
+    - light.ganglampbeneden
+    - light.ganglampboven
+    - light.voordeurlamp
+
+- platform: group
+  name: SlaapkamerGabrie
+  entities:
+    - light.slaapkamergabrie
+    - light.plafondlamp_gabrie
+
+- platform: group
+  name: KamerBas
+  entities:
+    - light.led_bas_bed
+    - light.led_bas_bureau
+
+- platform: group
+  name: Tuinverlichting
+  entities:
+    - light.twinkley_tuinslinger
+    - light.tuinlamp_links
+    - light.tuinschijnwerper

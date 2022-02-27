@@ -1,0 +1,99 @@
+
+## Time of Day (TOD) section
+- platform: tod
+  name: Nacht
+  after: sunset
+  before: sunrise
+
+- platform: tod
+  name: Dag
+  after: sunrise
+  before: sunset
+
+- platform: tod
+  name: Slaaptijd
+  after: "22:00"
+  before: "06:00"
+
+- platform: tod
+  name: ochtend
+  after: "06:00"
+  before: "9:00"
+
+- platform: tod
+  name: Overdag
+  after: "9:00"
+  before: "15:30"
+
+- platform: tod
+  name: Avond
+  after: "15:30"
+  before: "22:00"
+
+## Ping section
+- platform: ping
+  host: 192.168.0.1
+  name: "DNS vanzanten"
+  count: 5
+  scan_interval: 60
+
+- platform: ping
+  host: 192.168.0.254
+  name: "Gateway"
+  count: 5
+  scan_interval: 60
+
+- platform: ping
+  host: 192.168.0.5
+  name: "esx05"
+  count: 5
+  scan_interval: 60
+
+- platform: ping
+  host: 8.8.8.8
+  name: "Google 8.8.8.8"
+  count: 5
+  scan_interval: 60
+
+- platform: ping
+  host: 192.168.0.21
+  name: "RelaisMeterkast"
+  count: 5
+  scan_interval: 60
+
+- platform: ping
+  host: 192.168.0.22
+  name: "RelaisGarage"
+  count: 5
+  scan_interval: 60
+
+- platform: ping
+  host: 192.168.0.90
+  name: "PowerPlug001-Koffie"
+  count: 5
+  scan_interval: 60
+
+- platform: ping
+  host: 192.168.0.91
+  name: "PowerPlug002_Wasmachine"
+  count: 5
+  scan_interval: 60
+- platform: ping
+  host: 192.168.0.95
+  name: "Sonoff Bridge"
+  count: 5
+  scan_interval: 60
+- platform: ping
+  host: 192.168.0.249
+  name: "Printer"
+  count: 5
+  scan_interval: 60
+
+- platform: template
+  sensors:
+    coffee_machine:
+      friendly_name: "Koffiezetapparaat"
+      delay_off:
+        minutes: 3
+      value_template: >-
+        {{ states('sensor.powerplug004_energy_power') | float > 3 }}
