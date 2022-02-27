@@ -17,13 +17,12 @@ scr001_flashlightzolderbas:
         domain: switch
   mode: restart
 scr002_spotify_my_top_songs_2019:
-  alias: SCR002 Spotify My Top Songs 2019
+  alias: SCR002 Spotify 1 kopje koffie
   sequence:
-  - service: media_player.play_media
+  - service: spotcast.start
     data:
-      media_content_id: spotify:playlist:37i9dQZF1DZ06evO0DW7KX
-      media_content_type: playlist
-    entity_id: media_player.spotify_gabrie_van_zanten
+      entity_id: media_player.keuken
+      uri: spotify:track:7oIj1naWSVgDmruBrkT3Cw
   mode: single
 scr004_flashlightbureau:
   alias: SCR004_FlashLightBureau

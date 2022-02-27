@@ -617,6 +617,8 @@
     data:
       message: De koffie springt uit
       title: De koffie springt uit
+  - service: script.scr002_spotify_my_top_songs_2019
+    data: {}
   mode: single
 - id: '1633772441628'
   alias: AUT038-1 Badkamer lamp hard aan
@@ -777,7 +779,8 @@
       minutes: 0
       seconds: 0
       milliseconds: 0
-    above: '99'
+    above: '98'
+    below: '100'
   condition: []
   action:
   - service: notify.telegram
@@ -1191,4 +1194,80 @@
       data:
         tts: 0
         priority: high
+  mode: single
+- id: '1644948767535'
+  alias: AUT051 Button01 press
+  description: ''
+  trigger:
+  - device_id: 2d9631d85064c8192446d3126401794b
+    domain: zha
+    platform: device
+    type: remote_button_long_press
+    subtype: button
+  condition: []
+  action:
+  - service: notify.mobile_app_oneplus7progabrie
+    data:
+      title: Button01 1x druk
+      message: Button01 1x druk
+      data:
+        tts: 0
+        priority: high
+  mode: single
+- id: '1645049096652'
+  alias: S0tool update
+  description: ''
+  use_blueprint:
+    path: huizebruin/S0tool update.yaml
+    input:
+      notify_device: e91c5a930a66474099be7a69b9c17b5a
+- id: '1645981284580'
+  alias: AUT052 Smoke detectors
+  description: ''
+  trigger:
+  - type: smoke
+    platform: device
+    device_id: f740c35acea5be6a7a3f87dc30143d71
+    entity_id: binary_sensor.smokealarmbijkeuken
+    domain: binary_sensor
+    id: smoke-bijkeuken
+  - type: smoke
+    platform: device
+    device_id: 7ba1ea6e3ed27901dd0a148790a77dff
+    entity_id: binary_sensor.smokealarmgangboven
+    domain: binary_sensor
+    id: smoke-gangboven
+  - type: smoke
+    platform: device
+    device_id: 613eba87b1173fe626b6ed09d9cfd8ff
+    entity_id: binary_sensor.smokealarmgangonder
+    domain: binary_sensor
+    id: smoke-gangonder
+  - type: smoke
+    platform: device
+    device_id: e259e2dec2e7e038c5368e05943f50dc
+    entity_id: binary_sensor.smokealarmzolder
+    domain: binary_sensor
+    id: smoke-zolder
+  condition: []
+  action:
+  - service: notify.mobile_app_oneplus7progabrie
+    data_template:
+      message: Rookmelder {{ trigger.to_state.attributes.friendly_name }} is afgegaan
+  mode: single
+- id: '1645981928531'
+  alias: TestAutomation
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: 4c21f55e2672de391ce7587a94634471
+    entity_id: binary_sensor.badkamerdeur_ias_zone
+    domain: binary_sensor
+    id: badkamerdeur-triggerid
+  condition: []
+  action:
+  - service: notify.mobile_app_oneplus7progabrie
+    data:
+      message: Rookmelder {{ trigger.to_state.attributes.friendly_name }} is afgegaan
   mode: single
