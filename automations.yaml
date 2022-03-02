@@ -617,8 +617,10 @@
     data:
       message: De koffie springt uit
       title: De koffie springt uit
-  - service: script.scr002_spotify_my_top_songs_2019
-    data: {}
+  - service: tts.cloud_say
+    data:
+      message: De koffie wordt koud!
+      entity_id: media_player.keuken
   mode: single
 - id: '1633772441628'
   alias: AUT038-1 Badkamer lamp hard aan
@@ -1254,6 +1256,12 @@
   - service: notify.mobile_app_oneplus7progabrie
     data_template:
       message: Rookmelder {{ trigger.to_state.attributes.friendly_name }} is afgegaan
+  - service: tts.cloud_say
+    data:
+      message: Opgelet, de rookmelder {{ trigger.to_state.attributes.friendly_name
+        }} is afgegaan.
+      entity_id: media_player.keuken, media_player.woonkamer
+      language: nl
   mode: single
 - id: '1645981928531'
   alias: TestAutomation
@@ -1270,4 +1278,9 @@
   - service: notify.mobile_app_oneplus7progabrie
     data:
       message: Rookmelder {{ trigger.to_state.attributes.friendly_name }} is afgegaan
+  - service: tts.cloud_say
+    data:
+      message: Opgelet, de rookmelder {{ trigger.to_state.attributes.friendly_name
+        }} is afgegaan.
+      entity_id: media_player.keuken, media_player.woonkamer
   mode: single
