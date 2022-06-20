@@ -20,6 +20,21 @@ binary_sensor: !include binary_sensor.yaml
 sensor: !include sensors.yaml
 switch: !include switch.yaml
 
+
+#######
+####### Configureer welke entities wel/niet in logbook komen
+#######
+logbook:
+  exclude:
+    entities:
+      - sensor.time_utc
+      - sensor.date_time_utc
+      - sensor.date_time
+      - sensor.date_time_iso
+      - sensor.internet_time
+      - sensor.time_date
+      - sensor.time
+
 #######
 ####### Configureer logging levels
 #######

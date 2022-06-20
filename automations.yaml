@@ -49,7 +49,7 @@
   - service: notify.telegram
     data:
       message: De wasmachine is klaar
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       title: Wasmachine is klaar!
       message: De wasmachine is klaar
@@ -63,7 +63,7 @@
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_oneplus_daan
+  - service: notify.mobile_app_telefoondaan
     data:
       title: Wasmachine is klaar!
       message: De wasmachine is klaar
@@ -99,7 +99,7 @@
       message: Er is iemand aan de voordeur!
   - service: script.scr001_flashlightzolderbas
     data: {}
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       title: Deurbel
       message: Er is iemand aan de voordeur!
@@ -113,7 +113,7 @@
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_oneplus_daan
+  - service: notify.mobile_app_telefoondaan
     data:
       title: Deurbel
       message: Er is iemand aan de voordeur!
@@ -122,12 +122,13 @@
         priority: high
   - delay:
       hours: 0
-      minutes: 5
+      minutes: 2
       seconds: 0
       milliseconds: 0
   - service: scene.turn_on
     target:
       entity_id: scene.voordeurlamp_bewaren
+    data: {}
   mode: single
 - id: '1607202607844'
   alias: AUT005 NFC opent Garage
@@ -143,14 +144,14 @@
   - service: switch.toggle
     data:
       entity_id: switch.relais002_relaisstate
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       title: Garagepoort open/dicht
       message: De garagepoort wordt via NFC open/dicht gemaakt.
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_oneplus_daan
+  - service: notify.mobile_app_telefoondaan
     data:
       title: Garagepoort open/dicht
       message: De garagepoort wordt via NFC open/dicht gemaakt.
@@ -177,12 +178,13 @@
     - fri
     - sat
     - sun
+    before: 00:00:00
   action:
   - service: climate.set_preset_mode
     data:
       preset_mode: asleep
     entity_id: climate.anna
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       title: Thermostaat AUT006
       message: Thermo gaat naar nachtstand.
@@ -247,7 +249,7 @@
     for: '1:30:00'
   condition: []
   action:
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       title: Electrische deken uit
       message: De Electrische deken gaat uit na 1,5uur
@@ -258,7 +260,7 @@
     device_id: cc90c9bf343b14efeed1b880fda0ed52
     entity_id: switch.powerplug003
     domain: switch
-  - service: notify.mobile_app_oneplus_daan
+  - service: notify.mobile_app_telefoondaan
     data:
       title: Electrische deken uit
       message: De Electrische deken gaat uit na 1,5uur
@@ -277,7 +279,8 @@
   condition: []
   action:
   - service: script.scr004_flashlightbureau
-  - service: notify.mobile_app_oneplus7progabrie
+    data: {}
+  - service: notify.mobile_app_telefoongabrie
     data:
       title: Zonne-energie is hoog
       message: We vangen 15min meer dan 1000 KWh.
@@ -390,7 +393,7 @@
     from: returning
   condition: []
   action:
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       message: Stofzuiger heeft gelopen
   mode: single
@@ -425,7 +428,7 @@
     domain: light
   condition: []
   action:
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       message: Tuinschijnwerper aan
   mode: single
@@ -440,7 +443,7 @@
     domain: light
   condition: []
   action:
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       message: Tuinschijnwerper uit
   mode: single
@@ -463,7 +466,7 @@
   alias: AUT026 In of uit zone De Heeg
   trigger:
   - platform: zone
-    entity_id: device_tracker.oneplusgabrie,device_tracker.oneplus_daan,device_tracker.oneplusnordbas
+    entity_id: device_tracker.telefoondaan, device_tracker.te
     zone: zone.de_heeg
     event: enter
   action:
@@ -492,7 +495,7 @@
   - service: notify.mobile_app_ac2003
     data:
       message: De airco op zolder staat nog aan !!!
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       message: De airco op zolder staat nog aan !!!
   mode: single
@@ -515,7 +518,7 @@
       entity_id: climate.airco_woonkamer
       state: 'off'
   action:
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       message: De airco woonkamer staat nog aan !!!
   - service: notify.telegram
@@ -537,10 +540,10 @@
       entity_id: climate.airco_daan
       state: 'off'
   action:
-  - service: notify.mobile_app_oneplus_daan
+  - service: notify.mobile_app_telefoondaan
     data:
       message: De airco in kamer Daan staat nog aan !!!
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       message: De airco in kamer Daan staat nog aan !!!
   mode: single
@@ -563,7 +566,7 @@
   - service: notify.mobile_app_ac2003
     data:
       message: Printer na 1u automatisch uitgezet
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       message: Printer na 1u automatisch uitgezet
   mode: single
@@ -606,7 +609,7 @@
       seconds: 30
   condition: []
   action:
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       message: De koffie springt uit
   - service: notify.lgtv
@@ -788,7 +791,14 @@
   - service: notify.telegram
     data:
       message: AUT019 Oven programma klaar
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      title: AUT019 Oven programma klaar
+      message: AUT019 Oven programma klaar
+      data:
+        tts: 0
+        priority: high
+  - service: notify.mobile_app_telefoondaan
     data:
       title: AUT019 Oven programma klaar
       message: AUT019 Oven programma klaar
@@ -878,32 +888,6 @@
     data:
       title: Paardenvoer naar 3 zakjes
       message: Paardenvoer naar 3 zakjes
-      data:
-        tts: 0
-        priority: high
-  mode: single
-- id: '1638741299171'
-  alias: AUT002 NFC Paardenvoer
-  description: ''
-  trigger:
-  - platform: tag
-    tag_id: 13768d5e-ce1a-436c-8cbb-0665b1dd261c
-  condition: []
-  action:
-  - service: input_number.decrement
-    target:
-      entity_id: input_number.voer_zakjes
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      title: NFC Scan paardenvoer
-      message: NFC Scan paardenvoer
-      data:
-        tts: 0
-        priority: high
-  - service: notify.mobile_app_oneplus_daan
-    data:
-      title: NFC Scan paardenvoer
-      message: NFC Scan paardenvoer
       data:
         tts: 0
         priority: high
@@ -1114,7 +1098,7 @@
   description: ''
   trigger:
   - platform: time
-    at: '18:00:00'
+    at: '21:00:00'
   condition: []
   action:
   - service: light.turn_on
@@ -1129,12 +1113,13 @@
   description: ''
   trigger:
   - platform: time
-    at: 01:00:00
+    at: 00:00:00
   condition: []
   action:
   - service: light.turn_off
     target:
       device_id: 97497fba42099be65878acee4699431a
+    data: {}
   mode: single
 - id: '1642262339885'
   alias: AUT008 Airco Bas uit 's nachts
@@ -1170,7 +1155,7 @@
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       message: Airco Bas uit
       title: Airco Bas uit
@@ -1196,25 +1181,83 @@
       data:
         tts: 0
         priority: high
+  - service: spotcast.start
+    data:
+      entity_id: media_player.keuken
+      uri: spotify:track:29FNeqjOV2kPWGS55qhtGB?si=cee549ceabb04429
   mode: single
 - id: '1644948767535'
-  alias: AUT051 Button01 press
+  alias: AUT051 Button bedtijd
   description: ''
   trigger:
   - device_id: 2d9631d85064c8192446d3126401794b
     domain: zha
     platform: device
-    type: remote_button_long_press
+    type: remote_button_short_press
     subtype: button
   condition: []
   action:
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
-      title: Button01 1x druk
-      message: Button01 1x druk
-      data:
-        tts: 0
-        priority: high
+      message: Naar bed gaan gestart
+      title: Bedtijd
+  - service: light.turn_off
+    data:
+      transition: 10
+    target:
+      area_id:
+      - 23e6c7fb9f204e3eb18fe60dcaf3c181
+      - tuin
+      entity_id: light.led_bank_level_light_color_on_off
+  - service: climate.set_preset_mode
+    data:
+      preset_mode: asleep
+    target:
+      entity_id: climate.anna
+  - device_id: 2676c14df386a6dfbc95c12a49ba136e
+    domain: cover
+    entity_id: cover.rollerblind_0003
+    type: set_position
+    position: 1
+  - device_id: e7680b4e4246c3ff3c6e254e1b9ecd9d
+    domain: cover
+    entity_id: cover.rollerblind_0004
+    type: set_position
+    position: 1
+  - service: light.turn_on
+    data:
+      brightness: 3
+      color_temp: 369
+    target:
+      entity_id: light.slaapkamergabrie
+  - delay:
+      hours: 0
+      minutes: 3
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    data: {}
+    target:
+      area_id: b8b10b1ded3841c5b073de7cfb6139de
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.kamer_gabrie
+    data:
+      media_content_id: spotify://0e55d89f07fad063bfef3f01284072de/spotify:playlist:1S0R8nbouMoP276HkasXaj
+      media_content_type: spotify://playlist
+    metadata:
+      title: SleepSounds
+      thumbnail: https://i.scdn.co/image/ab67616d0000b273b445215b0343e06dd167e4e2
+      media_class: playlist
+      children_media_class: track
+      navigateIds:
+      - {}
+      - media_content_type: spotify://library
+        media_content_id: spotify://0e55d89f07fad063bfef3f01284072de
+      - media_content_type: spotify://current_user_playlists
+        media_content_id: spotify://0e55d89f07fad063bfef3f01284072de/current_user_playlists
+      - media_content_type: spotify://playlist
+        media_content_id: spotify://0e55d89f07fad063bfef3f01284072de/spotify:playlist:1S0R8nbouMoP276HkasXaj
   mode: single
 - id: '1645049096652'
   alias: S0tool update
@@ -1239,12 +1282,11 @@
     entity_id: binary_sensor.smokealarmgangboven
     domain: binary_sensor
     id: smoke-gangboven
-  - type: smoke
-    platform: device
-    device_id: 613eba87b1173fe626b6ed09d9cfd8ff
+  - platform: state
     entity_id: binary_sensor.smokealarmgangonder
-    domain: binary_sensor
     id: smoke-gangonder
+    from: 'off'
+    to: 'on'
   - type: smoke
     platform: device
     device_id: e259e2dec2e7e038c5368e05943f50dc
@@ -1264,7 +1306,7 @@
       language: nl
   mode: single
 - id: '1645981928531'
-  alias: TestAutomation
+  alias: TestAutomation (badkamer deur als rookmelder)
   description: ''
   trigger:
   - type: opened
@@ -1283,4 +1325,47 @@
       message: Opgelet, de rookmelder {{ trigger.to_state.attributes.friendly_name
         }} is afgegaan.
       entity_id: media_player.keuken, media_player.woonkamer
+  mode: single
+- id: '1648933967405'
+  alias: AUT053 Badkamer ventilator
+  description: "Wanneer motion badkamer plus warmwater trigger langer dan 3min, dan\
+    \ fan op high. \nNa stop van motion nog 15min wachten en fan naar medium"
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.auxiliary_dhw_state
+    from: 'off'
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  condition:
+  - condition: state
+    entity_id: binary_sensor.lumi_motionsensor_badkamer
+    state: 'on'
+  action:
+  - service: fan.set_speed
+    data:
+      speed: high
+    target:
+      device_id: bd6f8bbe3d01ab061647577e2b42ecb8
+  - service: notify.mobile_app_oneplus7progabrie
+    data:
+      message: Fan speed naar High
+  - wait_for_trigger:
+    - platform: state
+      entity_id: binary_sensor.lumi_motionsensor_badkamer
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 15
+        seconds: 0
+  - service: fan.set_speed
+    data:
+      speed: medium
+    target:
+      device_id: bd6f8bbe3d01ab061647577e2b42ecb8
+  - service: notify.mobile_app_oneplus7progabrie
+    data:
+      message: Fan speed naar medium
   mode: single

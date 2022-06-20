@@ -19,6 +19,7 @@
     - light.staanderaamlamp_level_light_color_on_off ## light.ty_raamlamp
     - light.tv_lamp ## light.ty_tvlamp
     - light.led_bank_level_light_color_on_off ## LED strip achter de bank
+    - light.ikea_of_sweden_tradfri_bulb_gu10_cws_345lm_1339b7fe_level_light_color_on_off   ## tvbacklight 
 
 - platform: group
   name: Achterkamer
