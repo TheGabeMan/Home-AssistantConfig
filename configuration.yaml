@@ -43,6 +43,7 @@ logger:
   default: info
   logs:
     homeassistant.components.twinkly.light: warn
+    homeassistant.components.mqtt: warn
 
 ### Text to speech
 tts:
@@ -119,9 +120,9 @@ influxdb:
 #######
 ####### Siemens Home Connect section
 ####### https://www.home-assistant.io/integrations/home_connect/
-home_connect:
-  client_id: !secret siemens_client_id
-  client_secret: !secret siemens_client_secret
+## home_connect:
+##  client_id: !secret siemens_client_id
+##  client_secret: !secret siemens_client_secret
 ###### Einde Home Connect
 
 # Example configuration.yaml entry for the Telegram Bot
@@ -158,23 +159,23 @@ spotcast:
 ####### Spotify integarion
 ####### https://www.home-assistant.io/integrations/spotify
 #######
-spotify:
-  client_id: !secret spotify_client_id
-  client_secret: !secret spotify_client_secret
+## spotify:
+##  client_id: !secret spotify_client_id
+##  client_secret: !secret spotify_client_secret
 
 #####################################
 ## Google Calendar integratie
 #####################################
-google:
-  client_id: !secret googlecalendar_client_id
-  client_secret: !secret googlecalendar_client_secret
-  calendar_access: read_write
+## google:
+##  client_id: !secret googlecalendar_client_id
+##  client_secret: !secret googlecalendar_client_secret
+##  calendar_access: read_write
 
 #####################################
 ## Withings Weegschaal configuratie
 ## https://www.home-assistant.io/integrations/withings/
 #####################################
-withings:
-  client_id: !secret withings_CLIENT_ID
-  client_secret: !secret withings_CONSUMER_SECRET
+## withings:
+##  client_id: !secret withings_CLIENT_ID
+##  client_secret: !secret withings_CONSUMER_SECRET
 

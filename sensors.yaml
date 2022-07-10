@@ -263,20 +263,33 @@
 - platform: template
   sensors:
     plant_01_alarm:
-      friendly_name: "dracaena_marginata alarm moisture (boekenkast)"
+      friendly_name: "Plant boekenkast"
       value_template: "{{ state_attr('plant.plant_01','moisture') | default(0) < 20  }}"
 
 - platform: template
   sensors:
-    anthurium_andraeanum_white_champion_alarm:
-      friendly_name: "anthurium_andraeanum_white_champion (Witte bloem)"
+    plant_02_alarm:
+      friendly_name: "Plant salontafel krukje"
+      value_template: "{{ state_attr('plant.plant_02','moisture') | default(0) < 20  }}"
+
+- platform: template
+  sensors:
+    plant_03_alarm:
+      friendly_name: "Pannekoekenplant"
       value_template: "{{ state_attr('plant.plant_03','moisture') | default(0) < 20  }}"
 
 - platform: template
   sensors:
-    aglaonema_sp_light_star_alarm:
-      friendly_name: "plant.aglaonema_sp_light_star (Rode plant)"
-      value_template: "{{ state_attr('plant.plant_02','moisture') | default(0) < 20  }}"
+    plant_04_alarm:
+      friendly_name: "Plant salontafel plankje"
+      value_template: "{{ state_attr('plant.plant_04','moisture') | default(0) < 20  }}"
+
+
+- platform: template
+  sensors:
+    plant_05_alarm:
+      friendly_name: "Plant naast TV"
+      value_template: "{{ state_attr('plant.plant_05','moisture') | default(0) < 20  }}"
 
 ###################################
 ## BMW Tank alarm

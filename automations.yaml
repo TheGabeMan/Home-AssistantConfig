@@ -6,32 +6,32 @@
     entity_id: binary_sensor.ewelink_ds01_4ccd2622_ias_zone
     from: 'off'
     to: 'on'
-    for: 0:15:00
+    for: 0:05:00
   condition: []
   action:
   - service: tts.google_translate_say
     data:
       entity_id: media_player.keukenhub,media_player.kamer_gabrie, media_player.woonkamer
-      message: De garagepoort is al langer dan 15 minuten open.
+      message: De garagepoort is al langer dan 5 minuten open.
       language: nl
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
-      title: Garagepoort open
-      message: De garagepoort is al langer dan 15 minuten open.
+      title: Garagepoort Open
+      message: De garagepoort is al langer dan 5 minuten open.
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_oneplus_a5000
+  - service: notify.mobile_app_ac2003
     data:
-      title: Garagepoort open
-      message: De garagepoort is al langer dan 15 minuten open.
+      title: Garagepoort Open
+      message: De garagepoort is al langer dan 5 minuten open.
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_oneplus_daan
+  - service: notify.mobile_app_telefoondaan
     data:
-      title: Garagepoort open
-      message: De garagepoort is al langer dan 15 minuten open.
+      title: Garagepoort Open
+      message: De garagepoort is al langer dan 5 minuten open.
       data:
         tts: 0
         priority: high
@@ -84,16 +84,6 @@
     to: 'on'
   condition: []
   action:
-  - service: scene.create
-    data:
-      scene_id: voordeurlamp_bewaren
-      snapshot_entities: light.voordeurlamp
-  - service: light.turn_on
-    target:
-      entity_id: light.voordeurlamp
-    data:
-      brightness: 255
-      color_temp: 153
   - service: notify.telegram
     data:
       message: Er is iemand aan de voordeur!
@@ -125,10 +115,6 @@
       minutes: 2
       seconds: 0
       milliseconds: 0
-  - service: scene.turn_on
-    target:
-      entity_id: scene.voordeurlamp_bewaren
-    data: {}
   mode: single
 - id: '1607202607844'
   alias: AUT005 NFC opent Garage
@@ -466,16 +452,16 @@
   alias: AUT026 In of uit zone De Heeg
   trigger:
   - platform: zone
-    entity_id: device_tracker.telefoondaan, device_tracker.te
+    entity_id: device_tracker.telefoondaan, device_tracker.telefoongabrie, device_tracker.oneplusnordbas
     zone: zone.de_heeg
     event: enter
   action:
   - service: notify.telegram
     data_template:
-      message: "{% if (trigger.event) == \"leave\" %}\n  {{ trigger.to_state.attributes.friendly_name\
-        \ }} heeft {{ trigger.zone.attributes.friendly_name }} verlaten.\n{% else\
-        \ %}\n  {{ trigger.to_state.attributes.friendly_name }} arriveert in zone\
-        \ {{ trigger.zone.attributes.friendly_name }}\n{% endif %}\n"
+      message: "{% if (trigger.event) == \"leave\" %}\n  {{ trigger.to_state.attributes.friendly_name
+        }} heeft {{ trigger.zone.attributes.friendly_name }} verlaten.\n{% else %}\n
+        \ {{ trigger.to_state.attributes.friendly_name }} arriveert in zone {{ trigger.zone.attributes.friendly_name
+        }}\n{% endif %}\n"
   mode: single
 - id: '1627120739713'
   alias: AUT027 Bas uit zone De Heeg met Airco aan
@@ -1239,25 +1225,6 @@
     data: {}
     target:
       area_id: b8b10b1ded3841c5b073de7cfb6139de
-  - service: media_player.play_media
-    target:
-      entity_id: media_player.kamer_gabrie
-    data:
-      media_content_id: spotify://0e55d89f07fad063bfef3f01284072de/spotify:playlist:1S0R8nbouMoP276HkasXaj
-      media_content_type: spotify://playlist
-    metadata:
-      title: SleepSounds
-      thumbnail: https://i.scdn.co/image/ab67616d0000b273b445215b0343e06dd167e4e2
-      media_class: playlist
-      children_media_class: track
-      navigateIds:
-      - {}
-      - media_content_type: spotify://library
-        media_content_id: spotify://0e55d89f07fad063bfef3f01284072de
-      - media_content_type: spotify://current_user_playlists
-        media_content_id: spotify://0e55d89f07fad063bfef3f01284072de/current_user_playlists
-      - media_content_type: spotify://playlist
-        media_content_id: spotify://0e55d89f07fad063bfef3f01284072de/spotify:playlist:1S0R8nbouMoP276HkasXaj
   mode: single
 - id: '1645049096652'
   alias: S0tool update
@@ -1325,47 +1292,4 @@
       message: Opgelet, de rookmelder {{ trigger.to_state.attributes.friendly_name
         }} is afgegaan.
       entity_id: media_player.keuken, media_player.woonkamer
-  mode: single
-- id: '1648933967405'
-  alias: AUT053 Badkamer ventilator
-  description: "Wanneer motion badkamer plus warmwater trigger langer dan 3min, dan\
-    \ fan op high. \nNa stop van motion nog 15min wachten en fan naar medium"
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.auxiliary_dhw_state
-    from: 'off'
-    to: 'on'
-    for:
-      hours: 0
-      minutes: 1
-      seconds: 0
-  condition:
-  - condition: state
-    entity_id: binary_sensor.lumi_motionsensor_badkamer
-    state: 'on'
-  action:
-  - service: fan.set_speed
-    data:
-      speed: high
-    target:
-      device_id: bd6f8bbe3d01ab061647577e2b42ecb8
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      message: Fan speed naar High
-  - wait_for_trigger:
-    - platform: state
-      entity_id: binary_sensor.lumi_motionsensor_badkamer
-      to: 'off'
-      for:
-        hours: 0
-        minutes: 15
-        seconds: 0
-  - service: fan.set_speed
-    data:
-      speed: medium
-    target:
-      device_id: bd6f8bbe3d01ab061647577e2b42ecb8
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      message: Fan speed naar medium
   mode: single
