@@ -21,7 +21,7 @@
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_ac2003
+  - service: notify.mobile_app_telefoonbas
     data:
       title: Garagepoort Open
       message: De garagepoort is al langer dan 5 minuten open.
@@ -56,7 +56,7 @@
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_ac2003
+  - service: notify.mobile_app_telefoonbas
     data:
       title: Wasmachine is klaar!
       message: De wasmachine is klaar
@@ -80,7 +80,8 @@
   description: Notificaties wanneer de deurbel gedrukt wordt
   trigger:
   - platform: state
-    entity_id: binary_sensor.relais001_button
+    entity_id:
+    - binary_sensor.relais001_button
     to: 'on'
   condition: []
   action:
@@ -96,13 +97,9 @@
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_ac2003
+  - service: notify.mobile_app_telefoonbas
     data:
-      title: Deurbel
       message: Er is iemand aan de voordeur!
-      data:
-        tts: 0
-        priority: high
   - service: notify.mobile_app_telefoondaan
     data:
       title: Deurbel
@@ -144,7 +141,7 @@
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_ac2003
+  - service: notify.mobile_app_bas
     data:
       message: De garagepoort wordt via NFC open/dicht gemaakt.
   mode: single
@@ -301,24 +298,24 @@
   - service: tts.google_translate_say
     data:
       entity_id: media_player.keukenhub, media_player.woonkamer,media_player.kamer_daan,
-        media_player.kamer_gabrie
+        media_player.kamer_gabrie, media_player.kamer_bas
       message: De garagepoort is open zonder beweging.
       language: nl
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data:
       title: Garagepoort open
       message: De garagepoort is open zonder beweging.
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_ac2003
+  - service: notify.mobile_app_telefoonbas
     data:
       message: De garagepoort is open zonder beweging.
       title: Garagepoort open
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_oneplus_daan
+  - service: notify.mobile_app_telefoondaan
     data:
       title: Garagepoort open
       message: De garagepoort is open zonder beweging.
@@ -348,7 +345,7 @@
     conditions:
     - condition: state
       entity_id: vacuum.roborock_s5_max
-      state: docked
+      state: idle
     - condition: state
       entity_id: vacuum.roborock_s5_max
       state: unavailable
@@ -368,6 +365,7 @@
     target:
       device_id:
       - dfd58c0a195722d15246db03cc7e5e33
+    data: {}
   mode: single
 - id: '1612781258481'
   alias: AUT015 Stofzuiger heeft gelopen
@@ -452,23 +450,23 @@
   alias: AUT026 In of uit zone De Heeg
   trigger:
   - platform: zone
-    entity_id: device_tracker.telefoondaan, device_tracker.telefoongabrie, device_tracker.oneplusnordbas
+    entity_id: device_tracker.telefoondaan, device_tracker.telefoongabrie, device_tracker.telefoonbas
     zone: zone.de_heeg
     event: enter
   action:
   - service: notify.telegram
     data_template:
       message: "{% if (trigger.event) == \"leave\" %}\n  {{ trigger.to_state.attributes.friendly_name
-        }} heeft {{ trigger.zone.attributes.friendly_name }} verlaten.\n{% else %}\n
-        \ {{ trigger.to_state.attributes.friendly_name }} arriveert in zone {{ trigger.zone.attributes.friendly_name
-        }}\n{% endif %}\n"
+        }} heeft {{ trigger.zone.attributes.friendly_name }} verlaten. AUT026\n{%
+        else %}\n  {{ trigger.to_state.attributes.friendly_name }} arriveert in zone
+        {{ trigger.zone.attributes.friendly_name }} AUT026\n{% endif %}\n"
   mode: single
 - id: '1627120739713'
   alias: AUT027 Bas uit zone De Heeg met Airco aan
   description: ''
   trigger:
   - platform: zone
-    entity_id: device_tracker.oneplusnordbas
+    entity_id: device_tracker.telefoonbas
     event: leave
     zone: zone.de_heeg
   condition:
@@ -478,7 +476,7 @@
       entity_id: climate.airco_bas
       state: 'off'
   action:
-  - service: notify.mobile_app_ac2003
+  - service: notify.mobile_app_telefoonbas
     data:
       message: De airco op zolder staat nog aan !!!
   - service: notify.mobile_app_telefoongabrie
@@ -549,9 +547,9 @@
     device_id: 7ae187398e4a3fd6fab18dbfedbfd499
     entity_id: switch.powerplug001printer
     domain: switch
-  - service: notify.mobile_app_ac2003
+  - service: notify.mobile_app_telefoonbas
     data:
-      message: Printer na 1u automatisch uitgezet
+      message: Printer automatisch uit na 1u
   - service: notify.mobile_app_telefoongabrie
     data:
       message: Printer na 1u automatisch uitgezet
@@ -791,6 +789,13 @@
       data:
         tts: 0
         priority: high
+  - service: notify.mobile_app_telefoonbas
+    data:
+      title: AUT019 Oven programma klaar
+      message: AUT019 Oven programma klaar
+      data:
+        tts: 0
+        priority: high
   - service: notify.lgtv
     data:
       message: AUT019 Oven programma klaar
@@ -909,7 +914,7 @@
     - alias: Ga naar home als Gabrie thuis is
       conditions:
       - condition: state
-        entity_id: device_tracker.oneplusgabrie
+        entity_id: device_tracker.telefoongabrie
         state: home
       sequence:
       - service: climate.set_preset_mode
@@ -917,19 +922,16 @@
           device_id: 3667d1f5372390ea6b5a97ce1c603c8c
         data:
           preset_mode: home
-      - service: notify.mobile_app_oneplus7progabrie
+      - service: notify.mobile_app_telefoongabrie
         data:
           title: Thermostaat AUT045
-          message: Thermo gaat naar "home" stand.
-          data:
-            tts: 0
-            priority: high
+          message: Thermostaat op HOME
     - alias: Ga naar away als Gabrie niet thuis is
       conditions:
       - condition: not
         conditions:
         - condition: state
-          entity_id: device_tracker.oneplusgabrie
+          entity_id: device_tracker.telefoongabrie
           state: home
       sequence:
       - service: climate.set_preset_mode
@@ -937,37 +939,11 @@
           device_id: 3667d1f5372390ea6b5a97ce1c603c8c
         data:
           preset_mode: away
-      - service: notify.mobile_app_oneplus7progabrie
+      - service: notify.mobile_app_telefoongabrie
         data:
           title: Thermostaat AUT045
           message: Thermo gaat naar "away" stand.
-          data:
-            tts: 0
-            priority: high
     default: []
-  mode: single
-- id: '1639991884878'
-  alias: AUT000 Tuya devices reload
-  description: ''
-  trigger:
-  - platform: time_pattern
-    minutes: '30'
-  condition: []
-  action:
-  - service: homeassistant.reload_config_entry
-    target:
-      device_id:
-      - 015ec03b60ee8ce94100b348b3984d9b
-      - 836fa2cb9a00c58f3881acc332cf5d3a
-      - 44b1d58487b404c5363bf0acf7d932c8
-      - 2d6a02ac7ea7e16e623d2c9890a18364
-      - 0d65398f6064ef05e60ca0b5a10ab6cb
-      - bbe5047608db678cc05d6aee4f538302
-      - 54382fc554a265abdd703d4d38dd6bd8
-      - b7125a2c255c7161289d3c3b3d86cedc
-      - 129ec6eb861678dbd065daeb705dba51
-      - b70f9b0e9dddc713e7d46292ca0edd5e
-      - dfd58c0a195722d15246db03cc7e5e33
   mode: single
 - id: '1641035998188'
   alias: AUT046 Pollen meldingen
@@ -995,22 +971,39 @@
         priority: high
   mode: single
 - id: '1641128829998'
-  alias: AUT047 Warm water gevraagd
+  alias: AUT047 Douche langer dan 5min30
   description: Notificatie wanneer er warm water gevraagd wordt
   trigger:
   - platform: state
-    entity_id: binary_sensor.auxiliary_dhw_state
+    entity_id:
+    - binary_sensor.auxiliary_dhw_state
     from: 'off'
     to: 'on'
     for:
       hours: 0
-      minutes: 3
+      minutes: 5
       seconds: 30
   condition: []
   action:
   - service: notify.telegram
     data:
-      message: Wordt er gedouched?
+      message: Wordt er langer dan 5min gedouched?
+      title: Douche
+  - service: scene.create
+    data:
+      scene_id: lamp_before
+      snapshot_entities: light.computerlamp
+  - service: script.scr022_flashlightbadkamer
+    data: {}
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - service: scene.turn_on
+    target:
+      entity_id: scene.lamp_before
+    data: {}
   mode: single
 - id: '1641166600532'
   alias: AUT048 Ganglamp boven
@@ -1134,13 +1127,10 @@
     entity_id: climate.airco_bas
     type: set_hvac_mode
     hvac_mode: 'off'
-  - service: notify.mobile_app_ac2003
+  - service: notify.mobile_app_telefoonbas
     data:
-      title: Airco
-      message: Airco gaat uit
-      data:
-        tts: 0
-        priority: high
+      message: Airco automatisch uit om 2u
+      title: Airco automatisch uit
   - service: notify.mobile_app_telefoongabrie
     data:
       message: Airco Bas uit
@@ -1210,6 +1200,36 @@
     entity_id: cover.rollerblind_0004
     type: set_position
     position: 1
+  - if:
+    - condition: or
+      conditions:
+      - type: is_open
+        condition: device
+        device_id: 1a47684b388f2c7c12da76802f2f0384
+        entity_id: binary_sensor.ewelink_ds01_f8283622_ias_zone
+        domain: binary_sensor
+      - type: is_open
+        condition: device
+        device_id: 44f63afd99da90ef87cd36dfa12a2375
+        entity_id: binary_sensor.ewelink_ds01_4c3f2622_ias_zone
+        domain: binary_sensor
+      - type: is_open
+        condition: device
+        device_id: aeead8e7bb82d6d48db0a1cd191f8afe
+        entity_id: binary_sensor.ewelink_ds01_4ccd2622_ias_zone
+        domain: binary_sensor
+      - type: is_open
+        condition: device
+        device_id: 52873fd3d21cdb8514eafe0fd3791d0c
+        entity_id: binary_sensor.achterdeur_ias_zone
+        domain: binary_sensor
+    then:
+    - service: notify.mobile_app_telefoongabrie
+      data:
+        title: Deur nog open
+        message: Controleer voordeur, achterdeur, garagepoort en schuifpui.
+    - service: script.scr021_flash_gang_lamp
+      data: {}
   - service: light.turn_on
     data:
       brightness: 3
@@ -1262,7 +1282,7 @@
     id: smoke-zolder
   condition: []
   action:
-  - service: notify.mobile_app_oneplus7progabrie
+  - service: notify.mobile_app_telefoongabrie
     data_template:
       message: Rookmelder {{ trigger.to_state.attributes.friendly_name }} is afgegaan
   - service: tts.cloud_say
@@ -1293,3 +1313,142 @@
         }} is afgegaan.
       entity_id: media_player.keuken, media_player.woonkamer
   mode: single
+- id: '1658215056692'
+  alias: AUT053a Start Airco Woonkamer automatisch
+  description: ''
+  trigger:
+  - type: temperature
+    platform: device
+    device_id: 3667d1f5372390ea6b5a97ce1c603c8c
+    entity_id: sensor.anna_temperature
+    domain: sensor
+    above: 24
+  condition:
+  - condition: state
+    entity_id: person.gabrie_van_zanten
+    state: home
+  - condition: time
+    before: '22:00:00'
+    after: 07:00:00
+  action:
+  - service: climate.set_temperature
+    data:
+      temperature: 23
+      hvac_mode: cool
+    target:
+      device_id: fac9b00a382db56093a1982fdba8c5d3
+  mode: single
+- id: '1658215254096'
+  alias: AUT053b Stop Airco Woonkamer automatisch
+  description: ''
+  trigger:
+  - type: temperature
+    platform: device
+    device_id: 3667d1f5372390ea6b5a97ce1c603c8c
+    entity_id: sensor.anna_temperature
+    domain: sensor
+    below: 23
+  condition: []
+  action:
+  - service: climate.turn_off
+    data: {}
+    target:
+      device_id: fac9b00a382db56093a1982fdba8c5d3
+  mode: single
+- id: '1659281927114'
+  alias: AUT054 Droger is klaar
+  description: Notificatie als de droger klaar is
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_electrical_measurement
+    below: '20'
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  condition: []
+  action:
+  - service: notify.telegram
+    data:
+      message: De droger is klaar
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      title: Droger is klaar!
+      message: De droger is klaar
+      data:
+        tts: 0
+        priority: high
+  - service: notify.mobile_app_telefoondaan
+    data:
+      title: Droger is klaar!
+      message: De droger is klaar
+      data:
+        tts: 0
+        priority: high
+  - service: notify.gabriechrome
+    data:
+      message: De droger is klaar
+      title: Droger is klaar
+  mode: single
+- id: '1663503141813'
+  alias: Test Lamp kleur
+  description: ''
+  trigger:
+  - device_id: 2ceac65e69613ebef814c999ee42f9c6
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: button
+  condition: []
+  action:
+  - service: scene.create
+    data:
+      scene_id: lamp_before
+      snapshot_entities: light.computerlamp
+  - service: light.turn_on
+    data:
+      rgb_color:
+      - 255
+      - 0
+      - 0
+      flash: long
+    target:
+      device_id: 44b1d58487b404c5363bf0acf7d932c8
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 5
+      milliseconds: 0
+  - service: scene.turn_on
+    target:
+      entity_id: scene.lamp_before
+    data: {}
+  - service: script.scr022_flashlightbadkamer
+    data: {}
+  mode: single
+- id: unavailable_entities_notification
+  alias: AUT000 Device unavailable
+  description: Create persistent notification if there are unavailable entities, dismiss
+    if none.
+  trigger:
+  - platform: state
+    entity_id: sensor.unavailable_entities
+  action:
+  - choose:
+      conditions:
+      - condition: numeric_state
+        entity_id: sensor.unavailable_entities
+        below: 1
+      sequence:
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: unavailable_entities
+    default:
+    - service: persistent_notification.create
+      data:
+        title: '{{ states(''sensor.unavailable_entities'') }} Unavailable Entities'
+        message: '- {{ expand(state_attr(''sensor.unavailable_entities'',''entities''))|map(attribute=''entity_id'')|join(''
+
+          - '') }}'
+        notification_id: unavailable_entities
+  mode: restart

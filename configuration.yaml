@@ -14,7 +14,7 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 utility_meter: !include utility_meter.yaml
-plant: !include plant.yaml
+## plant: !include plant.yaml
 light: !include lights.yaml
 binary_sensor: !include binary_sensor.yaml
 sensor: !include sensors.yaml
@@ -50,19 +50,6 @@ tts:
   - platform: google_translate
     ### service_name: google_say
 
-
-##########
-### Daan Slaapt
-#########
-template:
-  binary_sensor:
-    - name: daanslaapt
-      unique_id: daanslaapt
-      state: >
-        {{ is_state('sensor.oneplus_daan_type_oplader','ac')
-        and is_state('device_tracker.oneplus_daan','home')
-        and is_state('light.daanlamp','off') 
-        }}
 
 #####################################################
 ### Toegevoegd voor Roborock S5 Max

@@ -253,3 +253,33 @@ scr020_kalender_vissen_voeren_14dgn:
       end_date_time: '{{ now() + timedelta(days=14) }}'
   mode: single
   icon: mdi:fishbowl
+scr021_flash_gang_lamp:
+  alias: SCR021 Flash Gang Lamp
+  sequence:
+  - repeat:
+      count: '6'
+      sequence:
+      - type: toggle
+        device_id: 0d65398f6064ef05e60ca0b5a10ab6cb
+        entity_id: light.ganglampbeneden
+        domain: light
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 1
+          milliseconds: 0
+  mode: single
+  icon: mdi:flash-triangle
+scr022_flashlightbadkamer:
+  alias: SCR022_FlashLightBadkamer
+  sequence:
+  - repeat:
+      count: '8'
+      sequence:
+      - delay: '0.6'
+      - service: light.toggle
+        data: {}
+        target:
+          device_id:
+          - 015ec03b60ee8ce94100b348b3984d9b
+  mode: restart
