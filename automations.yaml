@@ -1235,7 +1235,9 @@
       brightness: 3
       color_temp: 369
     target:
-      entity_id: light.slaapkamergabrie
+      device_id:
+      - 03b8043a9c5983a8024215c7f3caadd8
+      - dc2cccc4ff9b1003e68bd1dd052f9c95
   - delay:
       hours: 0
       minutes: 3
