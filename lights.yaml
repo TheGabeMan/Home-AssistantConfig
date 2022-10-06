@@ -41,7 +41,8 @@
 - platform: group
   name: SlaapkamerGabrie
   entities:
-    - light.slaapkamergabrie
+    - light.signify_netherlands_b_v_llc020_huelight
+    - light.signify_netherlands_b_v_llc020_huelight_2
     - light.plafondlamp_gabrie
 
 - platform: group
