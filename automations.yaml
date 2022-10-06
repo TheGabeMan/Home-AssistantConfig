@@ -1454,3 +1454,46 @@
           - '') }}'
         notification_id: unavailable_entities
   mode: restart
+- id: '1664779991828'
+  alias: AUT055 Slaapkamer licht bij wekker
+  description: ''
+  trigger:
+  - platform: template
+    value_template: '{{now().strftime("%a %h %d %H:%M %Z %Y") == (((state_attr(''sensor.telefoongabrie_next_alarm'',
+      ''Time in Milliseconds'') | int / 1000)) | timestamp_custom(''%a %h %d %H:%M
+      %Z %Y''))}}'
+    alias: When Alan's Phone Alarm goes off
+  condition:
+  - condition: state
+    entity_id: person.gabrie_van_zanten
+    state: home
+  action:
+  - service: light.turn_on
+    data:
+      brightness: 1
+      rgb_color:
+      - 0
+      - 0
+      - 255
+    target:
+      device_id: 03b8043a9c5983a8024215c7f3caadd8
+  - service: light.turn_on
+    data:
+      transition: 60
+      brightness: 255
+      rgb_color:
+      - 0
+      - 0
+      - 255
+    target:
+      device_id: 03b8043a9c5983a8024215c7f3caadd8
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    data: {}
+    target:
+      device_id: 03b8043a9c5983a8024215c7f3caadd8
+  mode: restart
