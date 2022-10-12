@@ -13,11 +13,11 @@
 - platform: tod
   name: Slaaptijd
   after: "22:00"
-  before: "06:00"
+  before: "07:30"
 
 - platform: tod
   name: ochtend
-  after: "06:00"
+  after: "07:30"
   before: "9:00"
 
 - platform: tod
