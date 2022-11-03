@@ -458,8 +458,8 @@
     data_template:
       message: "{% if (trigger.event) == \"leave\" %}\n  {{ trigger.to_state.attributes.friendly_name
         }} heeft {{ trigger.zone.attributes.friendly_name }} verlaten. AUT026\n{%
-        else %}\n  {{ trigger.to_state.attributes.friendly_name }} arriveert in zone
-        {{ trigger.zone.attributes.friendly_name }} AUT026\n{% endif %}\n"
+        else %}\n  {{ trigger.to_state.attributes.friendly_name }} komt thuis AUT026\n{%
+        endif %}\n"
   mode: single
 - id: '1627120739713'
   alias: AUT027 Bas uit zone De Heeg met Airco aan
@@ -800,107 +800,6 @@
     data:
       message: AUT019 Oven programma klaar
       title: AUT019 Oven programma klaar
-  mode: single
-- id: '1638725034049'
-  alias: AUT041 Vissen voeren
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: calendar.gab_bas_daan
-    to: 'on'
-  condition: []
-  action:
-  - service: notify.telegram
-    data:
-      message: Tijd om de vissen te voeren
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      title: Vissen Voeren
-      message: Tijd om de vissen te voeren
-      data:
-        tts: 0
-        priority: high
-  - service: notify.mobile_app_oneplus_daan
-    data:
-      title: Vissen voeren
-      message: Tijd om de vissen te voeren
-      data:
-        tts: 0
-        priority: high
-  mode: single
-- id: '1638740451655'
-  alias: AUT042 Paardenvoer Oranje
-  description: ''
-  trigger:
-  - platform: numeric_state
-    entity_id: input_number.voer_zakjes
-    below: '11'
-    above: '3'
-  condition: []
-  action:
-  - service: notify.telegram
-    data:
-      message: Paardenvoer naar 10 zakjes
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      title: Paardenvoer naar 10 zakjes
-      message: Paardenvoer naar 10 zakjes
-      data:
-        tts: 0
-        priority: high
-  - service: notify.mobile_app_oneplus_daan
-    data:
-      title: Paardenvoer naar 10 zakjes
-      message: Paardenvoer naar 10 zakjes
-      data:
-        tts: 0
-        priority: high
-  mode: single
-- id: '1638740500359'
-  alias: AUT043 Paardenvoer Rood
-  description: ''
-  trigger:
-  - platform: numeric_state
-    entity_id: input_number.voer_zakjes
-    below: '4'
-  condition: []
-  action:
-  - service: notify.telegram
-    data:
-      message: Paardenvoer naar 3 zakjes
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      title: Paardenvoer naar 3 zakjes
-      message: Paardenvoer naar 3 zakjes
-      data:
-        tts: 0
-        priority: high
-  - service: notify.mobile_app_oneplus_daan
-    data:
-      title: Paardenvoer naar 3 zakjes
-      message: Paardenvoer naar 3 zakjes
-      data:
-        tts: 0
-        priority: high
-  mode: single
-- id: '1638743072601'
-  alias: AUT044 Webhook Paardenvoer
-  description: ''
-  trigger:
-  - platform: webhook
-    webhook_id: paardenvoer
-  condition: []
-  action:
-  - service: input_number.decrement
-    target:
-      entity_id: input_number.voer_zakjes
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      title: Webhook Scan paardenvoer
-      message: Webhook Scan paardenvoer
-      data:
-        tts: 0
-        priority: high
   mode: single
 - id: '1639776256652'
   alias: AUT045 - ANNA home or away
@@ -1462,7 +1361,7 @@
     value_template: '{{now().strftime("%a %h %d %H:%M %Z %Y") == (((state_attr(''sensor.telefoongabrie_next_alarm'',
       ''Time in Milliseconds'') | int / 1000)) | timestamp_custom(''%a %h %d %H:%M
       %Z %Y''))}}'
-    alias: When Alan's Phone Alarm goes off
+    alias: When Gabrie's Phone Alarm goes off
   condition:
   - condition: state
     entity_id: person.gabrie_van_zanten
@@ -1471,20 +1370,16 @@
   - service: light.turn_on
     data:
       brightness: 1
-      rgb_color:
-      - 0
-      - 0
-      - 255
     target:
       device_id: 03b8043a9c5983a8024215c7f3caadd8
   - service: light.turn_on
     data:
       transition: 60
-      brightness: 255
+      brightness: 83
       rgb_color:
-      - 0
-      - 0
       - 255
+      - 244
+      - 217
     target:
       device_id: 03b8043a9c5983a8024215c7f3caadd8
   - delay:
@@ -1497,3 +1392,81 @@
     target:
       device_id: 03b8043a9c5983a8024215c7f3caadd8
   mode: restart
+- id: '1666213453124'
+  alias: Tag NFC004-bronwater is scanned
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 13768d5e-ce1a-436c-8cbb-0665b1dd261c
+  condition: []
+  action:
+  - service: counter.increment
+    data: {}
+    target:
+      entity_id: counter.bronwater
+  mode: single
+- id: '1666213701591'
+  alias: Tag NFC004-scan-bronwater is scanned
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: 4b741406-68ab-4947-872d-4bd99c6e580e
+  condition: []
+  action:
+  - service: counter.increment
+    data: {}
+    target:
+      entity_id: counter.bronwater
+  mode: single
+- id: '1666255129657'
+  alias: AUT056 Droger uit na uur niet gebruiken
+  description: Droger uit na uur geen stroom
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_electrical_measurement
+    below: 10
+    for:
+      hours: 0
+      minutes: 50
+      seconds: 0
+  condition:
+  - condition: device
+    type: is_on
+    device_id: 1b85b6bc49ee10b4df0bf814890df5fc
+    entity_id: switch.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_on_off
+    domain: switch
+  action:
+  - service: notify.telegram
+    data:
+      message: De droger is klaar
+  - type: turn_off
+    device_id: 1b85b6bc49ee10b4df0bf814890df5fc
+    entity_id: switch.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_on_off
+    domain: switch
+  mode: single
+- id: '1666255767369'
+  alias: AUT057 Wasmachine uit na een uur
+  description: Wasmachine uit na uur geen stroom
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.powerplug002_wasmachine_energy_power
+    below: 10
+    for:
+      hours: 0
+      minutes: 50
+      seconds: 0
+  condition:
+  - condition: device
+    type: is_on
+    device_id: 1eaa6aaa10fea20bfe367985b4561cba
+    entity_id: switch.powerplug002_wasmachine
+    domain: switch
+  action:
+  - service: notify.telegram
+    data:
+      message: De Wasmachine gaat uit
+  - type: turn_off
+    device_id: 1eaa6aaa10fea20bfe367985b4561cba
+    entity_id: switch.powerplug002_wasmachine
+    domain: switch
+  mode: single

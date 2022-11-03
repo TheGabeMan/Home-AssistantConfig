@@ -14,7 +14,6 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 utility_meter: !include utility_meter.yaml
-## plant: !include plant.yaml
 light: !include lights.yaml
 binary_sensor: !include binary_sensor.yaml
 sensor: !include sensors.yaml

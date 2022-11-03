@@ -35,7 +35,11 @@ scr004_flashlightbureau:
   - repeat:
       count: '3'
       sequence:
-      - delay: '0.4'
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 1
+          milliseconds: 0
       - service: light.toggle
         data: {}
         target:
@@ -283,3 +287,12 @@ scr022_flashlightbadkamer:
           device_id:
           - 015ec03b60ee8ce94100b348b3984d9b
   mode: restart
+maak_bronwater:
+  alias: Maak bronwater
+  sequence:
+  - service: counter.increment
+    data: {}
+    target:
+      entity_id: counter.bronwater
+  mode: single
+  icon: mdi:bottle-soda-classic-outline

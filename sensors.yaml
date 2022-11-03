@@ -2,27 +2,23 @@
 ####### Sensor section
 #######
 
-
 #####################################################
 ### Toegevoegd om van de s0Tool de versie info uit github op te halen
 #####################################################
-- platform: scrape
-  scan_interval: 1800     ## Scrape elk half uur ipv default 30 seconden
-  resource: https://www.opgevenisgeenoptie.nl/fundraisers/GabrievanZanten/alpe-dhuzes-2022
-  name: donaties 
-  select: "#template-profile > main > section.content.section.position-relative.pb20 > div > div.amountRaised.col-sm-6.col-md-8 > div > div.col-xs-6.right > h1 > span"
-  unit_of_measurement: "Euro"
+#- platform: scrape
+#  scan_interval: 1800 ## Scrape elk half uur ipv default 30 seconden
+#  resource: https://www.opgevenisgeenoptie.nl/fundraisers/GabrievanZanten/alpe-dhuzes-2022
+#  name: donaties
+#  select: "#template-profile > main > section.content.section.position-relative.pb20 > div > div.amountRaised.col-sm-6.col-md-8 > div > div.col-xs-6.right > h1 > span"
+#  unit_of_measurement: "Euro"
   ###########
   ## Er is ook nog een template waarde "vorigdonatiebedrag" dat de vorige staat bijhoudt
   ##########
-- platform: template
-  sensors:
-    vorigedonatietotaal:
-      friendly_name: "Vorige Donatatie totaal"
-      value_template: "{{ states('sensor.donaties') }}"
-
-
-
+#- platform: template
+#  sensors:
+#    vorigedonatietotaal:
+#      friendly_name: "Vorige Donatatie totaal"
+#      value_template: "{{ states('sensor.donaties') }}"
 
 #####################################################
 ### Toegevoegd om van de s0Tool de versie info uit github op te halen
@@ -39,7 +35,6 @@
     s0tool_gelijk_github:
       friendly_name: "s0Tool versie gelijk github versie"
       value_template: "{{ states('sensor.s0tool_versie_github') | replace(states('sensor.s0tool_versie_github')[0:1],'') == states('sensor.s0tool_versie') }}"
-      
 
 #####################################################
 ### Toegevoegd om Airco in Energy dashboard te krijgen
@@ -265,32 +260,31 @@
   sensors:
     plant_01_alarm:
       friendly_name: "Plant boekenkast"
-      value_template: "{{ state_attr('plant.plant_01','moisture') | default(0) < 20  }}"
+      value_template: "{{ state_attr('plant.1boekenkast','moisture') | default(0) < 20  }}"
 
 - platform: template
   sensors:
     plant_02_alarm:
       friendly_name: "Plant salontafel krukje"
-      value_template: "{{ state_attr('plant.plant_02','moisture') | default(0) < 20  }}"
+      value_template: "{{ state_attr('plant.2aglonema_sp','moisture') | default(0) < 20  }}"
 
 - platform: template
   sensors:
     plant_03_alarm:
       friendly_name: "Pannekoekenplant"
-      value_template: "{{ state_attr('plant.plant_03','moisture') | default(0) < 20  }}"
+      value_template: "{{ state_attr('plant.3pilea_peperomioides','moisture') | default(0) < 20  }}"
 
 - platform: template
   sensors:
     plant_04_alarm:
       friendly_name: "Plant salontafel plankje"
-      value_template: "{{ state_attr('plant.plant_04','moisture') | default(0) < 20  }}"
-
+      value_template: "{{ state_attr('plant.4philondendron_white_measure','moisture') | default(0) < 20  }}"
 
 - platform: template
   sensors:
     plant_05_alarm:
       friendly_name: "Plant naast TV"
-      value_template: "{{ state_attr('plant.plant_05','moisture') | default(0) < 20  }}"
+      value_template: "{{ state_attr('plant.5naastv','moisture') | default(0) < 20  }}"
 
 ###################################
 ## BMW Tank alarm
@@ -325,3 +319,17 @@
         entities: >
           {{ states|selectattr('state','in',['unavailable','unknown','none'])|rejectattr('domain','eq','group')
             |rejectattr('entity_id','in',state_attr('group.ignored_entities','entity_id'))|map(attribute='entity_id')|list }}
+
+###################################
+## Adhv tijdstip electriciteitsprijs bepalen
+###################################
+- platform: template
+  sensors:
+    current_electricity_rate:
+      value_template: >-
+        {% set curtime = strptime(states('sensor.time'), '%H:%M') %}
+        {% if curtime.hour >= 7 and curtime.hour <= 19 and is_state('binary_sensor.workday_sensor', 'on') -%} 0.15080 
+        {%- else -%} 0.13727
+        {%- endif -%}
+      friendly_name: Current Electricity Rate
+      unit_of_measurement: EUR/kWh
