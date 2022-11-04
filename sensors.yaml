@@ -260,35 +260,35 @@
   sensors:
     plant_01_alarm:
       friendly_name: "Plant boekenkast"
-      value_template: "{{ states('sensor.esp32ble_plant_01_moisture') | default(0) < 20  }}"
+      value_template: "{{ states('sensor.esp32ble_plant_01_moisture') | float(100) < 20  }}"
       ## value_template: "{{ state_attr('plant.1boekenkast','moisture') | default(0) < 20  }}"
 
 - platform: template
   sensors:
     plant_02_alarm:
       friendly_name: "Plant salontafel krukje"
-      value_template: "{{ states('sensor.esp32ble_plant_02_moisture') | default(0) < 20  }}"
+      value_template: "{{ states('sensor.esp32ble_plant_02_moisture') | float(100) < 20  }}"
       ## value_template: "{{ state_attr('plant.2aglonema_sp','moisture') | default(0) < 20  }}"
 
 - platform: template
   sensors:
     plant_03_alarm:
       friendly_name: "Pannekoekenplant"
-      value_template: "{{ states('sensor.esp32ble_plant_03_moisture') | default(0) < 20  }}"
+      value_template: "{{ states('sensor.esp32ble_plant_03_moisture') | float(100) < 20  }}"
       ## value_template: "{{ state_attr('plant.3pilea_peperomioides','moisture') | default(0) < 20  }}"
 
 - platform: template
   sensors:
     plant_04_alarm:
       friendly_name: "Plant salontafel plankje"
-      value_template: "{{ states('sensor.esp32ble_plant_04_moisture') | default(0) < 20  }}"
+      value_template: "{{ states('sensor.esp32ble_plant_04_moisture') | float(100) < 20  }}"
       ## value_template: "{{ state_attr('plant.4philondendron_white_measure','moisture') | default(0) < 20  }}"
 
 - platform: template
   sensors:
     plant_05_alarm:
       friendly_name: "Plant naast TV"
-      value_template: "{{ states('sensor.esp32ble_plant_05_moisture') | default(0) < 20  }}"
+      value_template: "{{ states('sensor.esp32ble_plant_05_moisture') | float(100) < 20  }}"
       ## value_template: "{{ state_attr('plant.5naastv','moisture') | default(0) < 20  }}"
 
 ###################################

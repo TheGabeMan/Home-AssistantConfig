@@ -559,10 +559,10 @@
   description: ''
   trigger:
   - platform: numeric_state
-    entity_id: sensor.rollerblind_battery_0003
+    entity_id: sensor.rollerblind_battery_0001
     below: '20'
   - platform: numeric_state
-    entity_id: sensor.rollerblind_battery_0004
+    entity_id: sensor.rollerblind_battery_0002
     below: '20'
   condition: []
   action:
@@ -1089,14 +1089,14 @@
       preset_mode: asleep
     target:
       entity_id: climate.anna
-  - device_id: 2676c14df386a6dfbc95c12a49ba136e
+  - device_id: cd131e52c35e0c8e68e4d81337749c3f
     domain: cover
-    entity_id: cover.rollerblind_0003
+    entity_id: cover.rollerblind_0001
     type: set_position
     position: 1
-  - device_id: e7680b4e4246c3ff3c6e254e1b9ecd9d
+  - device_id: 66a3fee2bfc323a1bd5ce11f04e06d0b
     domain: cover
-    entity_id: cover.rollerblind_0004
+    entity_id: cover.rollerblind_0002
     type: set_position
     position: 1
   - if:
