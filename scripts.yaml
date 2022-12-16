@@ -114,7 +114,10 @@ sc010_woonkamer_licht_uit:
   sequence:
   - service: light.toggle
     target:
-      entity_id: light.woonkamertotaal
+      area_id:
+      - 23e6c7fb9f204e3eb18fe60dcaf3c181
+      - 7ed3a9f5218c404ba791bca0ead7c973
+    data: {}
   mode: single
 scr011_garagepoort_open_dicht:
   alias: SCR011 Garagepoort open / dicht
@@ -217,6 +220,7 @@ scr017_raam_lamp_sfeer:
     data:
       brightness: 1
       color_temp: 500
+    enabled: false
   mode: single
   icon: mdi:spotlight
 scr018_achterkamer_spots:
@@ -233,30 +237,6 @@ scr018_achterkamer_spots:
       color_temp: 462
   mode: single
   icon: mdi:spotlight-beam
-scr019_kalender_vissen_gevoerd:
-  alias: SCR019 kalender vissen voeren (now)
-  sequence:
-  - service: google.add_event
-    data:
-      calendar_id: qvd0rfdl2cvtponrubvnfpbb8g@group.calendar.google.com
-      summary: Vissen Voeren
-      description: Tijd om de vissen te voeren.
-      start_date_time: '{{ now() + timedelta(minutes=3) }}'
-      end_date_time: '{{ now() + timedelta(minutes=5) }}'
-  mode: single
-  icon: mdi:fishbowl
-scr020_kalender_vissen_voeren_14dgn:
-  alias: SCR020 kalender vissen voeren 14dgn
-  sequence:
-  - service: google.add_event
-    data:
-      calendar_id: qvd0rfdl2cvtponrubvnfpbb8g@group.calendar.google.com
-      summary: Vissen Voeren
-      description: Tijd om de vissen te voeren.
-      start_date_time: '{{ now() + timedelta(days=14)}}'
-      end_date_time: '{{ now() + timedelta(days=14) }}'
-  mode: single
-  icon: mdi:fishbowl
 scr021_flash_gang_lamp:
   alias: SCR021 Flash Gang Lamp
   sequence:
@@ -296,3 +276,50 @@ maak_bronwater:
       entity_id: counter.bronwater
   mode: single
   icon: mdi:bottle-soda-classic-outline
+scr023_kerstslinger_aan_met_snake_effect:
+  alias: SCR023 KerstSlinger aan met snake effect
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/kerstslinger/set
+      payload: '{"effect":{"effect":"snake","speed":50,"colors":[{"r":255,"g":0,"b":0},{"r":0,"g":255,"b":0},{"r":0,"g":0,"b":255}]}}'
+  mode: single
+  icon: mdi:string-lights
+scr024_kerstboom_aan_met_snake_effect:
+  alias: SCR024 kerstboom aan met snake effect
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/kerstboom/set
+      payload: '{"effect":{"effect":"snake","speed":50,"colors":[{"r":255,"g":0,"b":0},{"r":0,"g":255,"b":0},{"r":0,"g":0,"b":255}]}}'
+  mode: single
+  icon: mdi:string-lights
+scr025_kerstslinger_aan_aimee_setting:
+  alias: SCR025 kerstslinger aan Aimee setting
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/kerstslinger/set
+      payload: '{"color":{"h":45,"s":100,"b":48}}'
+  mode: single
+scr026_kerstboom_met_aimee_setting:
+  alias: SCR026 kerstboom aan Aimee setting
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/kerstboom/set
+      payload: '{"color":{"h":45,"s":100,"b":48}}'
+  mode: single
+scr027_kerstslinger_en_kerstboom_aan_met_rainbow_effect:
+  alias: SCR027 KerstSlinger en kerstboom aan met rainbow effect
+  sequence:
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/kerstslinger/set
+      payload: '{"effect":{"effect":"rainbow","speed":60}}'
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/kerstboom/set
+      payload: '{"effect":{"effect":"rainbow","speed":60}}'
+  mode: single
+  icon: mdi:string-lights

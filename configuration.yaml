@@ -3,11 +3,18 @@ default_config:
 
 homeassistant:
   customize: !include customize.yaml
-  latitude: !secret latitude
-  longitude: !secret longitude
+  # latitude: !secret latitude
+  # longitude: !secret longitude
+  country: NL 
 
 frontend:
   themes: !include_dir_merge_named themes/
+
+## Toegevoegd voor extra mooi thema: Kibibit-theme
+## https://github.com/Kibibit/hass-kibibit-theme
+resources:
+  - url: https://fonts.googleapis.com/css?family=Comfortaa&display=swap
+    type: css
 
 group: !include groups.yaml
 automation: !include automations.yaml

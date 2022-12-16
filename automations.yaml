@@ -355,6 +355,7 @@
     target:
       device_id:
       - dfd58c0a195722d15246db03cc7e5e33
+      - 8dd49e0e268a9e0bc723401332d9a6d0
   - wait_for_trigger:
     - platform: state
       entity_id: binary_sensor.lumi_lumi_sensor_motion_ias_zone
@@ -363,8 +364,9 @@
   - delay: 1
   - service: light.turn_off
     target:
-      device_id:
-      - dfd58c0a195722d15246db03cc7e5e33
+      area_id:
+      - 23e6c7fb9f204e3eb18fe60dcaf3c181
+      - 7ed3a9f5218c404ba791bca0ead7c973
     data: {}
   mode: single
 - id: '1612781258481'
@@ -559,10 +561,10 @@
   description: ''
   trigger:
   - platform: numeric_state
-    entity_id: sensor.rollerblind_battery_0001
+    entity_id: sensor.rollerblind_0001_battery
     below: '20'
   - platform: numeric_state
-    entity_id: sensor.rollerblind_battery_0002
+    entity_id: sensor.rollerblind_0002_battery
     below: '20'
   condition: []
   action:
@@ -884,14 +886,14 @@
       seconds: 30
   condition: []
   action:
-  - service: notify.telegram
+  - service: notify.mobile_app_telefoongabrie
     data:
-      message: Wordt er langer dan 5min gedouched?
-      title: Douche
+      message: Douche langer dan 5min30
+      title: Douche langer dan 5min30
   - service: scene.create
     data:
       scene_id: lamp_before
-      snapshot_entities: light.computerlamp
+      snapshot_entities: light.badkamerlamp
   - service: script.scr022_flashlightbadkamer
     data: {}
   - delay:
@@ -1000,7 +1002,7 @@
     data: {}
   mode: single
 - id: '1642262339885'
-  alias: AUT008 Airco Bas uit 's nachts
+  alias: AUT008-Z Airco Bas uit zomer
   description: ''
   trigger:
   - platform: time
@@ -1026,14 +1028,15 @@
     entity_id: climate.airco_bas
     type: set_hvac_mode
     hvac_mode: 'off'
+    enabled: false
   - service: notify.mobile_app_telefoonbas
     data:
       message: Airco automatisch uit om 2u
       title: Airco automatisch uit
   - service: notify.mobile_app_telefoongabrie
     data:
-      message: Airco Bas uit
-      title: Airco Bas uit
+      message: Airco Bas uit Zomer
+      title: Airco Bas uit Zomer
   mode: single
 - id: '1644784971435'
   alias: AUT050 Donatie ontvangen
@@ -1131,12 +1134,11 @@
       data: {}
   - service: light.turn_on
     data:
-      brightness: 3
+      brightness: 75
       color_temp: 369
     target:
       device_id:
       - 03b8043a9c5983a8024215c7f3caadd8
-      - dc2cccc4ff9b1003e68bd1dd052f9c95
   - delay:
       hours: 0
       minutes: 3
@@ -1469,4 +1471,238 @@
     device_id: 1eaa6aaa10fea20bfe367985b4561cba
     entity_id: switch.powerplug002_wasmachine
     domain: switch
+  mode: single
+- id: '1667601147143'
+  alias: AUT058 ijskast staat uit
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_off
+    device_id: 20d832e708a8d23dad062d9128eb8cbc
+    entity_id: switch.tz3000_u5u4cakc_ts011f_switch
+    domain: switch
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 15
+  condition: []
+  action:
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      message: Staat de ijskast uit? Zoek in HA op tabblad keuken naar de ijskast
+        en zet hem weer aan.
+  - type: turn_on
+    device_id: 20d832e708a8d23dad062d9128eb8cbc
+    entity_id: switch.tz3000_u5u4cakc_ts011f_switch
+    domain: switch
+  mode: single
+- id: '1668691629167'
+  alias: AUT059 Garage button gang
+  description: Button in gang maakt garage open
+  trigger:
+  - device_id: b1c50491cd4029582003785e22d84650
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: button
+  condition: []
+  action:
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      title: Garagepoort open/dicht
+      message: De garagepoort wordt via gangbutton open/dicht gemaakt.
+      data:
+        tts: 0
+        priority: high
+  - service: switch.toggle
+    data:
+      entity_id: switch.relais002_relaisstate
+  mode: single
+- id: '1668982038857'
+  alias: AUT060 Button Bas licht aan/uit
+  description: ''
+  trigger:
+  - device_id: dfd41e66356502c5c4802fe6adb11a9b
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: button
+  condition: []
+  action:
+  - if:
+    - condition: device
+      type: is_off
+      device_id: 38fbf0caec931547b7491e450a4046d2
+      entity_id: light.led_bas_bureau
+      domain: light
+    then:
+    - service: light.turn_on
+      data: {}
+      target:
+        device_id:
+        - 76b327b9329cc08343049931bb61b716
+        - 38fbf0caec931547b7491e450a4046d2
+        - 3b5ccf9a9f01cd0429958a4d12623ea1
+    - service: switch.turn_on
+      data: {}
+      target:
+        entity_id: switch.tz3000_g5xawfcq_ts0121_b3b93afe_on_off
+    else:
+    - if:
+      - condition: device
+        type: is_on
+        device_id: 38fbf0caec931547b7491e450a4046d2
+        entity_id: light.led_bas_bureau
+        domain: light
+      then:
+      - service: light.turn_off
+        data: {}
+        target:
+          device_id:
+          - 38fbf0caec931547b7491e450a4046d2
+          - 76b327b9329cc08343049931bb61b716
+      - service: switch.turn_off
+        data: {}
+        target:
+          entity_id: switch.tz3000_g5xawfcq_ts0121_b3b93afe_on_off
+  mode: single
+- id: '1669579904471'
+  alias: AUT061 Woonkamer temp 22
+  description: ''
+  trigger:
+  - type: temperature
+    platform: device
+    device_id: 3667d1f5372390ea6b5a97ce1c603c8c
+    entity_id: sensor.anna_temperature
+    domain: sensor
+    above: 21.9
+  - platform: numeric_state
+    entity_id: sensor.anna_temperature
+    above: 21.9
+  condition: []
+  action:
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      message: Woonkamer temp 21.1C
+      title: Anna Temp
+  - service: climate.turn_off
+    data: {}
+    target:
+      device_id: fac9b00a382db56093a1982fdba8c5d3
+  - delay:
+      hours: 0
+      minutes: 3
+      seconds: 0
+      milliseconds: 0
+  - repeat:
+      count: '5'
+      sequence:
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: climate.airco_woonkamer
+          state: 'off'
+      - service: climate.turn_off
+        data: {}
+        target:
+          device_id: fac9b00a382db56093a1982fdba8c5d3
+  mode: single
+- id: '1670016627490'
+  alias: AUT062 Tandenpoetsen
+  description: ''
+  trigger:
+  - platform: time
+    at: '10:00:00'
+  condition:
+  - type: is_value
+    condition: device
+    device_id: b813b36dafbb0c1f8beac47fba41422f
+    entity_id: sensor.smart_series_7000_e67b_time
+    domain: sensor
+    below: 120
+  action:
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      message: Nog niet lang genoeg tanden gepoetst vandaag.
+      title: Tandenborstel
+  mode: single
+- id: '1670854752289'
+  alias: AUT063 Kerstboom snake Sav / Daan
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - device_tracker.unifi_a2_d6_5e_58_72_97_default
+    to: home
+  - platform: state
+    entity_id:
+    - device_tracker.oneplus_7pro_2
+    to: home
+  condition:
+  - condition: or
+    conditions:
+    - condition: device
+      type: is_on
+      device_id: 9f86591ca886ebefbe5b17418d98a5a0
+      entity_id: light.kerstboom
+      domain: light
+    - condition: device
+      type: is_on
+      device_id: 20b0ed73838e3b5528a8fd508a0688bf
+      entity_id: light.kerstslinger
+      domain: light
+  action:
+  - service: script.scr027_kerstslinger_en_kerstboom_aan_met_rainbow_effect
+    data: {}
+  mode: single
+- id: '1671143588337'
+  alias: AUT064 Bas verlaat werkzone
+  description: ''
+  trigger:
+  - platform: zone
+    entity_id: device_tracker.telefoonbas
+    event: leave
+    zone: zone.workbas
+  condition: []
+  action:
+  - service: notify.mobile_app_telefoonbas
+    data:
+      title: U verlaat zone Bas Work!
+      message: Airco ??
+  mode: single
+- id: '1671144424420'
+  alias: AUT008-W Airco Bas lager winter
+  description: ''
+  trigger:
+  - platform: time
+    at: 02:00:00
+  condition:
+  - condition: or
+    conditions:
+    - condition: device
+      device_id: a5cbe79e266846ddf54c5fb4a2b7157c
+      domain: climate
+      entity_id: climate.airco_bas
+      type: is_hvac_mode
+      hvac_mode: heat
+  action:
+  - device_id: a5cbe79e266846ddf54c5fb4a2b7157c
+    domain: climate
+    entity_id: climate.airco_bas
+    type: set_hvac_mode
+    hvac_mode: 'off'
+    enabled: false
+  - service: notify.mobile_app_telefoonbas
+    data:
+      message: Airco lager om 2u
+      title: Airco lager om 2u
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      message: Airco lager om 2u
+      title: Airco lager om 2u
+  - service: climate.set_temperature
+    data:
+      temperature: 20
+    target:
+      device_id: a5cbe79e266846ddf54c5fb4a2b7157c
   mode: single
