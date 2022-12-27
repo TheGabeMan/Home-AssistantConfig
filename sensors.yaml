@@ -333,8 +333,18 @@
     current_electricity_rate:
       value_template: >-
         {% set curtime = strptime(states('sensor.time'), '%H:%M') %}
-        {% if curtime.hour >= 7 and curtime.hour <= 19 and is_state('binary_sensor.workday_sensor', 'on') -%} 0.15080 
+        {% if curtime.hour >= 7 and curtime.hour <= 21 and is_state('binary_sensor.workday_sensor', 'on') -%} 0.15080 
         {%- else -%} 0.13727
         {%- endif -%}
       friendly_name: Current Electricity Rate
       unit_of_measurement: EUR/kWh
+
+
+###################################
+## Stopcontact07 geschikt maken voor energy dashboard
+###################################
+- platform: integration
+  source: sensor.stopcontact07_power
+  name: stopcontact07_energy_spent
+  unit_prefix: k
+  round: 2

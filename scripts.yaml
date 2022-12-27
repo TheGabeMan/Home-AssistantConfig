@@ -277,37 +277,28 @@ maak_bronwater:
   mode: single
   icon: mdi:bottle-soda-classic-outline
 scr023_kerstslinger_aan_met_snake_effect:
-  alias: SCR023 KerstSlinger aan met snake effect
+  alias: SCR023 Kerstverlichting aan met snake effect
   sequence:
   - service: mqtt.publish
     data:
       topic: zigbee2mqtt/kerstslinger/set
-      payload: '{"effect":{"effect":"snake","speed":50,"colors":[{"r":255,"g":0,"b":0},{"r":0,"g":255,"b":0},{"r":0,"g":0,"b":255}]}}'
-  mode: single
-  icon: mdi:string-lights
-scr024_kerstboom_aan_met_snake_effect:
-  alias: SCR024 kerstboom aan met snake effect
-  sequence:
+      payload: '{"effect":{"effect":"snake","speed":25,"colors":[{"r":255,"g":0,"b":0},{"r":0,"g":255,"b":0},{"r":0,"g":0,"b":255}]}}'
   - service: mqtt.publish
     data:
       topic: zigbee2mqtt/kerstboom/set
-      payload: '{"effect":{"effect":"snake","speed":50,"colors":[{"r":255,"g":0,"b":0},{"r":0,"g":255,"b":0},{"r":0,"g":0,"b":255}]}}'
+      payload: '{"effect":{"effect":"snake","speed":25,"colors":[{"r":255,"g":0,"b":0},{"r":0,"g":255,"b":0},{"r":0,"g":0,"b":255}]}}'
   mode: single
   icon: mdi:string-lights
 scr025_kerstslinger_aan_aimee_setting:
-  alias: SCR025 kerstslinger aan Aimee setting
-  sequence:
-  - service: mqtt.publish
-    data:
-      topic: zigbee2mqtt/kerstslinger/set
-      payload: '{"color":{"h":45,"s":100,"b":48}}'
-  mode: single
-scr026_kerstboom_met_aimee_setting:
-  alias: SCR026 kerstboom aan Aimee setting
+  alias: SCR025 kerstverlichting aan Aimee setting
   sequence:
   - service: mqtt.publish
     data:
       topic: zigbee2mqtt/kerstboom/set
+      payload: '{"color":{"h":45,"s":100,"b":48}}'
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/kerstslinger/set
       payload: '{"color":{"h":45,"s":100,"b":48}}'
   mode: single
 scr027_kerstslinger_en_kerstboom_aan_met_rainbow_effect:

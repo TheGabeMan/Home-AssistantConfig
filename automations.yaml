@@ -1542,7 +1542,7 @@
         device_id:
         - 76b327b9329cc08343049931bb61b716
         - 38fbf0caec931547b7491e450a4046d2
-        - 3b5ccf9a9f01cd0429958a4d12623ea1
+        - f1f326c75f8408e04137655f8c12f1e6
     - service: switch.turn_on
       data: {}
       target:
@@ -1706,3 +1706,88 @@
     target:
       device_id: a5cbe79e266846ddf54c5fb4a2b7157c
   mode: single
+- id: '1671238057508'
+  alias: AUT065A Brushtime reached
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.smart_series_7000_e67b_time
+    above: 10
+  condition: []
+  action:
+  - service: input_boolean.turn_on
+    data: {}
+    target:
+      entity_id: input_boolean.brushenough
+  mode: single
+- id: '1671238406936'
+  alias: AUT065B Brushtime reset
+  description: ''
+  trigger:
+  - platform: time
+    at: 01:00:00
+  condition: []
+  action:
+  - service: input_boolean.turn_off
+    data: {}
+    target:
+      entity_id:
+      - input_boolean.brushenough
+  mode: single
+- id: '1671238513639'
+  alias: AUT065C Brushtime check
+  description: ''
+  trigger:
+  - platform: time
+    at: 09:30:00
+  condition:
+  - condition: state
+    entity_id: input_boolean.brushenough
+    state: 'off'
+  action:
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      message: Nog geen tanden gepoetst
+      title: Nog geen tanden gepoetst
+  mode: single
+- id: did_you_brush_yet
+  use_blueprint:
+    path: didyoubrushyet/did_you_brush_yet.yaml
+    input:
+      toothbrush:
+        name: toothbrush
+        description: Select your toothbrush
+        selector:
+          entity:
+            domain: sensor
+      oralb_brush_length:
+        name: Brush time
+        description: How long do you want to brush your teeth? (In seconds)
+        default: 120
+        selector:
+          number:
+            min: 10
+            max: 360
+            unit_of_measurement: seconds
+      brush_before:
+        name: Brush before time
+        description: Before what time should you have brushed your teeth
+        default: 09:00:00
+        selector:
+          time: {}
+      notify_device:
+        name: Device to notify
+        description: Device running HA app to receive notification on
+        selector:
+          device:
+            integration: mobile_app
+- id: '1671286364387'
+  alias: Brushtest
+  description: Test van tandenborstel
+  use_blueprint:
+    path: didyoubrushyet/did_you_brush_yet.yaml
+    input:
+      toothbrush: sensor.smart_series_7000_e67b_time
+      oralb_brush_length: 10
+      brush_before: '15:20:00'
+      notify_device: 2cfb950c8bdd9e29cc6e74e4d6e6b4fd

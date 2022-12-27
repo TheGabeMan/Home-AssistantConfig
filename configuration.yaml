@@ -20,6 +20,28 @@ binary_sensor: !include binary_sensor.yaml
 sensor: !include sensors.yaml
 switch: !include switch.yaml
 
+#######
+####### Recorder entries gaan naar een MariaDB 
+#######
+recorder:
+  db_url: !secret mariadb_url 
+
+#######
+####### InfluxDB section
+#######
+
+influxdb:
+  host: homeassist.intern.vanzanten.be
+  port: 8086
+  database: homeassistant
+  username: homeassistant
+  password: !secret influxdb_password
+  max_retries: 3
+  default_measurement: state
+
+#######
+####### End of: InfluxDB section
+#######
 
 #######
 ####### Configureer welke entities wel/niet in logbook komen
@@ -86,24 +108,6 @@ camera:
       - zones
 
 
-
-#######
-####### InfluxDB section
-#######
-
-influxdb:
-  host: homeassist.intern.vanzanten.be
-  port: 8086
-  database: homeassistant
-  username: homeassistant
-  password: !secret influxdb_password
-  max_retries: 3
-  default_measurement: state
-
-#######
-####### End of: InfluxDB section
-#######
-
 #######
 ####### Siemens Home Connect section
 ####### https://www.home-assistant.io/integrations/home_connect/
@@ -165,4 +169,6 @@ spotcast:
 ## withings:
 ##  client_id: !secret withings_CLIENT_ID
 ##  client_secret: !secret withings_CONSUMER_SECRET
+
+
 

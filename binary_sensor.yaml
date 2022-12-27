@@ -1,4 +1,3 @@
-
 ## Time of Day (TOD) section
 - platform: tod
   name: Nacht
@@ -102,4 +101,3 @@
   country: NL
   workdays: [mon, tue, wed, thu, fri]
   excludes: [sat, sun]
-  
