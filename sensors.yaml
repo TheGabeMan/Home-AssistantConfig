@@ -11,9 +11,9 @@
 #  name: donaties
 #  select: "#template-profile > main > section.content.section.position-relative.pb20 > div > div.amountRaised.col-sm-6.col-md-8 > div > div.col-xs-6.right > h1 > span"
 #  unit_of_measurement: "Euro"
-  ###########
-  ## Er is ook nog een template waarde "vorigdonatiebedrag" dat de vorige staat bijhoudt
-  ##########
+###########
+## Er is ook nog een template waarde "vorigdonatiebedrag" dat de vorige staat bijhoudt
+##########
 #- platform: template
 #  sensors:
 #    vorigedonatietotaal:
@@ -41,19 +41,19 @@
 #####################################################
 - platform: integration
   source: sensor.airco_bas_energy_current
-  name: verbruik_airco_bas
+  name: Airco Bas
   unit_prefix: k
   round: 2
 
 - platform: integration
   source: sensor.airco_daan_energy_current
-  name: verbruik_airco_daan
+  name: Airco Daan
   unit_prefix: k
   round: 2
 
 - platform: integration
   source: sensor.airco_woonkamer_energy_current
-  name: verbruik_airco_woonkamer
+  name: Airco Woonkamer
   unit_prefix: k
   round: 2
 #####################################################
@@ -339,12 +339,11 @@
       friendly_name: Current Electricity Rate
       unit_of_measurement: EUR/kWh
 
-
 ###################################
 ## Stopcontact07 geschikt maken voor energy dashboard
 ###################################
 - platform: integration
   source: sensor.stopcontact07_power
-  name: stopcontact07_energy_spent
+  name: Computers Bureau
   unit_prefix: k
   round: 2

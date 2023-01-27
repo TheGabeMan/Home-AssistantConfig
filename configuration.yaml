@@ -31,7 +31,8 @@ recorder:
 #######
 
 influxdb:
-  host: homeassist.intern.vanzanten.be
+  # host: homeassist.intern.vanzanten.be
+  host: databases.intern.vanzanten.be
   port: 8086
   database: homeassistant
   username: homeassistant

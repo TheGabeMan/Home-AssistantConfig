@@ -146,11 +146,11 @@
       message: De garagepoort wordt via NFC open/dicht gemaakt.
   mode: single
 - id: '1607377517341'
-  alias: AUT006 Anna - ASLEEP na 23u
-  description: Om 23u verwarming naar ASLEEP
+  alias: AUT045-B 22:30u Anna Sleep
+  description: Om 22:30u verwarming naar ASLEEP
   trigger:
   - platform: time
-    at: '23:00:00'
+    at: '22:30:00'
   condition:
   - condition: time
     weekday:
@@ -162,6 +162,7 @@
     - sat
     - sun
     before: 00:00:00
+    after: 00:00:00
   action:
   - service: climate.set_preset_mode
     data:
@@ -174,6 +175,11 @@
       data:
         tts: 0
         priority: high
+  - service: climate.set_hvac_mode
+    data:
+      hvac_mode: 'off'
+    target:
+      device_id: fac9b00a382db56093a1982fdba8c5d3
   mode: single
 - id: '1608073935353'
   alias: AUT009 - Stofzuiger - Stofzuigen
@@ -804,8 +810,8 @@
       title: AUT019 Oven programma klaar
   mode: single
 - id: '1639776256652'
-  alias: AUT045 - ANNA home or away
-  description: ''
+  alias: AUT045-A 7u Anna Home Away
+  description: Check om 7u of Gabrie thuis is en zet bij thuis zijn de CV op HOME
   trigger:
   - platform: time
     at: 07:00:00
@@ -1080,8 +1086,7 @@
       message: Naar bed gaan gestart
       title: Bedtijd
   - service: light.turn_off
-    data:
-      transition: 10
+    data: {}
     target:
       area_id:
       - 23e6c7fb9f204e3eb18fe60dcaf3c181
@@ -1195,30 +1200,10 @@
       entity_id: media_player.keuken, media_player.woonkamer
       language: nl
   mode: single
-- id: '1645981928531'
-  alias: TestAutomation (badkamer deur als rookmelder)
-  description: ''
-  trigger:
-  - type: opened
-    platform: device
-    device_id: 4c21f55e2672de391ce7587a94634471
-    entity_id: binary_sensor.badkamerdeur_ias_zone
-    domain: binary_sensor
-    id: badkamerdeur-triggerid
-  condition: []
-  action:
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      message: Rookmelder {{ trigger.to_state.attributes.friendly_name }} is afgegaan
-  - service: tts.cloud_say
-    data:
-      message: Opgelet, de rookmelder {{ trigger.to_state.attributes.friendly_name
-        }} is afgegaan.
-      entity_id: media_player.keuken, media_player.woonkamer
-  mode: single
 - id: '1658215056692'
-  alias: AUT053a Start Airco Woonkamer automatisch
-  description: ''
+  alias: AUT045-G ZOMER Start Airco Woonkamer automatisch
+  description: Start airco op stand koelen bij een kamertemperatuur van meer dan 24
+    graden en Gabrie thuis is.
   trigger:
   - type: temperature
     platform: device
@@ -1232,29 +1217,12 @@
     state: home
   - condition: time
     before: '22:00:00'
-    after: 07:00:00
+    after: 09:00:00
   action:
   - service: climate.set_temperature
     data:
       temperature: 23
       hvac_mode: cool
-    target:
-      device_id: fac9b00a382db56093a1982fdba8c5d3
-  mode: single
-- id: '1658215254096'
-  alias: AUT053b Stop Airco Woonkamer automatisch
-  description: ''
-  trigger:
-  - type: temperature
-    platform: device
-    device_id: 3667d1f5372390ea6b5a97ce1c603c8c
-    entity_id: sensor.anna_temperature
-    domain: sensor
-    below: 23
-  condition: []
-  action:
-  - service: climate.turn_off
-    data: {}
     target:
       device_id: fac9b00a382db56093a1982fdba8c5d3
   mode: single
@@ -1292,42 +1260,6 @@
     data:
       message: De droger is klaar
       title: Droger is klaar
-  mode: single
-- id: '1663503141813'
-  alias: Test Lamp kleur
-  description: ''
-  trigger:
-  - device_id: 2ceac65e69613ebef814c999ee42f9c6
-    domain: zha
-    platform: device
-    type: remote_button_short_press
-    subtype: button
-  condition: []
-  action:
-  - service: scene.create
-    data:
-      scene_id: lamp_before
-      snapshot_entities: light.computerlamp
-  - service: light.turn_on
-    data:
-      rgb_color:
-      - 255
-      - 0
-      - 0
-      flash: long
-    target:
-      device_id: 44b1d58487b404c5363bf0acf7d932c8
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 5
-      milliseconds: 0
-  - service: scene.turn_on
-    target:
-      entity_id: scene.lamp_before
-    data: {}
-  - service: script.scr022_flashlightbadkamer
-    data: {}
   mode: single
 - id: unavailable_entities_notification
   alias: AUT000 Device unavailable
@@ -1542,11 +1474,10 @@
         device_id:
         - 76b327b9329cc08343049931bb61b716
         - 38fbf0caec931547b7491e450a4046d2
-        - f1f326c75f8408e04137655f8c12f1e6
     - service: switch.turn_on
       data: {}
       target:
-        entity_id: switch.tz3000_g5xawfcq_ts0121_b3b93afe_on_off
+        device_id: f1f326c75f8408e04137655f8c12f1e6
     else:
     - if:
       - condition: device
@@ -1564,7 +1495,7 @@
       - service: switch.turn_off
         data: {}
         target:
-          entity_id: switch.tz3000_g5xawfcq_ts0121_b3b93afe_on_off
+          device_id: f1f326c75f8408e04137655f8c12f1e6
   mode: single
 - id: '1669579904471'
   alias: AUT061 Woonkamer temp 22
@@ -1791,3 +1722,74 @@
       oralb_brush_length: 10
       brush_before: '15:20:00'
       notify_device: 2cfb950c8bdd9e29cc6e74e4d6e6b4fd
+- id: '1672844773503'
+  alias: AUT045-C Anna temp reached
+  description: Als de ANNA op de ingesteld temp uitgekomen is, dan ANNA uit en Airco
+    aan
+  trigger:
+  - platform: state
+    entity_id:
+    - climate.anna
+    attribute: current_temperature
+  condition:
+  - condition: state
+    entity_id: climate.anna
+    attribute: preset_mode
+    state: home
+  - condition: template
+    value_template: '{{ state_attr("climate.anna","current_temperature") |int >= state_attr("climate.anna","temperature")
+      | int}}'
+  action:
+  - service: notify.telegram
+    data:
+      message: Overschakelen van Anna op Airco, ingestelde temperatuur van {{ state_attr("climate.anna","temperature")
+        }} bereikt. Gemeten temperatuur is {{state_attr("climate.anna","current_temperature")}}
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      title: ANNA naar Airco over
+      message: Overschakelen van Anna op Airco, ingestelde temperatuur van {{ state_attr("climate.anna","temperature")
+        }} bereikt. Gemeten temperatuur is {{state_attr("climate.anna","current_temperature")}}
+  - service: climate.turn_on
+    data: {}
+    target:
+      device_id: fac9b00a382db56093a1982fdba8c5d3
+  - service: climate.set_temperature
+    data:
+      temperature: '{{ state_attr("climate.anna","temperature") |int +4 }}'
+      hvac_mode: heat_cool
+    target:
+      device_id: fac9b00a382db56093a1982fdba8c5d3
+  - service: climate.set_fan_mode
+    data:
+      fan_mode: MID
+    target:
+      device_id: fac9b00a382db56093a1982fdba8c5d3
+  - service: climate.set_preset_mode
+    data:
+      preset_mode: away
+    target:
+      device_id: 3667d1f5372390ea6b5a97ce1c603c8c
+  mode: single
+- id: '1673337482297'
+  alias: TEST Mobile Notifications
+  description: ''
+  trigger:
+  - device_id: 2ceac65e69613ebef814c999ee42f9c6
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: button
+  condition: []
+  action:
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      message: Wil je de airco aanzetten?
+      data:
+        actions:
+        - action: NEE
+          title: Geen airco starten
+        - action: Koelen
+          title: Zet airco op koelen
+        - action: Verwarmen
+          title: Zet airco op verwarmen
+  mode: single
