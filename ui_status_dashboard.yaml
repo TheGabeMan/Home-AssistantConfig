@@ -1,0 +1,591 @@
+views:
+  - theme: kibibit
+    title: Overzicht Modules
+    path: overzicht-relais
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: sensor.relais001_ip
+          - entity: sensor.relais001_uptime
+        title: Relais001-Meterkast
+      - type: entities
+        entities:
+          - entity: sensor.relais002_ip
+          - entity: sensor.relais002_uptime
+        title: Relais002-Garage
+      - type: entities
+        entities:
+          - entity: sensor.powerplug001_ip
+          - entity: sensor.powerplug001_last_restart_time
+        title: PowerPlug-Koffie
+      - type: entities
+        entities:
+          - entity: sensor.powerplug002_wasmachine_ip
+          - entity: sensor.powerplug002_wasmachine_last_restart_time
+          - entity: sensor.powerplug002_wasmachine_signal
+        title: PowerPlug-Wasmachine
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.dns_vanzanten
+          - entity: binary_sensor.esx05_vanzanten_local
+          - entity: binary_sensor.gateway
+          - entity: binary_sensor.google_8_8_8_8
+          - entity: binary_sensor.leeslamp
+          - entity: binary_sensor.relaisgarage
+          - entity: binary_sensor.relaismeterkast
+          - entity: binary_sensor.powerplug001_koffie
+          - entity: binary_sensor.powerplug002_wasmachine
+          - entity: binary_sensor.sonoff_bridge
+          - entity: binary_sensor.printer
+        hours_to_show: 12
+        refresh_interval: 0
+        title: Ping Status
+      - type: history-graph
+        entities:
+          - entity: sensor.speedtest_download
+          - entity: sensor.speedtest_upload
+          - entity: sensor.speedtest_ping
+        hours_to_show: 336
+        refresh_interval: 0
+        title: Speed Test
+      - type: entities
+        entities:
+          - entity: sensor.powerplug003_ip
+          - entity: sensor.powerplug003_last_restart_time
+        title: PowerPlug-ElectrischeDeken
+      - type: entities
+        entities:
+          - entity: sensor.powerplug004_ip
+          - entity: sensor.powerplug004_last_restart_time
+        title: PowerPlug-004
+      - type: gauge
+        entity: sensor.speedtest_download
+        min: 0
+        max: 250
+        severity:
+          green: 0
+          yellow: 150
+          red: 225
+      - type: history-graph
+        entities:
+          - entity: sensor.relais001_uptime
+          - entity: sensor.relais002_uptime
+        hours_to_show: 24
+        refresh_interval: 0
+        title: Relais uptime
+      - type: entities
+        entities:
+          - binary_sensor.esx05_vanzanten_local
+      - type: history-graph
+        entities:
+          - entity: sensor.ewelink_ds01_4ccd2622_power
+          - entity: binary_sensor.ewelink_ds01_4ccd2622_ias_zone
+        hours_to_show: 24
+        refresh_interval: 0
+      - type: entity
+        entity: sensor.date_time_iso
+      - type: history-graph
+        entities:
+          - entity: sensor.power_usage
+          - entity: sensor.power_high
+          - entity: sensor.power_low
+          - entity: sensor.power_total
+        hours_to_show: 24
+        refresh_interval: 0
+        title: YouLess Meter
+      - type: custom:layout-card
+        layout_type: grid
+        layout:
+          width: 800
+          grid-template-columns: 40% 60%
+        square: true
+        cards:
+          - type: plant-status
+            entity: plant.plant_01
+            name: 1 Dracaena Marginata
+          - type: custom:flower-card
+            entity: plant.plant_01
+          - type: plant-status
+            entity: plant.plant_02
+            name: 2 Light Star
+          - type: custom:flower-card
+            entity: plant.plant_02
+          - type: plant-status
+            entity: plant.plant_03
+            name: 3 White Champion
+          - type: custom:flower-card
+            entity: plant.plant_04
+          - type: plant-status
+            entity: plant.plant_05
+            name: 4 Pannen-koeken plant
+          - type: custom:flower-card
+            entity: plant.plant_05
+          - type: plant-status
+            entity: plant.plant_06
+            name: 5 Philodendron Hybrida
+          - type: custom:flower-card
+            entity: plant.plant_06
+          - type: plant-status
+            entity: plant.plant_07
+            name: 6 Vriesea Poelmanii
+          - type: custom:flower-card
+            entity: plant.plant_07
+      - type: entities
+        entities:
+          - entity: input_boolean.baswekker_enabled
+            name: Wekker Actief
+            icon: mdi:alarm-check
+          - entity: input_datetime.baswekker_schedule_start_time
+            name: Tijdstip
+          - entity: input_boolean.baswekker_monday
+            name: Maandag
+          - entity: input_boolean.baswekker_tuesday
+            name: Dinsdag
+          - entity: input_boolean.baswekker_wednesday
+            name: Woensdag
+          - entity: input_boolean.baswekker_thursday
+            name: Donderdag
+          - entity: input_boolean.baswekker_friday
+            name: Vrijdag
+          - entity: input_boolean.baswekker_saturday
+            name: Zaterdag
+          - entity: input_boolean.baswekker_sunday
+            name: Zondag
+        title: Bas Wekker
+        state_color: true
+        show_header_toggle: false
+      - type: button
+        tap_action:
+          action: toggle
+        entity: switch.tz3000_g5xawfcq_ts0121_on_off
+        show_state: true
+        name: Koffie
+      - type: entities
+        entities:
+          - entity: device_tracker.mbp_van_aimee
+          - entity: device_tracker.redminote8t_aimee
+          - entity: device_tracker.barbaras_air
+      - type: custom:simple-thermostat
+        entity: climate.airco_woonkamer
+        step_size: '0.5'
+        hide:
+          temperature: false
+          state: true
+        label:
+          temperature: Airco meet
+        layout:
+          step: row
+          mode:
+            names: false
+            headings: false
+        header:
+          icon: auto
+          name: Woonkamer Airco
+        control:
+          hvac:
+            heat: true
+            cool: true
+            dry: false
+            fan_only: false
+            heat_cool: true
+  - title: HA Memory en Disk
+    path: ha-memory-en-disk
+    badges: []
+    cards:
+      - type: history-graph
+        entities:
+          - entity: sensor.memory_use
+          - entity: sensor.memory_free
+          - entity: sensor.memory_use_percent
+        hours_to_show: 24
+        refresh_interval: 0
+        title: Home Assistant Memory
+      - type: history-graph
+        entities:
+          - entity: sensor.disk_use_percent
+          - entity: sensor.disk_use
+          - entity: sensor.disk_free
+        hours_to_show: 24
+        refresh_interval: 0
+        title: Home Assistant Disk Usage
+      - type: history-graph
+        entities:
+          - entity: sensor.swap_free
+          - entity: sensor.swap_use
+          - entity: sensor.swap_use_percent
+        hours_to_show: 24
+        refresh_interval: 0
+        title: Home Assistant Swap
+  - title: Zigbee
+    path: zigbee
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: sensor.ewelink_ds01_f8283622_power
+            name: Schuifpui Sensor
+          - entity: sensor.ewelink_ds01_4c3f2622_power
+            name: Voordeur Sensor
+          - entity: sensor.ewelink_ds01_4ccd2622_power
+            name: Garagepoort Sensor
+          - entity: sensor.ewelink_badkamerdeur_power
+            name: Badkamer deur
+          - entity: sensor.lumi_lumi_sensor_motion_power
+            name: Motion Garage
+          - entity: sensor.lumi_lumi_sensor_motion_07943e02_power
+            name: Motion Badkamer
+          - entity: light.bas_bed
+            name: LED Bed Bas
+          - entity: switch.tz3000_g5xawfcq_ts0121_on_off
+            name: Stopcontact 05 - Woonkamer
+          - entity: switch.tz3000_g5xawfcq_ts0121_b3b93afe_on_off
+            name: Stopcontact 06 - Zolder Bas
+          - entity: binary_sensor.sonoff_bridge
+        title: Zigbee Sensoren
+      - type: history-graph
+        entities:
+          - entity: sensor.ewelink_ds01_4ccd2622_power
+        hours_to_show: 96
+        refresh_interval: 0
+        title: Garage Poort batterij
+      - type: history-graph
+        entities:
+          - entity: sensor.ewelink_ds01_4c3f2622_power
+        hours_to_show: 14000
+        refresh_interval: 0
+        title: Voordeur batterij
+      - type: entities
+        entities:
+          - entity: sensor.unavailable_entities
+  - title: vCenter
+    path: vcenter
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: sensor.esxi_vm_homeassistant
+            name: Power State
+          - type: attribute
+            entity: sensor.esxi_vm_homeassistant
+            attribute: status
+            name: Status
+          - type: attribute
+            entity: sensor.esxi_vm_homeassistant
+            attribute: cpu_use_pct
+            name: CPU Usage
+            suffix: '%'
+          - type: attribute
+            entity: sensor.esxi_vm_homeassistant
+            attribute: memory_allocated_mb
+            name: Allocated RAM
+            suffix: MB
+          - type: attribute
+            entity: sensor.esxi_vm_homeassistant
+            attribute: memory_used_mb
+            name: Used RAM
+            suffix: MB
+          - type: attribute
+            entity: sensor.esxi_vm_homeassistant
+            attribute: guest_ip
+            name: Guest IP adres
+          - type: attribute
+            entity: sensor.esxi_vm_homeassistant
+            attribute: snapshots
+            name: Snapshot
+            suffix: Snapshot(s)
+          - type: button
+            icon: mdi:delete-empty
+            name: Alle snapshots opruimen
+            action_name: Delete Snapshots
+            tap_action:
+              action: call-service
+              service: esxi_stats.remove_snapshot
+              service_data:
+                host: vcenter.intern.vanzanten.be
+                vm: homeassistant
+                command: all
+          - type: button
+            icon: mdi:content-save
+            name: Snapshot maken
+            action_name: Maak Snapshot
+            tap_action:
+              action: call-service
+              service: esxi_stats.create_snapshot
+              service_data:
+                host: vcenter.intern.vanzanten.be
+                vm: homeassistant
+                name: Snapshot via HA
+        title: Home Assistant VM
+      - type: entities
+        title: DNS Server
+        entities:
+          - entity: sensor.esxi_vm_dns
+            name: Power State
+          - type: attribute
+            entity: sensor.esxi_vm_dns
+            attribute: status
+            name: Status
+          - type: attribute
+            entity: sensor.esxi_vm_dns
+            attribute: cpu_use_pct
+            name: CPU Usage
+            suffix: '%'
+          - type: attribute
+            entity: sensor.esxi_vm_dns
+            attribute: memory_allocated_mb
+            name: Allocated RAM
+            suffix: MB
+          - type: attribute
+            entity: sensor.esxi_vm_dns
+            attribute: memory_used_mb
+            name: Used RAM
+            suffix: MB
+          - type: attribute
+            entity: sensor.esxi_vm_dns
+            attribute: guest_ip
+            name: Guest IP adres
+          - type: attribute
+            entity: sensor.esxi_vm_dns
+            attribute: snapshots
+            name: Snapshot
+            suffix: Snapshot(s)
+          - type: button
+            icon: mdi:delete-empty
+            name: Alle snapshots opruimen
+            action_name: Delete Snapshots
+            tap_action:
+              action: call-service
+              service: esxi_stats.remove_snapshot
+              service_data:
+                host: vcenter.intern.vanzanten.be
+                vm: dns
+                command: all
+          - type: button
+            icon: mdi:content-save
+            name: Snapshot maken
+            action_name: Maak Snapshot
+            tap_action:
+              action: call-service
+              service: esxi_stats.create_snapshot
+              service_data:
+                host: vcenter.intern.vanzanten.be
+                vm: dns
+                name: Snapshot via HA
+  - title: Area Test
+    path: test2
+    badges: []
+    cards:
+      - type: area
+        area: 7ed3a9f5218c404ba791bca0ead7c973
+      - type: area
+        area: kamerdaan
+      - type: tile
+        entity: light.boekenlamp
+        features:
+          - type: light-brightness
+      - type: tile
+        entity: person.gabrie_van_zanten
+        show_entity_picture: true
+  - title: Water
+    path: water
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: sensor.ip_adres
+          - entity: sensor.mac_adres
+          - entity: sensor.netwerk
+        title: s0tool
+      - type: entities
+        entities:
+          - entity: sensor.actuele_energie
+          - entity: sensor.actuele_meterstand
+          - entity: sensor.totaal_opgebracht
+          - entity: sensor.uptime
+          - entity: sensor.versie
+          - entity: sensor.watermeter_totaal
+          - entity: sensor.watermeter_pulse
+          - entity: sensor.watermeter_stand
+          - entity: sensor.waterverbruik_kwartier
+          - entity: sensor.waterverbruik_per_uur
+          - entity: sensor.waterverbruik_per_dag
+          - entity: sensor.waterverbruik_per_week
+          - entity: sensor.waterverbruik_per_maand
+          - entity: sensor.waterverbruik_per_kwartaal
+          - entity: sensor.waterverbruik_per_jaar
+        title: s0tool
+  - theme: Backend-selected
+    title: Wekker
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: input_boolean.baswekker_enabled
+            name: Wekker Actief
+            icon: mdi:alarm-check
+          - entity: input_datetime.baswekker_schedule_start_time
+            name: Tijdstip
+          - entity: input_boolean.baswekker_monday
+            name: Maandag
+          - entity: input_boolean.baswekker_tuesday
+            name: Dinsdag
+          - entity: input_boolean.baswekker_wednesday
+            name: Woensdag
+          - entity: input_boolean.baswekker_thursday
+            name: Donderdag
+          - entity: input_boolean.baswekker_friday
+            name: Vrijdag
+          - entity: input_boolean.baswekker_saturday
+            name: Zaterdag
+          - entity: input_boolean.baswekker_sunday
+            name: Zondag
+        title: Bas Wekker
+        state_color: true
+        show_header_toggle: false
+  - theme: Backend-selected
+    title: Temperaturen
+    path: temperaturen
+    badges: []
+    cards:
+      - type: gauge
+        entity: sensor.anna_temperature
+        needle: true
+        max: 30
+        min: 10
+        segments:
+          - from: 10
+            color: blue
+          - from: 16
+            color: yellow
+          - from: 18
+            color: green
+          - from: 22
+            color: orange
+          - from: 25
+            color: red
+        name: Anna Temp
+      - type: gauge
+        entity: sensor.airco_woonkamer_room_temperature
+        needle: true
+        max: 30
+        min: 10
+        segments:
+          - from: 10
+            color: blue
+          - from: 16
+            color: yellow
+          - from: 18
+            color: green
+          - from: 22
+            color: orange
+          - from: 25
+            color: red
+        name: Airco gemeten temp
+      - type: gauge
+        entity: sensor.airco_woonkamer_target_temp
+        needle: true
+        max: 30
+        min: 10
+        segments:
+          - from: 10
+            color: blue
+          - from: 16
+            color: yellow
+          - from: 18
+            color: green
+          - from: 22
+            color: orange
+          - from: 25
+            color: red
+      - type: gauge
+        entity: sensor.esp32ble_plant_01_temperature
+        needle: true
+        max: 30
+        min: 10
+        segments:
+          - from: 10
+            color: blue
+          - from: 16
+            color: yellow
+          - from: 18
+            color: green
+          - from: 22
+            color: orange
+          - from: 25
+            color: red
+        name: Plant 01
+      - type: gauge
+        entity: sensor.esp32ble_plant_02_temperature
+        needle: true
+        max: 30
+        min: 10
+        segments:
+          - from: 10
+            color: blue
+          - from: 16
+            color: yellow
+          - from: 18
+            color: green
+          - from: 22
+            color: orange
+          - from: 25
+            color: red
+        name: Plant 02
+      - type: gauge
+        entity: sensor.esp32ble_plant_03_temperature
+        needle: true
+        max: 30
+        min: 10
+        segments:
+          - from: 10
+            color: blue
+          - from: 16
+            color: yellow
+          - from: 18
+            color: green
+          - from: 22
+            color: orange
+          - from: 25
+            color: red
+        name: Plant 03
+      - type: gauge
+        entity: sensor.esp32ble_plant_04_temperature
+        needle: true
+        max: 30
+        min: 10
+        segments:
+          - from: 10
+            color: blue
+          - from: 16
+            color: yellow
+          - from: 18
+            color: green
+          - from: 22
+            color: orange
+          - from: 25
+            color: red
+        name: Plant 04
+      - type: gauge
+        entity: sensor.esp32ble_plant_05_temperature
+        needle: true
+        max: 30
+        min: 10
+        segments:
+          - from: 10
+            color: blue
+          - from: 16
+            color: yellow
+          - from: 18
+            color: green
+          - from: 22
+            color: orange
+          - from: 25
+            color: red
+        name: Plant 05
+  - theme: Backend-selected
+    title: Test
+    path: test
+    badges: []
+    cards:
+      - type: energy-solar-graph

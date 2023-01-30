@@ -41,19 +41,19 @@
 #####################################################
 - platform: integration
   source: sensor.airco_bas_energy_current
-  name: Airco Bas
+  name: airco bas
   unit_prefix: k
   round: 2
 
 - platform: integration
   source: sensor.airco_daan_energy_current
-  name: Airco Daan
+  name: airco daan
   unit_prefix: k
   round: 2
 
 - platform: integration
   source: sensor.airco_woonkamer_energy_current
-  name: Airco Woonkamer
+  name: airco woonkamer
   unit_prefix: k
   round: 2
 #####################################################
@@ -344,6 +344,6 @@
 ###################################
 - platform: integration
   source: sensor.stopcontact07_power
-  name: Computers Bureau
+  name: computers bureau
   unit_prefix: k
   round: 2

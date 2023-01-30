@@ -1,0 +1,183 @@
+views:
+  - theme: Backend-selected
+    title: Home
+    icon: mdi:home
+    visible:
+      - user: 0985600280104456bc63c81caaf9ee3e
+      - user: 494bc6778e5544cbad2b565c5ba4263f
+    badges:
+      - entity: person.gabrie_van_zanten
+      - entity: person.bas_van_zanten
+      - entity: person.daan_van_zanten
+      - entity: binary_sensor.ewelink_ds01_4ccd2622_ias_zone
+      - entity: sensor.anna_temperature
+    cards:
+      - square: false
+        columns: 1
+        type: grid
+        cards:
+          - type: glance
+            entities:
+              - entity: sensor.time
+                name: Tijd
+              - entity: person.gabrie_van_zanten
+                name: Gabrie
+              - entity: person.bas_van_zanten
+                name: Bas
+              - entity: person.daan_van_zanten
+                name: Daan
+              - entity: sensor.anna_temperature
+                name: Temp
+          - square: false
+            columns: 1
+            type: grid
+            cards:
+              - square: false
+                columns: 1
+                type: grid
+                cards:
+                  - type: conditional
+                    conditions:
+                      - entity: sensor.afvalinfo_trash_type_today
+                        state_not: none
+                    card:
+                      type: entity
+                      entity: sensor.afvalinfo_trash_type_today
+                      name: Afval vandaag
+                  - type: conditional
+                    conditions:
+                      - entity: sensor.afvalinfo_trash_type_tomorrow
+                        state_not: none
+                    card:
+                      type: entity
+                      entity: sensor.afvalinfo_trash_type_tomorrow
+                      name: Afval Morgen
+                  - type: conditional
+                    conditions:
+                      - entity: sensor.dracaena_marginata_alarm
+                        state: 'True'
+                    card:
+                      type: entity
+                      entity: sensor.esp32ble_dracaena_marginata_moisture
+                      name: Plant bij de boekenkast is te droog
+                  - type: conditional
+                    conditions:
+                      - entity: sensor.anthurium_andraeanum_white_champion_alarm
+                        state: 'True'
+                    card:
+                      type: entity
+                      entity: >-
+                        sensor.esp32ble_anthurium_andraeanum_white_champion_moisture
+                      name: Plant met de witte bloem is te droog
+                  - type: conditional
+                    conditions:
+                      - entity: sensor.aglaonema_sp_light_star_alarm
+                        state: 'True'
+                    card:
+                      type: entity
+                      entity: sensor.esp32ble_aglaonema_sp_light_star_moisture
+                      name: Plant met rode bladeren
+                  - type: conditional
+                    conditions:
+                      - entity: sensor.bmw_tanken
+                        state: 'True'
+                    card:
+                      type: entity
+                      entity: sensor.bmw_tanken
+                      attribute: friendly_name
+                      name: ' '
+          - type: custom:simple-thermostat
+            entity: climate.anna
+            step_size: '0.5'
+            hide:
+              temperature: false
+              state: true
+            label:
+              temperature: Huidig
+            layout:
+              step: row
+              mode:
+                names: false
+                headings: false
+            header:
+              icon: auto
+              name: Verwarming
+            control:
+              preset:
+                away:
+                  name: Niet thuis
+                  icon: mdi:walk
+                home:
+                  name: Thuis
+                  icon: mdi:home
+                asleep:
+                  name: Nacht
+                  icon: mdi:weather-night
+                vacation: false
+                no_frost: false
+              hvac: true
+          - type: custom:simple-thermostat
+            entity: climate.airco_woonkamer
+            step_size: '0.5'
+            hide:
+              temperature: false
+              state: true
+            label:
+              temperature: Huidig
+            layout:
+              step: row
+              mode:
+                names: false
+                headings: false
+            header:
+              icon: auto
+              name: Woonkamer Airco
+            control:
+              hvac:
+                heat: true
+                cool: true
+                dry: false
+                fan_only: false
+                heat_cool: true
+          - type: glance
+            show_name: true
+            show_icon: true
+            show_state: false
+            entities:
+              - entity: climate.airco_woonkamer
+              - entity: climate.airco_bas
+              - entity: climate.airco_daan
+            state_color: true
+      - square: false
+        columns: 1
+        type: grid
+        cards:
+          - type: glance
+            entities:
+              - entity: >-
+                  light.ikea_of_sweden_tradfri_bulb_gu10_cws_345lm_1339b7fe_level_light_color_on_off
+                name: TV
+                icon: mdi:television
+              - entity: light.tv_lamp
+                name: salontafel
+                icon: mdi:ceiling-light
+              - entity: light.staanderaamlamp_level_light_color_on_off
+                name: leeslamp
+                icon: mdi:floor-lamp
+              - entity: light.led_bank_level_light_color_on_off
+                name: bank
+                icon: mdi:sofa
+          - type: glance
+            entities:
+              - entity: light.computerlamp
+                name: Computer
+                icon: mdi:desk
+              - entity: light.tafellamp
+                name: Tafel
+                icon: mdi:ceiling-light
+              - entity: light.muurlamp
+                name: Posters
+                icon: mdi:spotlight-beam
+              - entity: light.boekenlamp
+                name: boekenkast
+                icon: mdi:spotlight-beam

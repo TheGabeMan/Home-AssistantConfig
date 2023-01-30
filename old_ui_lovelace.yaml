@@ -1,0 +1,1813 @@
+background: var(--background-image)
+title: Huis
+views:
+  - theme: Backend-selected
+    path: default_view
+    title: Home
+    badges:
+      - entity: person.gabrie_van_zanten
+      - entity: person.daan_van_zanten
+      - entity: person.bas_van_zanten
+      - entity: binary_sensor.ewelink_ds01_4ccd2622_ias_zone
+      - entity: binary_sensor.ewelink_ds01_4c3f2622_ias_zone
+      - entity: binary_sensor.achterdeur_ias_zone
+      - entity: binary_sensor.ewelink_ds01_f8283622_ias_zone
+      - entity: counter.bronwater
+        name: Bubbels
+    cards:
+      - type: grid
+        cards:
+          - type: grid
+            columns: 2
+            square: true
+            cards:
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: none
+                show_state: true
+                entity: binary_sensor.ewelink_ds01_4ccd2622_ias_zone
+                icon: mdi:garage-variant
+              - type: button
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: Weet je dit zeker?
+                entity: switch.relais002_relaisstate
+                name: Poort open/dicht
+                icon: hass:garage-open
+          - type: grid
+            columns: 1
+            square: false
+            cards:
+              - type: conditional
+                conditions:
+                  - entity: sensor.afvalinfo_trash_type_today
+                    state_not: none
+                card:
+                  type: entity
+                  entity: sensor.afvalinfo_trash_type_today
+                  name: Afval vandaag
+              - type: conditional
+                conditions:
+                  - entity: sensor.afvalinfo_trash_type_tomorrow
+                    state_not: none
+                card:
+                  type: entity
+                  entity: sensor.afvalinfo_trash_type_tomorrow
+                  name: Afval morgen
+              - type: conditional
+                conditions:
+                  - entity: sensor.s0tool_gelijk_github
+                    state_not: 'True'
+                card:
+                  type: markdown
+                  content: De s0tool is niet up to date met de GitHub versie.
+              - type: conditional
+                conditions:
+                  - entity: sensor.plant_01_alarm
+                    state: 'True'
+                card:
+                  type: entity
+                  entity: sensor.esp32ble_plant_01_moisture
+                  name: Plant bij de boekenkast is te droog
+              - type: conditional
+                conditions:
+                  - entity: sensor.plant_02_alarm
+                    state: 'True'
+                card:
+                  type: entity
+                  entity: sensor.esp32ble_plant_02_moisture
+                  name: Plant salontafel krukje is te droog
+              - type: conditional
+                conditions:
+                  - entity: sensor.plant_03_alarm
+                    state: 'True'
+                card:
+                  type: entity
+                  entity: sensor.esp32ble_plant_03_moisture
+                  name: Pannekoekenplant is te droog
+              - type: conditional
+                conditions:
+                  - entity: sensor.plant_04_alarm
+                    state: 'True'
+                card:
+                  type: entity
+                  entity: sensor.esp32ble_plant_04_moisture
+                  name: Plant salontafel plankje is te droog
+              - type: conditional
+                conditions:
+                  - entity: sensor.plant_05_alarm
+                    state: 'True'
+                card:
+                  type: entity
+                  entity: sensor.esp32ble_plant_05_moisture
+                  name: Plant naast TV is te droog
+              - type: conditional
+                conditions:
+                  - entity: sensor.bmw_tanken
+                    state: 'True'
+                card:
+                  type: entity
+                  entity: sensor.bmw_tanken
+                  attribute: friendly_name
+                  name: ' '
+              - type: conditional
+                conditions:
+                  - entity: sensor.oven_operation_state
+                    state: Run
+                card:
+                  type: gauge
+                  entity: sensor.oven_program_progress
+                  min: 0
+                  max: 100
+                  name: Oven voortgang
+                  severity:
+                    green: 0
+                    yellow: 50
+                    red: 90
+              - type: conditional
+                conditions:
+                  - entity: sensor.zout_niveau_in_procent
+                    state: < 15
+                card:
+                  type: entity
+                  entity: sensor.zout_niveau_in_procent
+                  name: Zout niveau laag
+          - type: grid
+            cards:
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: ../quick-buttons/verlichtingbuttons
+                name: Verlichting
+                icon: hass:lightbulb-group
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: ../quick-buttons/woonkamerbuttons
+                name: Woonkamer
+                icon: hass:home-map-marker
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: ../quick-buttons/kamer-daan-buttons
+                name: Kamer Daan
+                icon: hass:bed
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: ../quick-buttons/kamerbas
+                name: Kamer Bas
+                icon: hass:home-roof
+              - square: true
+                columns: 1
+                type: grid
+                cards:
+                  - type: light
+                    entity: light.nachtkastje
+                    icon: mdi:bed
+                    name: Gabrie
+              - type: light
+                entity: light.aanrecht
+                icon: mdi:countertop
+                name: Keuken
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: cameras
+                name: Camera's
+                icon: hass:camera
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: ../quick-buttons/tuin
+                name: Tuin
+                icon: hass:shovel
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: badkamer
+                entity: binary_sensor.lumi_motionsensor_badkamer
+                icon: mdi:shower
+                show_state: false
+                name: Badkamer
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: bijkeuken
+                icon: hass:dishwasher
+                name: Bijkeuken
+              - type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: bmw-c218i
+                name: BMW
+                icon: hass:car
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: navigate
+                  navigation_path: planten
+                name: Planten
+                icon: mdi:flower
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: call-service
+                  service: counter.increment
+                  data: {}
+                  target:
+                    entity_id: counter.bronwater
+                icon: mdi:bottle-soda-classic-outline
+                name: Bronwater +1
+            columns: 2
+        columns: 1
+        square: false
+  - badges: []
+    cards:
+      - type: grid
+        cards:
+          - type: button
+            tap_action:
+              action: toggle
+            show_state: true
+            entity: light.voorkamer
+            icon: hass:television
+            name: Voorkamer
+          - type: button
+            tap_action:
+              action: toggle
+            entity: light.achterkamer
+            name: Achterkamer
+            icon: mdi:book-open-variant
+            show_state: true
+            hold_action:
+              action: toggle
+          - type: button
+            tap_action:
+              action: toggle
+            name: Woonkamer alles
+            icon: hass:home-map-marker
+            show_state: true
+            entity: light.woonkamertotaal
+          - type: button
+            tap_action:
+              action: toggle
+            name: Gang boven / onder
+            icon: mdi:stairs
+            show_state: true
+            entity: light.gang
+          - type: button
+            tap_action:
+              action: toggle
+            entity: light.daanlamp
+            name: Kamer Daan
+            icon: mdi:horse-variant
+          - type: button
+            tap_action:
+              action: toggle
+            entity: light.kamerbas
+            name: Kamer Bas
+            icon: mdi:controller-classic
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: light.slaapkamergabrie_2
+            icon: mdi:bed
+            name: Kamer Gabrie
+          - type: button
+            tap_action:
+              action: toggle
+            icon: mdi:shower
+            show_state: false
+            name: Badkamer
+            entity: light.badkamerlamp
+          - type: button
+            tap_action:
+              action: toggle
+            name: Tuin
+            icon: hass:shovel
+            show_state: false
+            entity: light.tuinverlichting
+            hold_action:
+              action: toggle
+          - type: grid
+            cards:
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: script.scr006_gordijnen_overdag
+                icon: mdi:blinds-open
+                name: Open
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: script.rolgordijnen_omlaag
+                name: Gesloten
+                show_state: false
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: script.scr007_gordijnen_veel_licht
+                name: Volledig
+                show_state: false
+                icon: mdi:window-maximize
+            columns: 2
+        columns: 2
+      - type: grid
+        cards:
+          - type: entities
+            entities:
+              - entity: light.boekenlamp
+                name: Boekenkast
+              - entity: light.muurlamp
+                name: Schilderijen
+              - entity: light.tafellamp
+                name: Grote tafel
+              - entity: light.computerlamp
+                name: Bureau
+            title: Achterkamer
+          - type: entities
+            entities:
+              - entity: light.tv_lamp
+              - entity: light.led_bank_level_light_color_on_off
+                name: Bank LED
+              - entity: light.staanderaamlamp_level_light_color_on_off
+                name: Raam lamp
+              - entity: >-
+                  light.ikea_of_sweden_tradfri_bulb_gu10_cws_345lm_1339b7fe_level_light_color_on_off
+                name: Backlight
+                icon: mdi:spotlight
+            title: Voorkamer
+          - type: entities
+            entities:
+              - entity: light.voordeurlamp
+                name: Voordeur
+              - entity: light.ganglampbeneden
+                name: Gang onder
+              - entity: light.ganglampboven
+                name: Gang boven
+            title: Gang
+          - type: entities
+            entities:
+              - entity: light.plafondlamp_gabrie
+                name: Plafond
+              - entity: light.signify_netherlands_b_v_llc020_huelight
+              - entity: light.signify_netherlands_b_v_llc020_huelight_2
+            title: Slaapkamer Gabrie
+          - type: entities
+            entities:
+              - entity: light.bas_bed
+                name: Bed LED
+              - entity: light.led_bas_bureau
+                name: Bureau
+              - entity: switch.0xcc86ecfffe3ab9b3
+                name: LED slang
+            title: Kamer Bas
+          - type: entities
+            entities:
+              - entity: light.daanlamp
+                name: Plafondlamp
+            title: Kamer Daan
+            show_header_toggle: true
+          - type: entities
+            entities:
+              - entity: light.tuinlamp_links
+                name: Tuin links
+              - entity: light.tuinschijnwerper
+                name: Schijnwerper
+                icon: mdi:spotlight-beam
+              - entity: light.twinkly_1e806d
+            title: Tuin
+          - type: entities
+            entities:
+              - entity: light.badkamerlamp
+            title: Badkamer
+        columns: 1
+        square: false
+    path: verlichting
+    title: Verlichting
+  - title: Centraal
+    path: centraal
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: sensor.afvalinfo_gft
+          - entity: sensor.afvalinfo_restafval
+            icon: mdi:trash-can
+          - entity: sensor.afvalinfo_trash_type_today
+            name: Vandaag
+          - entity: sensor.afvalinfo_trash_type_tomorrow
+            name: Morgen
+        title: Afval Maastricht
+        state_color: true
+      - type: grid
+        columns: 1
+        square: false
+        cards:
+          - type: conditional
+            conditions:
+              - entity: sensor.afvalinfo_trash_type_today
+                state_not: none
+            card:
+              type: entity
+              entity: sensor.afvalinfo_trash_type_today
+              name: Afval vandaag
+          - type: conditional
+            conditions:
+              - entity: sensor.afvalinfo_trash_type_tomorrow
+                state_not: none
+            card:
+              type: entity
+              entity: sensor.afvalinfo_trash_type_tomorrow
+              name: Afval Morgen
+          - type: conditional
+            conditions:
+              - entity: sensor.s0tool_gelijk_github
+                state_not: 'True'
+            card:
+              type: markdown
+              content: De s0tool is niet up to date met de GitHub versie.
+          - type: conditional
+            conditions:
+              - entity: sensor.dracaena_marginata_alarm
+                state: 'True'
+            card:
+              type: entity
+              entity: sensor.esp32ble_dracaena_marginata_moisture
+              name: Plant bij de boekenkast is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.anthurium_andraeanum_white_champion_alarm
+                state: 'True'
+            card:
+              type: entity
+              entity: sensor.esp32ble_anthurium_andraeanum_white_champion_moisture
+              name: Plant met de witte bloem is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.aglaonema_sp_light_star_alarm
+                state: 'True'
+            card:
+              type: entity
+              entity: sensor.esp32ble_aglaonema_sp_light_star_moisture
+              name: Plant met rode bladeren
+          - type: conditional
+            conditions:
+              - entity: sensor.bmw_tanken
+                state: 'True'
+            card:
+              type: entity
+              entity: sensor.bmw_tanken
+              attribute: friendly_name
+              name: ' '
+      - type: custom:simple-thermostat
+        entity: climate.anna
+        step_size: '0.5'
+        hide:
+          temperature: true
+          state: true
+        layout:
+          step: row
+          mode:
+            names: false
+            headings: false
+        header:
+          icon: auto
+          name: Woonkamer Anna
+        control:
+          preset:
+            away:
+              name: Niet thuis
+              icon: mdi:walk
+            home:
+              name: Thuis
+              icon: mdi:home
+            asleep:
+              name: Nacht
+              icon: mdi:weather-night
+            vacation: false
+            no_frost: false
+          hvac: true
+      - entity: weather.huis
+        type: weather-forecast
+      - type: weather-forecast
+        entity: weather.huis_open_meteo
+      - type: grid
+        square: false
+        columns: 1
+        cards:
+          - type: entities
+            entities:
+              - sensor.huis_cloud_ceiling
+              - sensor.huis_precipitation
+              - sensor.huis_pressure_tendency
+              - sensor.huis_realfeel_temperature
+              - sensor.huis_uv_index
+              - sensor.huis_wind
+            title: AccuWeather
+          - type: weather-forecast
+            entity: weather.huis_2
+            show_forecast: false
+      - type: custom:simple-thermostat
+        entity: climate.airco_woonkamer
+        step_size: '0.5'
+        hide:
+          temperature: true
+          state: true
+        layout:
+          step: row
+          mode:
+            names: false
+            headings: false
+        header:
+          icon: auto
+          name: Woonkamer Anna Test
+        control:
+          preset:
+            away:
+              name: Niet thuis
+              icon: mdi:walk
+            home:
+              name: Thuis
+              icon: mdi:home
+            asleep:
+              name: Nacht
+              icon: mdi:weather-night
+            vacation: false
+            no_frost: false
+          hvac: true
+  - title: Kamer Daan
+    path: kamer-daan
+    badges: []
+    cards:
+      - type: button
+        tap_action:
+          action: toggle
+        entity: switch.powerplug003
+        show_state: true
+        name: Deken Daan
+        icon: mdi:bed
+      - type: button
+        tap_action:
+          action: toggle
+        entity: light.daanlamp
+        name: Plafond Lamp
+        show_state: true
+      - type: thermostat
+        entity: climate.airco_daan
+      - type: history-graph
+        entities:
+          - entity: sensor.powerplug003_energy_power
+        hours_to_show: 12
+        refresh_interval: 0
+        title: ElectrischeDeken
+      - type: history-graph
+        entities:
+          - entity: sensor.airco_daan_room_temperature
+          - entity: sensor.airco_daan_target_temp
+        refresh_interval: 0
+        title: Kamer Daan temperatuur
+        hours_to_show: 12
+      - type: history-graph
+        entities:
+          - entity: sensor.airco_daan_energy_current
+        hours_to_show: 24
+        refresh_interval: 0
+  - title: Kamer Bas
+    path: kamerbas
+    badges: []
+    cards:
+      - type: button
+        tap_action:
+          action: toggle
+        entity: light.kamerbas
+      - type: thermostat
+        entity: climate.airco_bas
+      - type: history-graph
+        entities:
+          - entity: sensor.airco_bas_target_temp
+          - entity: sensor.airco_bas_room_temperature
+          - entity: sensor.airco_bas_energy_current
+        refresh_interval: 0
+        title: Kamer Bas temperatuur
+        hours_to_show: 12
+      - type: entities
+        entities:
+          - entity: binary_sensor.smokealarmzolder
+            icon: mdi:smoke-detector-variant
+            secondary_info: last-changed
+            name: Rookmelder Zolder
+          - entity: sensor.smokealarmzolder_battery_state
+            name: Batterij
+      - type: entities
+        entities:
+          - entity: light.led_bas_bureau
+            name: Level, light_color, on_off
+        title: LED BUREAU
+      - type: entities
+        entities:
+          - entity: switch.0xcc86ecfffe3ab9b3
+        title: LED Slang Bas
+      - type: entities
+        entities:
+          - entity: light.bas_bed
+            name: Level, light_color, on_off
+        title: BedBas
+      - type: history-graph
+        entities:
+          - entity: >-
+              sensor.tz3000_g5xawfcq_ts0121_b3b93afe_smartenergy_metering_summation_delivered
+        hours_to_show: 96
+        refresh_interval: 0
+        title: LED Slang stopcontact
+  - title: Badkamer
+    path: badkamer
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: light.badkamerlamp
+          - entity: binary_sensor.lumi_motionsensor_badkamer
+          - entity: binary_sensor.motionsensor_badkamer_occupancy
+        state_color: true
+      - type: entity
+        entity: fan.nrg_itho_ae98_fan
+        state_color: true
+        attribute: Fan speed (rpm)
+      - type: entity
+        entity: fan.nrg_itho_ae98_fan
+        attribute: preset_mode
+  - title: Woonkamer
+    path: woonkamer
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: cover.rollerblind_0001
+            name: Rolgordijn Links
+            secondary_info: position
+          - entity: cover.rollerblind_0002
+            name: Rolgordijn Rechts
+            secondary_info: position
+          - entity: sensor.rollerblind_0001_battery
+            name: Links Batterij
+          - entity: sensor.rollerblind_0002_battery
+            name: Rechts Batterij
+        title: Rolgordijnen
+        state_color: true
+      - type: button
+        tap_action:
+          action: toggle
+        entity: binary_sensor.ewelink_ds01_f8283622_ias_zone
+        show_state: true
+        name: Schuifpui
+        icon: mdi:door-closed
+      - type: button
+        tap_action:
+          action: call-service
+          service: xiaomi_miio.vacuum_clean_segment
+          service_data:
+            segments: 16
+            entity_id: vacuum.roborock_s5_max
+        name: Woonkamer Stofzuigen
+        icon: mdi:robot-vacuum
+        show_state: false
+        show_name: true
+        show_icon: true
+        icon_height: 70px
+      - type: entities
+        entities:
+          - entity: binary_sensor.lumi_lumi_sensor_motion_occupancy
+          - entity: binary_sensor.lumi_lumi_sensor_motion_ias_zone
+          - entity: sensor.ewelink_ds01_f8283622_power
+      - type: thermostat
+        entity: climate.airco_woonkamer
+      - type: thermostat
+        entity: climate.anna
+        name: Woonkamer Temperatuur
+      - entity: media_player.kamer_gabrie
+        type: media-control
+      - type: media-control
+        entity: media_player.woonkamer_thuis
+      - entity: media_player.woonkamer
+        type: media-control
+      - type: media-control
+        entity: media_player.spotify_gabrie_van_zanten
+      - type: media-control
+        entity: media_player.keuken
+      - type: history-graph
+        entities:
+          - entity: sensor.anna_temperature
+          - entity: sensor.anna_outdoor_temperature
+          - entity: sensor.anna_setpoint
+          - entity: sensor.airco_woonkamer_current_temp
+        refresh_interval: 0
+        title: Woonkamer temperatuur
+        hours_to_show: 12
+      - type: entities
+        entities:
+          - entity: sensor.stopcontact07_current
+            name: Current
+          - entity: sensor.stopcontact07_power
+            name: Power
+          - entity: sensor.stopcontact07_voltage
+            name: Voltage
+        title: stopcontact Mac bureau
+      - type: history-graph
+        entities:
+          - entity: sensor.stopcontact07_power
+  - badges: []
+    cards:
+      - entity: sensor.power_usage
+        max: 10000
+        min: -4000
+        name: Stroom verbruik
+        severity:
+          green: -1000
+          red: 10000
+          yellow: 2000
+        type: gauge
+      - entity: sensor.pv_outputpower
+        max: 4500
+        min: 0
+        name: Current Solar Power
+        severity:
+          green: 1500
+          red: 4500
+          yellow: 3000
+        type: gauge
+      - entities:
+          - entity: sensor.pv_eday
+          - entity: sensor.pv_etotal
+          - entity: sensor.pv_eday
+          - entity: sensor.pv_etotal
+          - entity: sensor.pv_temperature
+        title: Zonnepanelen
+        type: entities
+      - entities:
+          - entity: sensor.power_usage
+        refresh_interval: 0
+        title: Laatste 24 uur Stroom verbruik
+        type: history-graph
+        hours_to_show: 24
+      - detail: 3
+        entity: sensor.power_high
+        graph: line
+        hours_to_show: 48
+        name: Hoog tarief 48u
+        type: sensor
+      - entities:
+          - entity: sensor.gas_usage
+        refresh_interval: 0
+        title: Laatste 24u gas verbruik
+        type: history-graph
+        hours_to_show: 24
+      - detail: 3
+        entity: sensor.power_total
+        graph: line
+        hours_to_show: 48
+        name: Netto Stroom vebruik 48u
+        type: sensor
+      - detail: 3
+        entity: sensor.power_low
+        graph: line
+        hours_to_show: 48
+        name: Laag tarief 48u
+        type: sensor
+      - type: history-graph
+        entities:
+          - entity: sensor.power_usage
+        refresh_interval: 0
+        title: Current Power Usage (1h)
+        hours_to_show: 1
+      - type: history-graph
+        entities:
+          - entity: sensor.powerplug002_energy_power
+        refresh_interval: 0
+        title: Wasmachine
+        hours_to_show: 3
+      - entities:
+          - entity: sensor.pv_outputpower
+        refresh_interval: 0
+        title: Laatste 36 uur Zonne-energie
+        type: history-graph
+        hours_to_show: 36
+      - detail: 3
+        entity: sensor.pv_etotal
+        graph: line
+        hours_to_show: 48
+        name: Opbrengst Zonnepanelen
+        type: sensor
+      - entities:
+          - entity: sensor.airco_bas_energy_current
+          - entity: sensor.airco_daan_energy_current
+          - entity: sensor.airco_woonkamer_energy_current
+        refresh_interval: 0
+        title: Laatste 24u Airco verbruik
+        type: history-graph
+        hours_to_show: 24
+      - type: history-graph
+        entities:
+          - entity: sensor.powerplug004_energy_apparentpower
+        hours_to_show: 1
+        refresh_interval: 0
+        title: Koffie
+      - type: history-graph
+        entities:
+          - entity: sensor.watermeter_totaal
+        hours_to_show: 24
+        refresh_interval: 0
+        title: Water verbruik (6h)
+      - type: history-graph
+        entities:
+          - entity: sensor.auxiliary_intended_boiler_temperature
+          - entity: sensor.auxiliary_return_temperature
+          - entity: sensor.auxiliary_water_temperature
+        hours_to_show: 24
+        refresh_interval: 0
+        title: Boiler info
+      - type: entities
+        entities:
+          - entity: sensor.gas_usage
+          - entity: sensor.power_delivery_high
+          - entity: sensor.power_delivery_low
+          - entity: sensor.power_usage
+          - entity: sensor.power_high
+          - entity: sensor.power_low
+          - entity: sensor.power_total
+        title: Youless info
+      - type: history-graph
+        entities:
+          - entity: sensor.afwasmachine_33ad7dfe_electrical_measurement
+        title: Afwasmachine
+        hours_to_show: 6
+      - type: history-graph
+        entities:
+          - entity: >-
+              sensor.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_electrical_measurement
+          - entity: >-
+              sensor.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_smartenergy_metering_summation_delivered
+        title: Droger
+      - type: history-graph
+        entities:
+          - entity: sensor.gas_usage
+        title: Gas 2u
+        hours_to_show: 2
+      - type: history-graph
+        entities:
+          - entity: sensor.tz3000_u5u4cakc_ts011f_electricalmeasurement
+        title: Ijskast
+        hours_to_show: 12
+      - type: custom:history-explorer-card
+        cardName: historycard-19896075
+      - type: history-graph
+        entities:
+          - entity: sensor.stopcontact07_power
+        title: Bureau Mac - Display
+        hours_to_show: 3
+      - entities:
+          - entity: sensor.auxiliary_intended_boiler_temperature
+        refresh_interval: 0
+        title: Boiler temperatuur
+        type: history-graph
+        hours_to_show: 24
+    path: stroom-en-gas
+    title: Stroom en Gas
+  - badges: []
+    cards:
+      - entity: weather.huis
+        name: Weersverwachting
+        type: weather-forecast
+      - entity: weather.openweathermap
+        type: weather-forecast
+        name: OpenWeatherMap
+      - type: entities
+        entities:
+          - entity: sensor.openweathermap_forecast_condition
+          - entity: sensor.openweathermap_forecast_precipitation
+            icon: mdi:weather-rainy
+            secondary_info: last-updated
+          - entity: sensor.openweathermap_forecast_temperature
+          - entity: sensor.openweathermap_rain
+        title: Voorspelling
+        state_color: true
+      - type: history-graph
+        entities:
+          - entity: sensor.anna_temperature
+          - entity: sensor.anna_outdoor_temperature
+          - entity: sensor.anna_setpoint
+        hours_to_show: 72
+        refresh_interval: 0
+        title: Kamer temp (3d)
+      - type: custom:sun-card
+        darkMode: true
+        language: nl
+        timeFormat: 24h
+      - type: entities
+        entities:
+          - entity: sensor.climacell_tree_pollen_index
+          - entity: sensor.climacell_grass_pollen_index
+          - entity: weather.climacell_daily
+        title: ClimaCell Pollen
+      - type: history-graph
+        entities:
+          - entity: sensor.solar_angle
+        hours_to_show: 24
+        refresh_interval: 0
+        title: Solar Elevation / Angle
+    path: weerbericht
+    title: Weerbericht
+  - badges: []
+    cards:
+      - type: button
+        tap_action:
+          action: none
+        show_state: true
+        name: Garagepoort
+        entity: binary_sensor.ewelink_ds01_4ccd2622_ias_zone
+        hold_action:
+          action: none
+      - type: button
+        tap_action:
+          action: toggle
+        entity: switch.relais002_relaisstate
+        name: Poort open/dicht
+        icon: hass:garage-open
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.ewelink_ds01_4ccd2622_ias_zone
+        hours_to_show: 24
+        refresh_interval: 0
+        title: GaragePoort
+      - type: entities
+        entities:
+          - entity: binary_sensor.218i_check_control_messages
+          - entity: binary_sensor.218i_condition_based_services
+          - entity: binary_sensor.218i_door_lock_state
+          - entity: binary_sensor.218i_lids
+          - entity: binary_sensor.218i_lights_parking
+          - entity: lock.218i_lock
+          - entity: sensor.218i_mileage
+          - entity: sensor.218i_remaining_fuel
+          - entity: sensor.218i_remaining_range_fuel
+          - entity: sensor.218i_remaining_range_total
+          - entity: binary_sensor.218i_windows
+        title: BMW 218i Gran Coupee
+        show_header_toggle: true
+    path: garage
+    title: Garage
+  - title: Gang
+    path: overige-ruimtes
+    badges: []
+    cards:
+      - type: button
+        tap_action:
+          action: call-service
+          service: xiaomi_miio.vacuum_clean_segment
+          service_data:
+            segments: 18
+            entity_id: vacuum.roborock_s5_max
+        name: Hal Stofzuigen
+        icon: mdi:robot-vacuum
+        show_state: false
+        show_name: true
+        show_icon: true
+        icon_height: 70px
+      - type: entities
+        entities:
+          - entity: binary_sensor.lumi_lumi_sensor_motion_51663602_ias_zone
+            name: Gang boven beweging
+          - entity: sensor.lumi_lumi_sensor_motion_51663602_power
+            name: Gang boven batterij
+          - entity: binary_sensor.lumi_lumi_sensor_motion_07883702_ias_zone
+            name: Gang onder beweging
+          - entity: sensor.lumi_lumi_sensor_motion_07883702_power
+            name: Gang onder batterij
+          - entity: binary_sensor.ewelink_ds01_4c3f2622_ias_zone
+          - entity: sensor.ewelink_ds01_4c3f2622_power
+            name: Voordeur batterij
+          - entity: binary_sensor.smokealarmgangonder
+            icon: mdi:smoke-detector-variant
+            secondary_info: last-changed
+            name: Rookmelder Gang onder
+          - entity: sensor.smokealarmgangonder_battery_state
+            name: Batterij
+          - entity: binary_sensor.smokealarmgangboven
+            icon: mdi:smoke-detector-variant
+            secondary_info: last-changed
+            name: Rookmelder Gang boven
+          - entity: sensor.smokealarmgangboven_battery_state
+            name: Batterij
+      - type: gauge
+        entity: sensor.zout_niveau_in_procent
+        name: Zout Niveau
+        min: 1
+        max: 100
+        severity:
+          green: 40
+          yellow: 15
+          red: 0
+        unit: '%'
+      - type: history-graph
+        entities:
+          - entity: sensor.zout_ruwe_meting_in_cm
+        hours_to_show: 720
+        title: Diepte meting
+      - type: gauge
+        entity: sensor.zout_ruwe_meting_in_cm
+        name: Zout Niveau (ruw)
+        min: 1
+        max: 100
+        severity:
+          green: 40
+          yellow: 15
+          red: 0
+        unit: cm
+      - chart_type: bar
+        period: day
+        days_to_show: 180
+        type: statistics-graph
+        entities:
+          - sensor.zout_ruwe_meting_in_cm
+        stat_types:
+          - mean
+  - title: Deuren en Ramen
+    path: deuren-en-ramen
+    badges: []
+    cards:
+      - type: button
+        tap_action:
+          action: toggle
+        entity: binary_sensor.ewelink_ds01_f8283622_ias_zone
+        show_state: true
+        name: Schuifpui
+        icon: mdi:door-closed
+      - type: button
+        tap_action:
+          action: none
+        show_state: true
+        name: Garagepoort
+        entity: binary_sensor.ewelink_ds01_4ccd2622_ias_zone
+        hold_action:
+          action: none
+      - type: button
+        tap_action:
+          action: none
+        show_state: true
+        name: Voordeur
+        entity: binary_sensor.ewelink_ds01_4c3f2622_ias_zone
+        hold_action:
+          action: none
+      - type: button
+        tap_action:
+          action: none
+        show_state: true
+        name: Badkamer deur
+        entity: binary_sensor.badkamerdeur_ias_zone
+        hold_action:
+          action: none
+        icon: mdi:window-closed-variant
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.ewelink_ds01_f8283622_ias_zone
+        hours_to_show: 4
+        refresh_interval: 0
+        title: SchuifPui
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.ewelink_ds01_4ccd2622_ias_zone
+        hours_to_show: 4
+        refresh_interval: 0
+        title: GaragePoort
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.ewelink_ds01_4c3f2622_ias_zone
+        hours_to_show: 4
+        refresh_interval: 0
+        title: Voordeur
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.badkamerdeur_ias_zone
+        hours_to_show: 4
+        refresh_interval: 0
+        title: Raam bij Daan
+      - type: glance
+        entities:
+          - entity: binary_sensor.ewelink_ds01_4c3f2622_ias_zone
+          - entity: binary_sensor.achterdeur_ias_zone
+          - entity: binary_sensor.ewelink_ds01_f8283622_ias_zone
+  - title: Bijkeuken
+    path: bijkeuken
+    badges: []
+    cards:
+      - square: true
+        columns: 2
+        type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: switch.powerplug002_wasmachine
+            icon: mdi:washing-machine
+            name: Wasmachine
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: switch.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_on_off
+            icon: mdi:tumble-dryer
+            name: Droger
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: switch.powerplug001printer
+            icon: mdi:printer
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: call-service
+              service: xiaomi_miio.vacuum_clean_segment
+              service_data:
+                segments: 19
+                entity_id: vacuum.roborock_s5_max
+            icon: mdi:robot-vacuum
+            name: Stofzuigen
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: switch.tz3000_u5u4cakc_ts011f_switch
+            icon: mdi:fridge
+            name: Ijskast
+            show_state: true
+          - type: entities
+            entities:
+              - entity: binary_sensor.smokealarmbijkeuken
+                icon: mdi:smoke-detector-variant
+                secondary_info: last-changed
+                name: Rookmelder
+              - entity: sensor.smokealarmbijkeuken_battery_state
+                name: Batterij
+          - type: entities
+            entities:
+              - entity: sensor.epson_et_2820_series_black_ink
+              - entity: sensor.epson_et_2820_series_cyan_ink
+              - entity: sensor.epson_et_2820_series_magenta_ink
+              - entity: sensor.epson_et_2820_series_yellow_ink
+              - entity: sensor.epson_et_2820_series
+      - type: energy-solar-graph
+      - type: markdown
+        content: |
+          **Wasmachine**
+          Korte was van 30min: 0,19 kWh
+          Sportwas van 55min: 0,5 kWh
+          Gemengde was van 1,5h: 0,72 kWh
+
+          **Wasdroger**
+          Gemengde was: 3 kWh
+      - type: history-graph
+        entities:
+          - entity: sensor.powerplugcomputers_power
+        title: PC verbruik
+        hours_to_show: 1
+  - title: Keuken
+    path: keuken
+    badges: []
+    cards:
+      - type: media-control
+        entity: media_player.keuken
+      - type: entities
+        entities:
+          - entity: switch.powerplug001printer
+          - entity: sensor.powerplug001_energy_apparentpower
+          - entity: sensor.powerplug001_energy_current
+          - entity: sensor.powerplug001_energy_factor
+          - entity: sensor.powerplug001_energy_power
+          - entity: sensor.powerplug001_energy_reactivepower
+          - entity: sensor.powerplug001_energy_today
+          - entity: sensor.powerplug001_energy_total
+          - entity: sensor.powerplug001_energy_totalstarttime
+          - entity: sensor.powerplug001_energy_voltage
+          - entity: sensor.powerplug001_energy_yesterday
+          - entity: sensor.powerplug001_ip
+      - type: entities
+        entities:
+          - entity: binary_sensor.oven_door
+          - entity: sensor.oven_duration
+          - entity: switch.oven_power
+          - entity: switch.oven_program_600watt
+          - entity: switch.oven_program_hotair
+          - entity: switch.oven_program_pizzasetting
+          - entity: switch.oven_program_preheating
+          - entity: sensor.oven_program_progress
+          - entity: switch.oven_program_topbottomheating
+          - entity: sensor.oven_remaining_program_time
+          - entity: sensor.oven_operation_state
+      - type: button
+        tap_action:
+          action: call-service
+          service: xiaomi_miio.vacuum_clean_segment
+          service_data:
+            segments: 17
+            entity_id: vacuum.roborock_s5_max
+        name: Keuken Stofzuigen
+        icon: mdi:robot-vacuum
+        show_state: false
+        show_name: true
+        show_icon: true
+        icon_height: 70px
+      - type: gauge
+        entity: sensor.oven_program_progress
+        min: 0
+        max: 100
+        name: Oven voortgang
+        severity:
+          green: 0
+          yellow: 50
+          red: 90
+      - type: history-graph
+        entities:
+          - entity: sensor.powerplug004_energy_power
+        refresh_interval: 0
+        title: Koffie
+        hours_to_show: 1
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.coffee_machine
+        hours_to_show: 1
+        refresh_interval: 0
+        title: Koffie aan / uit
+      - type: entities
+        entities:
+          - entity: binary_sensor.coffee_machine
+            icon: mdi:coffee-maker
+        title: Koffie aan of uit
+      - entity: media_player.keuken
+        type: media-control
+      - type: entities
+        entities:
+          - counter.bronwater
+      - type: entities
+        entities:
+          - entity: switch.tz3000_u5u4cakc_ts011f_switch
+            name: ijskast
+            icon: mdi:fridge
+      - type: light
+        entity: light.tz3210_agjx0pxt_ts0501b_light
+        name: Aanrecht Links
+      - type: light
+        entity: light.aanrecht_rechts_light_2
+        name: Aanrecht Rechts
+  - title: Zonnepanelen
+    path: zonnepanelen
+    badges: []
+    cards:
+      - entities:
+          - entity: sensor.pv_outputpower
+        refresh_interval: 0
+        title: Laatste 12 uur Zonne-energie
+        type: history-graph
+        hours_to_show: 12
+      - type: history-graph
+        entities:
+          - entity: sensor.pv_eday
+        hours_to_show: 72
+        title: Opbrengst laatste 72h
+  - title: Luchtkwaliteit
+    path: luchtkwaliteit
+    badges: []
+    cards:
+      - type: history-graph
+        entities:
+          - entity: sensor.air_quality_air_quality_index
+          - entity: sensor.air_quality_carbon_monoxide
+          - entity: sensor.air_quality_nitrogen_dioxide
+          - entity: sensor.air_quality_ozone
+        refresh_interval: 0
+        title: Luchtkwaliteit
+        hours_to_show: 24
+      - type: history-graph
+        entities:
+          - entity: sensor.pollen_tree
+          - entity: sensor.pollen_tree_alder
+          - entity: sensor.pollen_tree_birch
+          - entity: sensor.pollen_tree_hazel
+          - entity: sensor.pollen_tree_risk
+        hours_to_show: 24
+        refresh_interval: 0
+        title: Pollen
+  - title: Planten
+    path: planten
+    badges: []
+    cards:
+      - type: custom:flower-card
+        entity: plant.1boekenkast
+        show-bars:
+          - temperature
+          - humidity
+          - conductivity
+          - illuminance
+          - moisture
+          - dli
+      - type: custom:flower-card
+        entity: plant.2aglonema_sp
+        show-bars:
+          - temperature
+          - humidity
+          - conductivity
+          - illuminance
+          - moisture
+          - dli
+      - type: custom:flower-card
+        entity: plant.3pilea_peperomioides
+        show-bars:
+          - temperature
+          - humidity
+          - conductivity
+          - illuminance
+          - moisture
+          - dli
+      - type: custom:flower-card
+        entity: plant.4philondendron_white_measure
+        show-bars:
+          - temperature
+          - humidity
+          - conductivity
+          - illuminance
+          - moisture
+          - dli
+      - type: custom:flower-card
+        entity: plant.5naastv
+        show-bars:
+          - temperature
+          - humidity
+          - conductivity
+          - illuminance
+          - moisture
+          - dli
+  - title: BMW C218i
+    path: bmw-c218i
+    badges: []
+    cards:
+      - type: button
+        tap_action:
+          action: toggle
+        entity: lock.218i_lock
+        show_state: true
+      - type: picture-elements
+        image: /local/lovelace/bmw-c218.jpeg
+        elements:
+          - type: custom:circle-sensor-card
+            entity: sensor.218i_remaining_fuel
+            max: 63
+            min: 0
+            stroke_width: 15
+            gradient: true
+            fill: rgba(37, 150, 190, 0.6)
+            name: tank
+            units: L
+            font_style:
+              font-size: 1.1em
+              color: white
+            color_stops:
+              '5': '#09C7E8'
+              '63': '#09A50C'
+            style:
+              top: 6%
+              left: 5%
+              width: 4em
+              height: 4em
+              transform: none
+          - type: custom:text-element
+            text: Slot
+            style:
+              top: 70%
+              left: 10%
+              color: white
+          - type: state-icon
+            entity: lock.218i_lock
+            tap_action: more-info
+            style:
+              top: 80%
+              left: 10%
+              '--paper-item-icon-color': white
+          - type: state-label
+            entity: lock.218i_lock
+            style:
+              top: 92.5%
+              left: 10%
+              color: white
+          - type: custom:text-element
+            text: Raam
+            style:
+              top: 70%
+              left: 22%
+              color: white
+          - type: state-icon
+            entity: binary_sensor.218i_windows
+            tap_action: more-info
+            style:
+              top: 80%
+              left: 22%
+              '--paper-item-icon-color': white
+          - type: state-label
+            entity: binary_sensor.218i_windows
+            style:
+              top: 92.5%
+              left: 22%
+              color: white
+          - type: custom:text-element
+            text: Slot2
+            style:
+              top: 70%
+              left: 34%
+              color: white
+          - type: state-icon
+            entity: binary_sensor.218i_door_lock_state
+            tap_action: more-info
+            style:
+              top: 80%
+              left: 34%
+              '--paper-item-icon-color': white
+          - type: state-label
+            entity: binary_sensor.218i_door_lock_state
+            style:
+              top: 92.5%
+              left: 34%
+              color: white
+          - type: custom:text-element
+            text: Kilometers
+            style:
+              top: 70%
+              left: 50%
+              color: white
+          - type: state-icon
+            entity: sensor.218i_mileage
+            tap_action: more-info
+            style:
+              top: 80%
+              left: 50%
+              '--paper-item-icon-color': white
+          - type: state-label
+            entity: sensor.218i_mileage
+            style:
+              top: 92.5%
+              left: 50%
+              color: white
+      - type: map
+        entities:
+          - entity: device_tracker.218i_old
+        title: Where's Bimmie K-307-HX
+        dark_mode: true
+        hours_to_show: 12
+      - type: entities
+        entities:
+          - sensor.apk_expiration
+          - sensor.ascription_date
+          - binary_sensor.liability_insured
+          - binary_sensor.pending_recall
+          - sensor.218i_remaining_fuel
+          - binary_sensor.218i_windows
+          - binary_sensor.218i_door_lock_state
+          - sensor.218i_mileage
+        title: 'BMW: K307HX'
+      - type: history-graph
+        entities:
+          - entity: sensor.218i_mileage
+        title: BMW Kilometers
+        hours_to_show: 72
+      - type: entities
+        entities:
+          - entity: sensor.opel_1tjd62_apk_expiration
+          - entity: sensor.opel_1tjd62_ascription_date
+          - entity: binary_sensor.opel_1tjd62_liability_insured
+          - entity: binary_sensor.opel_1tjd62_pending_recall
+        title: 'Aimee Opel Agila : 1TJD62'
+  - title: Stofzuiger
+    path: stofzuiger
+    badges: []
+    cards:
+      - type: custom:xiaomi-vacuum-map-card
+        map_source:
+          camera: camera.xiaomi_cloud_map_extractor
+        calibration_source:
+          camera: true
+        entity: vacuum.roborock_s5_max
+        vacuum_platform: default
+        title: Stofzuiger
+        map_modes:
+          - name: Rooms
+            icon: mdi:floor-plan
+            selection_type: ROOM
+            max_selections: 5
+            repeats_type: NONE
+            max_repeats: 5
+            service_call_schema:
+              service: vacuum.do_rooms
+              service_data:
+                rooms: '[[selection]]'
+                predefined: 'true'
+              target:
+                entity_id: '[[entity_id]]'
+      - type: entities
+        entities:
+          - entity: input_boolean.vacuum_enabled
+            icon: mdi:robot-vacuum
+            name: Schema Actief
+          - entity: sensor.next_vacuum_date
+            icon: mdi:calendar-month
+            name: Volgende tijdstip
+          - entity: input_datetime.vacuum_schedule_start_time
+            name: Starttijd
+          - entity: input_boolean.vacuum_monday
+          - entity: input_boolean.vacuum_tuesday
+          - entity: input_boolean.vacuum_wednesday
+          - entity: input_boolean.vacuum_thursday
+          - entity: input_boolean.vacuum_friday
+          - entity: input_boolean.vacuum_saturday
+          - entity: input_boolean.vacuum_sunday
+        title: Stofzuiger
+        state_color: true
+        show_header_toggle: false
+  - title: Camera's
+    path: cameras
+    badges: []
+    cards:
+      - type: picture-entity
+        entity: camera.birdhousecam01
+      - type: picture-entity
+        entity: camera.birdhousecam02
+      - type: picture-elements
+        header: Foscam Camera
+        image: camera.foscam01
+        camera_image: camera.foscam01
+        camera_view: live
+        elements:
+          - type: icon
+            icon: mdi:arrow-up
+            style:
+              background: rgba(255, 255, 255, 0.5)
+              right: 25px
+              bottom: 50px
+            tap_action:
+              action: call-service
+              service: foscam.ptz
+              service_data:
+                entity_id: camera.foscam01
+                movement: up
+          - type: icon
+            icon: mdi:arrow-down
+            style:
+              background: rgba(255, 255, 255, 0.5)
+              right: 25px
+              bottom: 0px
+            tap_action:
+              action: call-service
+              service: foscam.ptz
+              service_data:
+                entity_id: camera.foscam01
+                movement: down
+          - type: icon
+            icon: mdi:arrow-left
+            style:
+              background: rgba(255, 255, 255, 0.5)
+              right: 50px
+              bottom: 25px
+            tap_action:
+              action: call-service
+              service: foscam.ptz
+              service_data:
+                entity_id: camera.foscam01
+                movement: left
+          - type: icon
+            icon: mdi:arrow-right
+            style:
+              background: rgba(255, 255, 255, 0.5)
+              right: 0px
+              bottom: 25px
+            tap_action:
+              action: call-service
+              service: foscam.ptz
+              service_data:
+                entity_id: camera.foscam01
+                movement: right
+          - type: icon
+            icon: mdi:arrow-top-left
+            style:
+              background: rgba(255, 255, 255, 0.5)
+              right: 50px
+              bottom: 50px
+            tap_action:
+              action: call-service
+              service: foscam.ptz
+              service_data:
+                entity_id: camera.foscam01
+                movement: top_left
+          - type: icon
+            icon: mdi:arrow-top-right
+            style:
+              background: rgba(255, 255, 255, 0.5)
+              right: 0px
+              bottom: 50px
+            tap_action:
+              action: call-service
+              service: foscam.ptz
+              service_data:
+                entity_id: camera.foscam01
+                movement: top_right
+          - type: icon
+            icon: mdi:arrow-bottom-left
+            style:
+              background: rgba(255, 255, 255, 0.5)
+              right: 50px
+              bottom: 0px
+            tap_action:
+              action: call-service
+              service: foscam.ptz
+              service_data:
+                entity_id: camera.foscam01
+                movement: bottom_left
+          - type: icon
+            icon: mdi:arrow-bottom-right
+            style:
+              background: rgba(255, 255, 255, 0.5)
+              right: 0px
+              bottom: 0px
+            tap_action:
+              action: call-service
+              service: foscam.ptz
+              service_data:
+                entity_id: camera.foscam01
+                movement: bottom_right
+  - title: Gabrie
+    path: gabrie
+    visible:
+      - user: 494bc6778e5544cbad2b565c5ba4263f
+    badges: []
+    cards:
+      - square: false
+        columns: 1
+        type: grid
+        cards:
+          - type: gauge
+            entity: sensor.withings_systolic_blood_pressure_mmhg_homeassistant
+            name: Systolic
+            needle: true
+            min: 80
+            max: 200
+            segments:
+              - from: 0
+                color: green
+              - from: 130
+                color: yellow
+              - from: 140
+                color: red
+          - type: gauge
+            entity: sensor.withings_diastolic_blood_pressure_mmhg_homeassistant
+            name: Diastolic
+            needle: true
+            min: 0
+            max: 150
+            segments:
+              - from: 0
+                color: green
+              - from: 80
+                color: yellow
+              - from: 90
+                color: red
+          - type: entity
+            entity: sensor.withings_heart_pulse_bpm_homeassistant
+            name: Hartslag
+      - type: custom:history-explorer-card
+        cardName: historycard-15353766
+  - theme: Backend-selected
+    title: Wassen?
+    path: a
+    icon: mdi:washing-machine
+    badges: []
+    cards:
+      - type: history-graph
+        entities:
+          - entity: sensor.powerplug002_wasmachine_energy_power
+        refresh_interval: 0
+        title: Wasmachine op dit moment
+        hours_to_show: 3
+      - entities:
+          - entity: sensor.pv_outputpower
+        refresh_interval: 0
+        title: Laatste 3 uur Zonne-energie
+        type: history-graph
+        hours_to_show: 3
+  - theme: Backend-selected
+    title: Airco Woonkamer
+    path: airco-woonkamper
+    badges: []
+    cards:
+      - type: history-graph
+        entities:
+          - entity: sensor.anna_temperature
+          - entity: sensor.anna_outdoor_temperature
+          - entity: sensor.anna_setpoint
+          - entity: sensor.airco_woonkamer_current_temp
+        refresh_interval: 0
+        title: Woonkamer temperatuur
+        hours_to_show: 12
+      - type: gauge
+        entity: sensor.anna_temperature
+        name: Anna Woonkamper temp
+        needle: true
+        severity:
+          green: 1
+          yellow: 23
+          red: 26
+        min: 17
+        max: 30
+      - type: gauge
+        entity: sensor.airco_woonkamer_current_temp
+        name: Airco Woonkamer Temp
+        needle: true
+        severity:
+          green: 1
+          yellow: 23
+          red: 26
+        min: 17
+        max: 30
+      - type: history-graph
+        entities:
+          - entity: sensor.airco_woonkamer_energy_current
+        hours_to_show: 4
+        title: Airco Stroom (W)
+      - type: history-graph
+        entities:
+          - entity: sensor.verbruik_airco_woonkamer
+        hours_to_show: 4
+        title: Verbruik Airco Woonkamer
+      - type: thermostat
+        entity: climate.airco_woonkamer
+  - theme: Backend-selected
+    title: Douche
+    path: douche
+    icon: mdi:shower-head
+    badges: []
+    cards:
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.auxiliary_dhw_state
+        title: DHW
+        hours_to_show: 6
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.opentherm_flame_state
+        title: Flame State
+        hours_to_show: 6
+      - type: history-graph
+        entities:
+          - entity: sensor.gas_usage
+        hours_to_show: 6
+        title: Gas m3
+  - theme: Backend-selected
+    icon: mdi:home-thermometer-outline
+    badges: []
+    cards:
+      - type: gauge
+        entity: sensor.airco_woonkamer_room_temperature
+        name: Airco Woonkamer
+      - type: gauge
+        entity: sensor.anna_temperature
+        name: Anna Woonkamer
+      - type: gauge
+        entity: sensor.esp32ble_plant_01_temperature
+        name: Plant 01
+      - type: gauge
+        entity: sensor.esp32ble_plant_02_temperature
+        name: Plant 02
+      - type: gauge
+        entity: sensor.esp32ble_plant_03_temperature
+        name: Plant 03
+      - type: gauge
+        entity: sensor.esp32ble_plant_04_temperature
+        name: Plant 04
+      - type: gauge
+        entity: sensor.esp32ble_plant_05_temperature
+        name: Plant 05
+      - type: custom:history-explorer-card
+        cardName: historycard-22159144
+        header: Woonkamer
+        combineSameUnits: true

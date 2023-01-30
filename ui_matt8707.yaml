@@ -1,0 +1,541 @@
+button_card_templates: !include_dir_merge_named button_card_templates
+
+views:
+  - type: custom:grid-layout
+    theme: tablet
+    title: Home
+    layout:
+      #default
+      margin: 0
+      grid-gap: var(--custom-layout-card-padding)
+      grid-template-columns: repeat(4, 1fr) 0
+      grid-template-rows: 0 repeat(2, fit-content(100%)) 0fr
+      grid-template-areas: |
+        "sidebar  .           .       .       ."
+        "sidebar  voorkamer   achter  overig1  ."
+        "sidebar  thermo      thermo  scenes   ."
+        "sidebar  people1     people2  .   ."
+        "sidebar  footer      footer  footer  ."
+      mediaquery:
+        #phone
+        "(max-width: 800px)":
+          grid-gap: calc(var(--custom-layout-card-padding) * 1.7)
+          grid-template-columns: 0 repeat(2, 1fr) 0
+          grid-template-rows: 0 repeat(5, fit-content(100%)) 0fr
+          grid-template-areas: |
+            ".  .           .        ."
+            ".  sidebar     sidebar  ."
+            ".  voorkamer   overig1   ."
+            ".  achter      övrigt   ."
+            ".  temperatuur scenes    ."
+            ".  footer      footer   ."
+            ".  .           .        ."
+        #portrait
+        "(max-width: 1200px)":
+          grid-gap: var(--custom-layout-card-padding)
+          grid-template-columns: repeat(3, 1fr) 0
+          grid-template-rows: 0 repeat(3, fit-content(100%)) 0fr
+          grid-template-areas: |
+            "sidebar  .           .       ."
+            "sidebar  voorkamer   overig1  ."
+            "sidebar  achter      övrigt  ."
+            "sidebar  temperatuur scenes   ."
+            "sidebar  footer      footer  ."
+            "sidebar  .           .       ."
+    cards:
+      #extra_styles fix, do not remove
+      #also warn if theme is not set
+
+      - type: custom:button-card
+        view_layout:
+          grid-area: 1 / 2 / 2 / 5
+        name: SET THEME TO "tablet" IN PROFILE
+        tap_action:
+          action: navigate
+          navigation_path: /profile
+        styles:
+          card:
+            - display: >
+                [[[
+                  return hass.themes.theme === 'tablet'
+                      ? 'none'
+                      : 'initial';
+                ]]]
+          name:
+            - z-index: 1
+            - overflow: visible
+            - color: red
+            - font-weight: bolder
+            - font-size: xxx-large
+            - background: yellow
+
+      #################################################
+      #                                               #
+      #                    SIDEBAR                    #
+      #                                               #
+      #################################################
+
+      - type: vertical-stack
+        view_layout:
+          grid-area: sidebar
+        cards:
+          - type: custom:button-card
+            entity: sensor.template_sidebar
+            template: sidebar
+          - type: conditional
+            conditions:
+              - entity: sensor.afvalinfo_trash_type_today
+                state_not: none
+            card:
+              type: entity
+              entity: sensor.afvalinfo_trash_type_today
+              name: Afval vandaag
+          - type: conditional
+            conditions:
+              - entity: sensor.afvalinfo_trash_type_tomorrow
+                state_not: none
+            card:
+              type: entity
+              entity: sensor.afvalinfo_trash_type_tomorrow
+              name: Afval morgen
+          - type: conditional
+            conditions:
+              - entity: sensor.s0tool_gelijk_github
+                state_not: 'True'
+            card:
+              type: markdown
+              content: De s0tool is niet up to date met de GitHub versie.
+          - type: conditional
+            conditions:
+              - entity: sensor.plant_01_alarm
+                state: 'True'
+            card:
+              type: entity
+              entity: sensor.esp32ble_plant_01_moisture
+              name: Plant bij de boekenkast is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.plant_02_alarm
+                state: 'True'
+            card:
+              type: entity
+              entity: sensor.esp32ble_plant_02_moisture
+              name: Plant salontafel krukje is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.plant_03_alarm
+                state: 'True'
+            card:
+              type: entity
+              entity: sensor.esp32ble_plant_03_moisture
+              name: Pannekoekenplant is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.plant_04_alarm
+                state: 'True'
+            card:
+              type: entity
+              entity: sensor.esp32ble_plant_04_moisture
+              name: Plant salontafel plankje is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.plant_05_alarm
+                state: 'True'
+            card:
+              type: entity
+              entity: sensor.esp32ble_plant_05_moisture
+              name: Plant naast TV is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.bmw_tanken
+                state: 'True'
+            card:
+              type: entity
+              entity: sensor.bmw_tanken
+              attribute: friendly_name
+              name: ' '
+          - type: conditional
+            conditions:
+              - entity: sensor.oven_operation_state
+                state: Run
+            card:
+              type: gauge
+              entity: sensor.oven_program_progress
+              min: 0
+              max: 100
+              name: Oven voortgang
+              severity:
+                green: 0
+                yellow: 50
+                red: 90
+          - type: conditional
+            conditions:
+              - entity: sensor.zout_niveau_in_procent
+                state: < 15
+            card:
+              type: entity
+              entity: sensor.zout_niveau_in_procent
+              name: Zout niveau laag
+
+      #################################################
+      #                                               #
+      #                  voorkamer                    #
+      #                                               #
+      #################################################
+
+      - type: grid
+        title: 
+        view_layout:
+          grid-area: voorkamer
+        columns: 2
+        cards:
+          - type: custom:button-card
+            entity: light.ikea_of_sweden_tradfri_bulb_gu10_cws_345lm_1339b7fe_level_light_color_on_off
+            name: backlight
+            template:
+              - light
+              - icon_hue
+
+          - type: custom:button-card
+            entity: light.staanderaamlamp_level_light_color_on_off
+            name: raam
+            template:
+              - light
+              - icon_hue
+
+          - type: custom:button-card
+            entity: light.led_bank_level_light_color_on_off
+            name: bank
+            template:
+              - light
+              - icon_shade
+
+          - type: custom:button-card
+            entity: light.tv_lamp
+            name: salontafel
+            template:
+              - light
+              - icon_shade
+
+      #################################################
+      #                                               #
+      #                    achter                     #
+      #                                               #
+      #################################################
+
+      - type: grid
+        title: 
+        view_layout:
+          grid-area: achter
+        columns: 2
+        cards:
+          - type: custom:button-card
+            entity: light.computerlamp
+            name: bureau
+            template:
+              - light
+              - icon_spot
+
+          - type: custom:button-card
+            entity: light.boekenlamp
+            name: boekenkast
+            template:
+              - light
+              - icon_spot
+
+          - type: custom:button-card
+            entity: light.muurlamp
+            name: posters
+            template:
+              - light
+              - icon_spot
+
+          - type: custom:button-card
+            entity: light.tafellamp
+            name: tafel
+            template:
+              - light
+              - icon_spot
+
+      #################################################
+      #                                               #
+      #                    overig1                    #
+      #                                               #
+      #################################################
+
+      - type: grid
+        title: 
+        view_layout:
+          grid-area: overig1
+        columns: 2
+        cards:
+          - type: custom:button-card
+            entity: switch.relais002_relaisstate
+            name: poort
+            icon: mdi:garage-variant
+            tap_action:
+              action: toggle
+              confirmation:
+                text: Weet je dit zeker?
+
+          - type: custom:button-card
+            entity: light.aanrecht
+            name: aanrecht
+            icon: mdi:countertop
+          - type: custom:button-card
+            entity: script.scr006_gordijnen_overdag
+            name: open
+            icon: mdi:blinds-open 
+            tap_action:
+              action: toggle
+          - type: custom:button-card
+            entity: script.rolgordijnen_omlaag
+            name: open
+            icon: mdi:roller-shade-closed
+            tap_action:
+              action: toggle
+      #################################################
+      #                                               #
+      #                     THERMO                    #
+      #                                               #
+      #################################################
+
+      - type: grid
+        title: 
+        view_layout:
+          grid-area: thermo
+        columns: 1
+        cards:
+          - type: custom:swipe-card
+            parameters:
+              speed: 550
+              spaceBetween: 40
+              threshold: 5
+            cards:
+              - type: custom:simple-thermostat
+                entity: climate.anna
+                step_size: "0.5"
+                hide:
+                  temperature: false
+                  state: true
+                label:
+                  temperature: Huidig
+                layout:
+                  step: row
+                  mode:
+                    names: false
+                    headings: false
+                header:
+                  icon: auto
+                  name: Verwarming
+                control:
+                  preset:
+                    away:
+                      name: Niet thuis
+                      icon: mdi:walk
+                    home:
+                      name: Thuis
+                      icon: mdi:home
+                    asleep:
+                      name: Nacht
+                      icon: mdi:weather-night
+                    vacation: false
+                    no_frost: false
+                  hvac: true
+              - type: custom:simple-thermostat
+                entity: climate.airco_woonkamer
+                step_size: '0.5'
+                hide:
+                  temperature: false
+                  state: true
+                label:
+                  temperature: Huidig
+                layout:
+                  step: row
+                  mode:
+                    names: false
+                    headings: false
+                header:
+                  icon: auto
+                  name: Woonkamer Airco
+                control:
+                  hvac:
+                    heat: true
+                    cool: true
+                    dry: false
+                    fan_only: false
+                    heat_cool: true
+
+      #################################################
+      #                                               #
+      #                    PEOPLE1                    #
+      #                                               #
+      #################################################
+
+      - type: grid
+        title: 
+        view_layout:
+          grid-area: people1
+        columns: 2
+        cards:
+          - type: custom:button-card
+            entity: person.gabrie_van_zanten
+            name: Gabrie
+            template:
+              - person
+              - circle
+
+          - type: custom:button-card
+            entity: person.bas_van_zanten
+            name: Bas
+            template:
+              - person
+              - circle
+
+    #################################################
+    #                                               #
+    #                    PEOPLE2                    #
+    #                                               #
+    #################################################
+
+      - type: grid
+        title: 
+        view_layout:
+          grid-area: people2
+        columns: 2
+        cards:
+          - type: custom:button-card
+            entity: person.daan_van_zanten
+            name: Daan
+            template:
+              - person
+              - circle
+          - type: custom:button-card
+            entity: device_tracker.galaxy_a52s_5g
+            name: Savanne
+            template:
+              - person
+              - circle
+  
+      #################################################
+      #                                               #
+      #                     scenes                    #
+      #                                               #
+      #################################################
+
+      - type: grid
+        title: scenes
+        view_layout:
+          grid-area: scenes
+        columns: 2
+        cards:
+          - type: custom:button-card
+            entity: scene.sec003_tv_kijken
+            name: TV kijken
+            icon: mdi:television
+          - type: custom:button-card
+            entity: scene.sce001_winter_werkdag
+            name: winter licht
+            icon: mdi:snowflake
+          - type: custom:button-card
+            entity: scene.sce002_lente_herfst_werkdag
+            name: zomer
+            icon: mdi:tree
+          - type: custom:button-card
+            entity: automation.aut051_button01_press
+            name: bedtijd
+            icon: mdi:bed
+            
+      #################################################
+      #                                               #
+      #                    FOOTER                     #
+      #                                               #
+      #################################################
+
+      - type: horizontal-stack
+        view_layout:
+          grid-area: footer
+        cards:
+          - type: custom:button-card
+            name: >
+              <ha-icon icon="mdi:nas"></ha-icon> NAS
+            tap_action: !include popup/footer_nas.yaml
+            triggers_update:
+              - update.nas_dsm_update
+              - sensor.nas_volume_1_status
+              - binary_sensor.nas_security_status
+              - sensor.disk_use_percent
+            variables:
+              notify: >
+                [[[
+                  let id = this._config.triggers_update;
+                  if (id.every(e => states[e]))
+                      return states[id[0]].state === 'on'
+                          ? 1
+                          : states[id[1]].state === 'background_scrubbing' ||
+                            states[id[2]].state === 'on' ||
+                            parseFloat(states[id[3]].state) >= 85;
+                ]]]
+            template: footer
+
+          - type: custom:button-card
+            entity: sensor.template_updates
+            name: >
+              <ha-icon icon="mdi:arrow-up-bold-circle-outline"></ha-icon> Uppdatera
+            tap_action: !include popup/footer_updates.yaml
+            variables:
+              notify: >
+                [[[
+                  return parseInt(entity?.state);
+                ]]]
+            template: footer
+
+          - type: custom:button-card
+            name: >
+              <ha-icon icon="mdi:robot-vacuum-variant"></ha-icon> Städa
+            tap_action: !include popup/footer_vacuum.yaml
+            triggers_update:
+              - sensor.date
+            variables:
+              notify: >
+                [[[
+                  let id = states['sensor.morty_last_clean_end'];
+                  if (id) return (Date.now() - Date.parse(id.state)) > 6048e5;
+                ]]]
+            template: footer
+
+          - type: custom:button-card
+            name: >
+              <ha-icon icon="mdi:chart-line-variant"></ha-icon> Historik
+            tap_action: !include popup/footer_history.yaml
+            template: footer
+
+          - type: custom:button-card
+            name: >
+              <ha-icon icon="mdi:tablet"></ha-icon> Platta
+            tap_action: !include popup/footer_tablet.yaml
+            variables:
+              notify: >
+                [[[
+                  let id = states['binary_sensor.galaxy_tab_a_plugged_in'];
+                  if (id) return id.state === 'off';
+                ]]]
+            template: footer
+
+          - type: custom:button-card
+            name: >
+              <ha-icon icon="mdi:router-wireless"></ha-icon> Router
+            tap_action: !include popup/footer_router.yaml
+            triggers_update:
+              - update.unifi_dream_machine
+              - binary_sensor.template_udm_internet
+            variables:
+              notify: >
+                [[[
+                  let id = this._config.triggers_update;
+                  if (id.every(e => states[e]))
+                      return states[id[0]].state === 'on'
+                          ? 1
+                          : states[id[1]].state === 'off';
+                ]]]
+            template: footer

@@ -5,10 +5,17 @@ homeassistant:
   customize: !include customize.yaml
   # latitude: !secret latitude
   # longitude: !secret longitude
-  country: NL 
+  country: NL
 
 frontend:
   themes: !include_dir_merge_named themes/
+  #######
+  ####### Special theme for tablet
+  ####### Extra entries for https://github.com/matt8707/hass-config
+  #######
+  extra_module_url:
+    - /hacsfiles/lovelace-card-mod/card-mod.js
+  ######
 
 group: !include groups.yaml
 automation: !include automations.yaml
@@ -21,10 +28,35 @@ sensor: !include sensors.yaml
 switch: !include switch.yaml
 
 #######
-####### Recorder entries gaan naar een MariaDB 
+####### Special theme for tablet
+####### Extra entries for https://github.com/matt8707/hass-config
+#######
+template: !include sidebar.yaml
+lovelace:
+  mode: storage
+  resources:
+    - url: /hacsfiles/button-card/button-card.js
+      type: module
+    - url: /hacsfiles/lovelace-layout-card/layout-card.js
+      type: module
+    - url: /hacsfiles/swipe-card/swipe-card.js
+      type: module
+  dashboards:
+    lovelace-matt8707:
+      mode: yaml
+      title: matt8707
+      filename: ui_matt8707.yaml
+      show_in_sidebar: true
+      require_admin: false
+      icon: mdi:tools
+
+  ####### End Special
+
+#######
+####### Recorder entries gaan naar een MariaDB
 #######
 recorder:
-  db_url: !secret mariadb_url 
+  db_url: !secret mariadb_url
 
 #######
 ####### InfluxDB section
@@ -73,7 +105,6 @@ tts:
   - platform: google_translate
     ### service_name: google_say
 
-
 #####################################################
 ### Toegevoegd voor Roborock S5 Max
 ### https://github.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor
@@ -107,7 +138,6 @@ camera:
       - map_name
       - cleaned_rooms
       - zones
-
 
 #######
 ####### Siemens Home Connect section
@@ -146,7 +176,6 @@ notify:
 spotcast:
   sp_dc: !secret sp_dc
   sp_key: !secret sp_key
-
 #######
 ####### Spotify integarion
 ####### https://www.home-assistant.io/integrations/spotify
@@ -170,6 +199,4 @@ spotcast:
 ## withings:
 ##  client_id: !secret withings_CLIENT_ID
 ##  client_secret: !secret withings_CONSUMER_SECRET
-
-
 
