@@ -9,12 +9,12 @@ views:
       margin: 0
       grid-gap: var(--custom-layout-card-padding)
       grid-template-columns: repeat(4, 1fr) 0
-      grid-template-rows: 0 repeat(2, fit-content(100%)) 0fr
+      grid-template-rows: 0 repeat(4, fit-content(100%)) 0fr
       grid-template-areas: |
         "sidebar  .           .       .       ."
         "sidebar  voorkamer   achter  overig1  ."
-        "sidebar  thermo      thermo  scenes   ."
-        "sidebar  people1     people2  .   ."
+        "sidebar  thermo      energy  scenes   ."
+        "sidebar  people1     people2 overig2   ."
         "sidebar  footer      footer  footer  ."
       mediaquery:
         #phone
@@ -42,6 +42,12 @@ views:
             "sidebar  temperatuur scenes   ."
             "sidebar  footer      footer  ."
             "sidebar  .           .       ."
+
+      #################################################
+      #                                               #
+      #                    CARD DEFINITIONS           #
+      #                                               #
+      #################################################
     cards:
       #extra_styles fix, do not remove
       #also warn if theme is not set
@@ -82,6 +88,8 @@ views:
           - type: custom:button-card
             entity: sensor.template_sidebar
             template: sidebar
+          - type: weather-forecast
+            entity: weather.huis_open_meteo
           - type: conditional
             conditions:
               - entity: sensor.afvalinfo_trash_type_today
@@ -294,6 +302,44 @@ views:
             icon: mdi:roller-shade-closed
             tap_action:
               action: toggle
+
+      #################################################
+      #                                               #
+      #                    overig2                    #
+      #                                               #
+      #################################################
+
+      - type: grid
+        title: 
+        view_layout:
+          grid-area: overig2
+        columns: 2
+        cards:
+          - type: custom:button-card
+            entity: switch.relais002_relaisstate
+            name: poort
+            icon: mdi:garage-variant
+            tap_action:
+              action: toggle
+              confirmation:
+                text: Weet je dit zeker?
+
+          - type: custom:button-card
+            entity: light.aanrecht
+            name: aanrecht
+            icon: mdi:countertop
+          - type: custom:button-card
+            entity: script.scr006_gordijnen_overdag
+            name: open
+            icon: mdi:blinds-open 
+            tap_action:
+              action: toggle
+          - type: custom:button-card
+            entity: script.rolgordijnen_omlaag
+            name: open
+            icon: mdi:roller-shade-closed
+            tap_action:
+              action: toggle
       #################################################
       #                                               #
       #                     THERMO                    #
@@ -312,59 +358,60 @@ views:
               spaceBetween: 40
               threshold: 5
             cards:
-              - type: custom:simple-thermostat
-                entity: climate.anna
-                step_size: "0.5"
-                hide:
-                  temperature: false
-                  state: true
-                label:
-                  temperature: Huidig
-                layout:
-                  step: row
-                  mode:
-                    names: false
-                    headings: false
-                header:
-                  icon: auto
-                  name: Verwarming
-                control:
-                  preset:
-                    away:
-                      name: Niet thuis
-                      icon: mdi:walk
-                    home:
-                      name: Thuis
-                      icon: mdi:home
-                    asleep:
-                      name: Nacht
-                      icon: mdi:weather-night
-                    vacation: false
-                    no_frost: false
+            - type: custom:simple-thermostat
+              entity: climate.airco_woonkamer
+              step_size: '0.5'
+              hide:
+                temperature: false
+                state: true
+              label:
+                temperature: 'Huidig'
+              layout:
+                step: column
+                mode:
+                  names: false
+                  headings: false
+              header:
+                icon: auto
+                name: Woonkamer Airco
+              control:
+                hvac:
+                  heat: true
+                  cool: true
+                  dry: false
+                  fan_only: false
+                  heat_cool: true
+            - type: custom:simple-thermostat
+              entity: climate.anna
+              step_size: "0.5"
+              hide:
+                temperature: false
+                state: true
+              label:
+                temperature: Huidig
+              layout:
+                step: column
+                mode:
+                  names: false
+                  headings: false
+              header:
+                icon: auto
+                name: Verwarming
+              control:
+                preset:
+                  away:
+                    name: Niet thuis
+                    icon: mdi:walk
+                  home:
+                    name: Thuis
+                    icon: mdi:home
+                  asleep:
+                    name: Nacht
+                    icon: mdi:weather-night
+                  vacation: false
+                  no_frost: false
                   hvac: true
-              - type: custom:simple-thermostat
-                entity: climate.airco_woonkamer
-                step_size: '0.5'
-                hide:
-                  temperature: false
-                  state: true
-                label:
-                  temperature: Huidig
-                layout:
-                  step: row
-                  mode:
-                    names: false
-                    headings: false
-                header:
-                  icon: auto
-                  name: Woonkamer Airco
-                control:
-                  hvac:
-                    heat: true
-                    cool: true
-                    dry: false
-                    fan_only: false
-                    heat_cool: true
+    
 
       #################################################
       #                                               #
@@ -392,11 +439,11 @@ views:
               - person
               - circle
 
-    #################################################
-    #                                               #
-    #                    PEOPLE2                    #
-    #                                               #
-    #################################################
+      #################################################
+      #                                               #
+      #                    PEOPLE2                    #
+      #                                               #
+      #################################################
 
       - type: grid
         title: 
@@ -424,15 +471,19 @@ views:
       #################################################
 
       - type: grid
-        title: scenes
+        title: 
         view_layout:
           grid-area: scenes
         columns: 2
         cards:
           - type: custom:button-card
-            entity: scene.sec003_tv_kijken
+            entity: scene.filmavond
             name: TV kijken
             icon: mdi:television
+          - type: custom:button-card
+            entity: automation.aut051_button01_press
+            name: bedtijd
+            icon: mdi:bed
           - type: custom:button-card
             entity: scene.sce001_winter_werkdag
             name: winter licht
@@ -441,11 +492,24 @@ views:
             entity: scene.sce002_lente_herfst_werkdag
             name: zomer
             icon: mdi:tree
+
+      #################################################
+      #                                               #
+      #                     energy                    #
+      #                                               #
+      #################################################
+
+      - type: grid
+        title:
+        view_layout:
+          grid-area: energy
+        columns: 1
+        cards:
           - type: custom:button-card
-            entity: automation.aut051_button01_press
-            name: bedtijd
-            icon: mdi:bed
-            
+            entity: scene.Filmavond
+            name: TV kijken
+            icon: mdi:television
+  
       #################################################
       #                                               #
       #                    FOOTER                     #

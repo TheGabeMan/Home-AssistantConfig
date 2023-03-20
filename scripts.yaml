@@ -202,25 +202,22 @@ scr016_raam_lamp_fel:
   alias: SCR016 Raam Lamp fel
   sequence:
   - service: light.turn_on
-    target:
-      device_id:
-      - 129ec6eb861678dbd065daeb705dba51
     data:
       brightness: 255
       color_temp: 153
+    target:
+      device_id: 74bd3b2d028cb916019d0651557701d0
   mode: single
   icon: mdi:spotlight
 scr017_raam_lamp_sfeer:
   alias: SCR017 Raam Lamp sfeer
   sequence:
   - service: light.turn_on
-    target:
-      device_id:
-      - 129ec6eb861678dbd065daeb705dba51
     data:
       brightness: 1
       color_temp: 500
-    enabled: false
+    target:
+      device_id: 74bd3b2d028cb916019d0651557701d0
   mode: single
   icon: mdi:spotlight
 scr018_achterkamer_spots:

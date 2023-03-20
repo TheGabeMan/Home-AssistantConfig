@@ -1,7 +1,3 @@
-- platform: switch
-  name: Kerstboom
-  entity_id: switch.tz3000_g5xawfcq_ts0121_on_off
-
 - platform: group
   name: WoonkamerTotaal
   entities:
@@ -13,6 +9,7 @@
     - light.boekenlamp ## light.ty_boekenlamp
     - light.tafellamp ## light.ty_tafellamp
     - light.muurlamp ## light.ty_muurlamp
+    - light.ikea_of_sweden_tradfri_bulb_gu10_cws_345lm_1339b7fe_level_light_color_on_off
 
 
 - platform: group

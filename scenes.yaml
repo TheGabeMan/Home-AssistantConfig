@@ -368,3 +368,272 @@
       state: 'on'
   icon: mdi:television
   metadata: {}
+- id: '1675973399117'
+  name: Filmavond
+  entities:
+    light.led_bank_level_light_color_on_off:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode: xy
+      brightness: 128
+      hs_color:
+      - 44.722
+      - 84.706
+      rgb_color:
+      - 255
+      - 200
+      - 39
+      xy_color:
+      - 0.507973
+      - 0.450996
+      off_with_transition: false
+      off_brightness:
+      friendly_name: LED-Bank level, light_color, on_off
+      supported_features: 44
+      state: 'on'
+    light.ikea_of_sweden_tradfri_bulb_gu10_cws_345lm_1339b7fe_level_light_color_on_off:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      min_mireds: 250
+      max_mireds: 454
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      off_with_transition: false
+      off_brightness:
+      friendly_name: backlight
+      supported_features: 44
+      color_mode: xy
+      brightness: 178
+      hs_color:
+      - 44.793
+      - 85.098
+      rgb_color:
+      - 255
+      - 200
+      - 38
+      xy_color:
+      - 0.509
+      - 0.451
+      state: 'on'
+    light.staanderaamlamp_level_light_color_on_off:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - color_temp
+      - xy
+      off_with_transition: false
+      off_brightness: 3
+      friendly_name: StaandeRaamLamp level, light_color, on_off
+      supported_features: 40
+      state: 'off'
+    light.tv_lamp:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      icon: mdi:ceiling-light
+      friendly_name: TV lamp
+      supported_features: 0
+      state: 'off'
+    light.computerlamp:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Computerlamp
+      supported_features: 0
+      state: 'off'
+    light.tafellamp:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      icon: mdi:spotlight-beam
+      friendly_name: Tafellamp
+      supported_features: 0
+      state: 'off'
+    light.boekenlamp:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Boekenlamp
+      supported_features: 0
+      color_mode: hs
+      brightness: 64
+      hs_color:
+      - 45.125
+      - 85.827
+      rgb_color:
+      - 255
+      - 200
+      - 36
+      xy_color:
+      - 0.509
+      - 0.451
+      state: 'on'
+    light.muurlamp:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      friendly_name: Muurlamp
+      supported_features: 0
+      color_mode: hs
+      brightness: 64
+      hs_color:
+      - 45.125
+      - 85.827
+      rgb_color:
+      - 255
+      - 200
+      - 36
+      xy_color:
+      - 0.509
+      - 0.451
+      state: 'on'
+    cover.gordijnen:
+      friendly_name: Gordijnen
+      supported_features: 15
+      current_position: 0
+      entity_id:
+      - cover.rollerblind_0001
+      - cover.rollerblind_0002
+      device_class: blind
+      state: closed
+  icon: mdi:video-vintage
+  metadata:
+    cover.gordijnen:
+      entity_only: true
+- id: '1677612483914'
+  name: AvondLicht
+  entities:
+    light.led_bank_level_light_color_on_off:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      off_with_transition: false
+      off_brightness:
+      friendly_name: LED-Bank level, light_color, on_off
+      supported_features: 44
+      color_mode: xy
+      brightness: 97
+      hs_color:
+      - 44.722
+      - 84.706
+      rgb_color:
+      - 255
+      - 200
+      - 39
+      xy_color:
+      - 0.507988
+      - 0.450996
+      state: 'on'
+    light.ikea_of_sweden_tradfri_bulb_gu10_cws_345lm_1339b7fe_level_light_color_on_off:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      min_mireds: 250
+      max_mireds: 454
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      off_with_transition: false
+      off_brightness:
+      friendly_name: backlight
+      supported_features: 44
+      color_mode: color_temp
+      brightness: 107
+      color_temp_kelvin: 2624
+      color_temp: 381
+      hs_color:
+      - 28.567
+      - 68.208
+      rgb_color:
+      - 255
+      - 163
+      - 81
+      xy_color:
+      - 0.534
+      - 0.387
+      state: 'on'
+    light.tv_lamp:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      supported_color_modes:
+      - brightness
+      - color_temp
+      - hs
+      color_mode: color_temp
+      brightness: 51
+      color_temp_kelvin: 3378
+      color_temp: 296
+      hs_color:
+      - 27.303
+      - 47.492
+      rgb_color:
+      - 255
+      - 189
+      - 133
+      xy_color:
+      - 0.464
+      - 0.377
+      icon: mdi:ceiling-light
+      friendly_name: TV lamp
+      supported_features: 0
+      state: 'on'
+    cover.rollerblind_0001:
+      current_position: 0
+      device_class: shade
+      friendly_name: RollerBlind 0001
+      supported_features: 15
+      state: closed
+    cover.rollerblind_0002:
+      current_position: 0
+      device_class: shade
+      friendly_name: RollerBlind 0002
+      supported_features: 15
+      state: closed
+  icon: mdi:lightbulb-night
+  metadata: {}

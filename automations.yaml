@@ -337,13 +337,11 @@
   description: Wanneer lampen uit zijn in woonkamer en er beweging is, licht aan
   trigger:
   - platform: state
-    entity_id: binary_sensor.lumi_lumi_sensor_motion_ias_zone
+    entity_id:
+    - binary_sensor.woonkamersensor_occupancy
     to: 'on'
     from: 'off'
   condition:
-  - condition: state
-    entity_id: light.woonkamertotaal
-    state: 'off'
   - condition: state
     entity_id: sun.sun
     state: below_horizon
@@ -355,6 +353,9 @@
     - condition: state
       entity_id: vacuum.roborock_s5_max
       state: unavailable
+  - condition: state
+    entity_id: light.woonkamertotaal
+    state: 'off'
   action:
   - service: light.turn_on
     data: {}
@@ -1477,7 +1478,7 @@
     - service: switch.turn_on
       data: {}
       target:
-        device_id: f1f326c75f8408e04137655f8c12f1e6
+        entity_id: switch.0xcc86ecfffe3ab9b3
     else:
     - if:
       - condition: device
@@ -1495,7 +1496,7 @@
       - service: switch.turn_off
         data: {}
         target:
-          device_id: f1f326c75f8408e04137655f8c12f1e6
+          entity_id: switch.0xcc86ecfffe3ab9b3
   mode: single
 - id: '1669579904471'
   alias: AUT061 Woonkamer temp 22
@@ -1681,37 +1682,6 @@
       message: Nog geen tanden gepoetst
       title: Nog geen tanden gepoetst
   mode: single
-- id: did_you_brush_yet
-  use_blueprint:
-    path: didyoubrushyet/did_you_brush_yet.yaml
-    input:
-      toothbrush:
-        name: toothbrush
-        description: Select your toothbrush
-        selector:
-          entity:
-            domain: sensor
-      oralb_brush_length:
-        name: Brush time
-        description: How long do you want to brush your teeth? (In seconds)
-        default: 120
-        selector:
-          number:
-            min: 10
-            max: 360
-            unit_of_measurement: seconds
-      brush_before:
-        name: Brush before time
-        description: Before what time should you have brushed your teeth
-        default: 09:00:00
-        selector:
-          time: {}
-      notify_device:
-        name: Device to notify
-        description: Device running HA app to receive notification on
-        selector:
-          device:
-            integration: mobile_app
 - id: '1671286364387'
   alias: Brushtest
   description: Test van tandenborstel
@@ -1792,4 +1762,70 @@
           title: Zet airco op koelen
         - action: Verwarmen
           title: Zet airco op verwarmen
+  mode: single
+- id: '1675865973206'
+  alias: AUTO66 aanrecht motion
+  description: ''
+  trigger:
+  - type: motion
+    platform: device
+    device_id: f489d551955cd9d416c1c7edfd4fa6aa
+    entity_id: binary_sensor.keukensensor_occupancy
+    domain: binary_sensor
+  condition:
+  - type: is_illuminance
+    condition: device
+    device_id: f489d551955cd9d416c1c7edfd4fa6aa
+    entity_id: sensor.keukensensor_illuminance_lux
+    domain: sensor
+    below: 100
+  action:
+  - type: turn_on
+    device_id: 8dd49e0e268a9e0bc723401332d9a6d0
+    entity_id: light.tz3210_agjx0pxt_ts0501b_light
+    domain: light
+  - type: turn_on
+    device_id: 3715da8d1c163d25b3c844fee1bcb703
+    entity_id: light.aanrecht_rechts_light_2
+    domain: light
+  - wait_for_trigger:
+    - type: no_motion
+      platform: device
+      device_id: f489d551955cd9d416c1c7edfd4fa6aa
+      entity_id: binary_sensor.keukensensor_occupancy
+      domain: binary_sensor
+      for:
+        hours: 0
+        minutes: 1
+        seconds: 0
+  - type: turn_off
+    device_id: 8dd49e0e268a9e0bc723401332d9a6d0
+    entity_id: light.tz3210_agjx0pxt_ts0501b_light
+    domain: light
+  - type: turn_off
+    device_id: 3715da8d1c163d25b3c844fee1bcb703
+    entity_id: light.aanrecht_rechts_light_2
+    domain: light
+  mode: single
+- id: '1676042684370'
+  alias: Wasdroger Starten
+  description: ''
+  trigger:
+  - platform: time
+    at: '11:00:00'
+  condition: []
+  action:
+  - service: switch.turn_on
+    data: {}
+    target:
+      device_id: 1b85b6bc49ee10b4df0bf814890df5fc
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      message: Droger aan
+      title: Droger aan
+  - service: automation.turn_off
+    data:
+      stop_actions: false
+    target:
+      entity_id: automation.wasdroger_starten
   mode: single
