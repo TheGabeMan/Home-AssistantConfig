@@ -109,14 +109,14 @@ views:
           - type: conditional
             conditions:
               - entity: sensor.s0tool_gelijk_github
-                state_not: 'True'
+                state_not: "True"
             card:
               type: markdown
               content: De s0tool is niet up to date met de GitHub versie.
           - type: conditional
             conditions:
               - entity: sensor.plant_01_alarm
-                state: 'True'
+                state: "True"
             card:
               type: entity
               entity: sensor.esp32ble_plant_01_moisture
@@ -124,7 +124,7 @@ views:
           - type: conditional
             conditions:
               - entity: sensor.plant_02_alarm
-                state: 'True'
+                state: "True"
             card:
               type: entity
               entity: sensor.esp32ble_plant_02_moisture
@@ -132,7 +132,7 @@ views:
           - type: conditional
             conditions:
               - entity: sensor.plant_03_alarm
-                state: 'True'
+                state: "True"
             card:
               type: entity
               entity: sensor.esp32ble_plant_03_moisture
@@ -140,7 +140,7 @@ views:
           - type: conditional
             conditions:
               - entity: sensor.plant_04_alarm
-                state: 'True'
+                state: "True"
             card:
               type: entity
               entity: sensor.esp32ble_plant_04_moisture
@@ -148,7 +148,7 @@ views:
           - type: conditional
             conditions:
               - entity: sensor.plant_05_alarm
-                state: 'True'
+                state: "True"
             card:
               type: entity
               entity: sensor.esp32ble_plant_05_moisture
@@ -156,12 +156,122 @@ views:
           - type: conditional
             conditions:
               - entity: sensor.bmw_tanken
-                state: 'True'
+                state: "True"
             card:
               type: entity
               entity: sensor.bmw_tanken
               attribute: friendly_name
-              name: ' '
+              name: " "
+          - type: conditional
+            conditions:
+              - entity: sensor.oven_operation_state
+                state: Run
+            card:
+              type: gauge
+              entity: sensor.oven_program_progress
+              min: 0
+              max: 100
+              name: Oven voortgang
+              severity:
+                green: 0
+                yellow: 50
+                red: 90
+          - type: conditional
+            conditions:
+              - entity: sensor.zout_niveau_in_procent
+                state: < 15
+            card:
+              type: entity
+              entity: sensor.zout_niveau_in_procent
+              name: Zout niveau laag
+
+      #################################################
+      #                                               #
+      #                    SIDEBARRIGHT               #
+      #                                               #
+      #################################################
+
+      - type: vertical-stack
+        view_layout:
+          grid-area: sidebarright
+        cards:
+          - type: custom:button-card
+            entity: sensor.template_sidebar
+            template: sidebar
+          - type: weather-forecast
+            entity: weather.huis_open_meteo
+          - type: conditional
+            conditions:
+              - entity: sensor.afvalinfo_trash_type_today
+                state_not: none
+            card:
+              type: entity
+              entity: sensor.afvalinfo_trash_type_today
+              name: Afval vandaag
+          - type: conditional
+            conditions:
+              - entity: sensor.afvalinfo_trash_type_tomorrow
+                state_not: none
+            card:
+              type: entity
+              entity: sensor.afvalinfo_trash_type_tomorrow
+              name: Afval morgen
+          - type: conditional
+            conditions:
+              - entity: sensor.s0tool_gelijk_github
+                state_not: "True"
+            card:
+              type: markdown
+              content: De s0tool is niet up to date met de GitHub versie.
+          - type: conditional
+            conditions:
+              - entity: sensor.plant_01_alarm
+                state: "True"
+            card:
+              type: entity
+              entity: sensor.esp32ble_plant_01_moisture
+              name: Plant bij de boekenkast is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.plant_02_alarm
+                state: "True"
+            card:
+              type: entity
+              entity: sensor.esp32ble_plant_02_moisture
+              name: Plant salontafel krukje is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.plant_03_alarm
+                state: "True"
+            card:
+              type: entity
+              entity: sensor.esp32ble_plant_03_moisture
+              name: Pannekoekenplant is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.plant_04_alarm
+                state: "True"
+            card:
+              type: entity
+              entity: sensor.esp32ble_plant_04_moisture
+              name: Plant salontafel plankje is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.plant_05_alarm
+                state: "True"
+            card:
+              type: entity
+              entity: sensor.esp32ble_plant_05_moisture
+              name: Plant naast TV is te droog
+          - type: conditional
+            conditions:
+              - entity: sensor.bmw_tanken
+                state: "True"
+            card:
+              type: entity
+              entity: sensor.bmw_tanken
+              attribute: friendly_name
+              name: " "
           - type: conditional
             conditions:
               - entity: sensor.oven_operation_state
@@ -192,7 +302,7 @@ views:
       #################################################
 
       - type: grid
-        title: 
+        title:
         view_layout:
           grid-area: voorkamer
         columns: 2
@@ -205,7 +315,7 @@ views:
               - icon_hue
 
           - type: custom:button-card
-            entity: light.staanderaamlamp_level_light_color_on_off
+            entity: light.staande_lamp
             name: raam
             template:
               - light
@@ -232,7 +342,7 @@ views:
       #################################################
 
       - type: grid
-        title: 
+        title:
         view_layout:
           grid-area: achter
         columns: 2
@@ -272,7 +382,7 @@ views:
       #################################################
 
       - type: grid
-        title: 
+        title:
         view_layout:
           grid-area: overig1
         columns: 2
@@ -289,16 +399,19 @@ views:
           - type: custom:button-card
             entity: light.aanrecht
             name: aanrecht
-            icon: mdi:countertop
+            template:
+              - light
+              - icon_hue
+
           - type: custom:button-card
             entity: script.scr006_gordijnen_overdag
             name: open
-            icon: mdi:blinds-open 
+            icon: mdi:blinds-open
             tap_action:
               action: toggle
           - type: custom:button-card
             entity: script.rolgordijnen_omlaag
-            name: open
+            name: dicht
             icon: mdi:roller-shade-closed
             tap_action:
               action: toggle
@@ -310,7 +423,7 @@ views:
       #################################################
 
       - type: grid
-        title: 
+        title:
         view_layout:
           grid-area: overig2
         columns: 2
@@ -331,12 +444,12 @@ views:
           - type: custom:button-card
             entity: script.scr006_gordijnen_overdag
             name: open
-            icon: mdi:blinds-open 
+            icon: mdi:blinds-open
             tap_action:
               action: toggle
           - type: custom:button-card
             entity: script.rolgordijnen_omlaag
-            name: open
+            name: dicht
             icon: mdi:roller-shade-closed
             tap_action:
               action: toggle
@@ -347,7 +460,7 @@ views:
       #################################################
 
       - type: grid
-        title: 
+        title:
         view_layout:
           grid-area: thermo
         columns: 1
@@ -358,60 +471,59 @@ views:
               spaceBetween: 40
               threshold: 5
             cards:
-            - type: custom:simple-thermostat
-              entity: climate.airco_woonkamer
-              step_size: '0.5'
-              hide:
-                temperature: false
-                state: true
-              label:
-                temperature: 'Huidig'
-              layout:
-                step: column
-                mode:
-                  names: false
-                  headings: false
-              header:
-                icon: auto
-                name: Woonkamer Airco
-              control:
-                hvac:
-                  heat: true
-                  cool: true
-                  dry: false
-                  fan_only: false
-                  heat_cool: true
-            - type: custom:simple-thermostat
-              entity: climate.anna
-              step_size: "0.5"
-              hide:
-                temperature: false
-                state: true
-              label:
-                temperature: Huidig
-              layout:
-                step: column
-                mode:
-                  names: false
-                  headings: false
-              header:
-                icon: auto
-                name: Verwarming
-              control:
-                preset:
-                  away:
-                    name: Niet thuis
-                    icon: mdi:walk
-                  home:
-                    name: Thuis
-                    icon: mdi:home
-                  asleep:
-                    name: Nacht
-                    icon: mdi:weather-night
-                  vacation: false
-                  no_frost: false
-                  hvac: true
-    
+              - type: custom:simple-thermostat
+                entity: climate.airco_woonkamer
+                step_size: "0.5"
+                hide:
+                  temperature: false
+                  state: true
+                label:
+                  temperature: "Huidig"
+                layout:
+                  step: column
+                  mode:
+                    names: false
+                    headings: false
+                header:
+                  icon: auto
+                  name: Woonkamer Airco
+                control:
+                  hvac:
+                    heat: true
+                    cool: true
+                    dry: false
+                    fan_only: false
+                    heat_cool: true
+              - type: custom:simple-thermostat
+                entity: climate.anna
+                step_size: "0.5"
+                hide:
+                  temperature: false
+                  state: true
+                label:
+                  temperature: Huidig
+                layout:
+                  step: column
+                  mode:
+                    names: false
+                    headings: false
+                header:
+                  icon: auto
+                  name: Verwarming
+                control:
+                  preset:
+                    away:
+                      name: Niet thuis
+                      icon: mdi:walk
+                    home:
+                      name: Thuis
+                      icon: mdi:home
+                    asleep:
+                      name: Nacht
+                      icon: mdi:weather-night
+                    vacation: false
+                    no_frost: false
+                    hvac: true
 
       #################################################
       #                                               #
@@ -420,7 +532,7 @@ views:
       #################################################
 
       - type: grid
-        title: 
+        title:
         view_layout:
           grid-area: people1
         columns: 2
@@ -446,7 +558,7 @@ views:
       #################################################
 
       - type: grid
-        title: 
+        title:
         view_layout:
           grid-area: people2
         columns: 2
@@ -463,7 +575,7 @@ views:
             template:
               - person
               - circle
-  
+
       #################################################
       #                                               #
       #                     scenes                    #
@@ -471,7 +583,7 @@ views:
       #################################################
 
       - type: grid
-        title: 
+        title:
         view_layout:
           grid-area: scenes
         columns: 2
@@ -509,7 +621,7 @@ views:
             entity: scene.Filmavond
             name: TV kijken
             icon: mdi:television
-  
+
       #################################################
       #                                               #
       #                    FOOTER                     #

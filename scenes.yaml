@@ -241,22 +241,22 @@
       supported_color_modes:
       - color_temp
       - xy
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: LED-Bank level, light_color, on_off
+      supported_features: 44
       color_mode: xy
       brightness: 191
       hs_color:
-      - 44.722
-      - 84.706
+      - 113.6
+      - 88.235
       rgb_color:
+      - 54
       - 255
-      - 200
-      - 39
+      - 30
       xy_color:
-      - 0.507988
-      - 0.450996
-      off_with_transition: false
-      off_brightness:
-      friendly_name: LED-Bank level, light_color, on_off
-      supported_features: 44
+      - 0.190433
+      - 0.720073
       state: 'on'
     light.ikea_of_sweden_tradfri_bulb_gu10_cws_345lm_1339b7fe_level_light_color_on_off:
       min_color_temp_kelvin: 2202
@@ -286,59 +286,6 @@
       xy_color:
       - 0.534
       - 0.387
-      state: 'on'
-    light.tv_lamp:
-      min_color_temp_kelvin: 2000
-      max_color_temp_kelvin: 6535
-      min_mireds: 153
-      max_mireds: 500
-      supported_color_modes:
-      - brightness
-      - color_temp
-      - hs
-      icon: mdi:ceiling-light
-      friendly_name: TV lamp
-      supported_features: 0
-      color_mode: color_temp
-      brightness: 51
-      color_temp_kelvin: 3378
-      color_temp: 296
-      hs_color:
-      - 27.303
-      - 47.492
-      rgb_color:
-      - 255
-      - 189
-      - 133
-      xy_color:
-      - 0.464
-      - 0.377
-      state: 'on'
-    light.boekenlamp:
-      min_color_temp_kelvin: 2000
-      max_color_temp_kelvin: 6535
-      min_mireds: 153
-      max_mireds: 500
-      supported_color_modes:
-      - brightness
-      - color_temp
-      - hs
-      friendly_name: Boekenlamp
-      supported_features: 0
-      color_mode: color_temp
-      brightness: 76
-      color_temp_kelvin: 2320
-      color_temp: 431
-      hs_color:
-      - 29.393
-      - 79.466
-      rgb_color:
-      - 255
-      - 151
-      - 52
-      xy_color:
-      - 0.567
-      - 0.389
       state: 'on'
     light.muurlamp:
       min_color_temp_kelvin: 2000

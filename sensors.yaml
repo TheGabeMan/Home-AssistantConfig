@@ -5,24 +5,6 @@
 #####################################################
 ### Toegevoegd om van de s0Tool de versie info uit github op te halen
 #####################################################
-#- platform: scrape
-#  scan_interval: 1800 ## Scrape elk half uur ipv default 30 seconden
-#  resource: https://www.opgevenisgeenoptie.nl/fundraisers/GabrievanZanten/alpe-dhuzes-2022
-#  name: donaties
-#  select: "#template-profile > main > section.content.section.position-relative.pb20 > div > div.amountRaised.col-sm-6.col-md-8 > div > div.col-xs-6.right > h1 > span"
-#  unit_of_measurement: "Euro"
-###########
-## Er is ook nog een template waarde "vorigdonatiebedrag" dat de vorige staat bijhoudt
-##########
-#- platform: template
-#  sensors:
-#    vorigedonatietotaal:
-#      friendly_name: "Vorige Donatatie totaal"
-#      value_template: "{{ states('sensor.donaties') }}"
-
-#####################################################
-### Toegevoegd om van de s0Tool de versie info uit github op te halen
-#####################################################
 - platform: rest
   resource: https://api.github.com/repos/huizebruin/s0tool/releases/latest
   name: s0tool_versie_github
@@ -60,7 +42,7 @@
 ### EINDE Toegevoegd om Airco in Energy dashboard te krijgen
 #####################################################
 
-###### Bitcoin Sesnor
+###### Bitcoin Sensor
 ###### https://www.home-assistant.io/integrations/bitcoin/
 - platform: bitcoin
   currency: EUR
@@ -297,33 +279,9 @@
 - platform: template
   sensors:
     bmw_tanken:
-      friendly_name: "Tijd om de BMW te tanken"
+      friendly_name: "BMW Tanken"
       value_template: "{{ states('sensor.218i_remaining_range_fuel') | float(0) < 75  }}"
       icon_template: mdi:gas-station
-
-- platform: template
-  sensors:
-    tijdtotalp:
-      friendly_name: "Tijd tot Alpe d'HuZes"
-      value_template: "{{ (as_timestamp('2022-06-02') - as_timestamp(now()) ) | timestamp_custom('%j')| int }}"
-      icon_template: mdi:clock
-
-###################################
-## Offline devices zoeken
-###################################
-- platform: template
-  sensors:
-    unavailable_entities:
-      friendly_name: Unavailable Entities
-      unit_of_measurement: entities
-      icon_template: "{{ 'mdi:check-circle' if is_state('sensor.unavailable_entities','0') else 'mdi:alert-circle' }}"
-      value_template: >
-        {{ states|selectattr('state','in',['unavailable','unknown','none'])|rejectattr('domain','eq','group')
-          |rejectattr('entity_id','in',state_attr('group.ignored_entities','entity_id'))|list|count }}
-      attribute_templates:
-        entities: >
-          {{ states|selectattr('state','in',['unavailable','unknown','none'])|rejectattr('domain','eq','group')
-            |rejectattr('entity_id','in',state_attr('group.ignored_entities','entity_id'))|map(attribute='entity_id')|list }}
 
 ###################################
 ## Adhv tijdstip electriciteitsprijs bepalen
@@ -338,6 +296,7 @@
         {%- endif -%}
       friendly_name: Current Electricity Rate
       unit_of_measurement: EUR/kWh
+
 
 ###################################
 ## Stopcontact07 geschikt maken voor energy dashboard

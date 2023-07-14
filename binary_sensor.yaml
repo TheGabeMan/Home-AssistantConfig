@@ -97,7 +97,3 @@
       value_template: >-
         {{ states('sensor.powerplug004_energy_power') | float > 3 }}
 
-- platform: workday
-  country: NL
-  workdays: [mon, tue, wed, thu, fri]
-  excludes: [sat, sun]

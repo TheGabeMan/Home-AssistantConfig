@@ -672,19 +672,6 @@ views:
         show_state: true
         name: Schuifpui
         icon: mdi:door-closed
-      - type: button
-        tap_action:
-          action: call-service
-          service: xiaomi_miio.vacuum_clean_segment
-          service_data:
-            segments: 16
-            entity_id: vacuum.roborock_s5_max
-        name: Woonkamer Stofzuigen
-        icon: mdi:robot-vacuum
-        show_state: false
-        show_name: true
-        show_icon: true
-        icon_height: 70px
       - type: entities
         entities:
           - entity: binary_sensor.lumi_lumi_sensor_motion_occupancy
@@ -970,19 +957,6 @@ views:
     path: overige-ruimtes
     badges: []
     cards:
-      - type: button
-        tap_action:
-          action: call-service
-          service: xiaomi_miio.vacuum_clean_segment
-          service_data:
-            segments: 18
-            entity_id: vacuum.roborock_s5_max
-        name: Hal Stofzuigen
-        icon: mdi:robot-vacuum
-        show_state: false
-        show_name: true
-        show_icon: true
-        icon_height: 70px
       - type: entities
         entities:
           - entity: binary_sensor.lumi_lumi_sensor_motion_51663602_ias_zone
@@ -1141,17 +1115,6 @@ views:
             show_icon: true
             type: button
             tap_action:
-              action: call-service
-              service: xiaomi_miio.vacuum_clean_segment
-              service_data:
-                segments: 19
-                entity_id: vacuum.roborock_s5_max
-            icon: mdi:robot-vacuum
-            name: Stofzuigen
-          - show_name: true
-            show_icon: true
-            type: button
-            tap_action:
               action: toggle
             entity: switch.tz3000_u5u4cakc_ts011f_switch
             icon: mdi:fridge
@@ -1220,19 +1183,6 @@ views:
           - entity: switch.oven_program_topbottomheating
           - entity: sensor.oven_remaining_program_time
           - entity: sensor.oven_operation_state
-      - type: button
-        tap_action:
-          action: call-service
-          service: xiaomi_miio.vacuum_clean_segment
-          service_data:
-            segments: 17
-            entity_id: vacuum.roborock_s5_max
-        name: Keuken Stofzuigen
-        icon: mdi:robot-vacuum
-        show_state: false
-        show_name: true
-        show_icon: true
-        icon_height: 70px
       - type: gauge
         entity: sensor.oven_program_progress
         min: 0
@@ -1504,28 +1454,6 @@ views:
     path: stofzuiger
     badges: []
     cards:
-      - type: custom:xiaomi-vacuum-map-card
-        map_source:
-          camera: camera.xiaomi_cloud_map_extractor
-        calibration_source:
-          camera: true
-        entity: vacuum.roborock_s5_max
-        vacuum_platform: default
-        title: Stofzuiger
-        map_modes:
-          - name: Rooms
-            icon: mdi:floor-plan
-            selection_type: ROOM
-            max_selections: 5
-            repeats_type: NONE
-            max_repeats: 5
-            service_call_schema:
-              service: vacuum.do_rooms
-              service_data:
-                rooms: '[[selection]]'
-                predefined: 'true'
-              target:
-                entity_id: '[[entity_id]]'
       - type: entities
         entities:
           - entity: input_boolean.vacuum_enabled

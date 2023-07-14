@@ -105,48 +105,6 @@ tts:
   - platform: google_translate
     ### service_name: google_say
 
-#####################################################
-### Toegevoegd voor Roborock S5 Max
-### https://github.com/PiotrMachowski/Home-Assistant-custom-components-Xiaomi-Cloud-Map-Extractor
-#####################################################
-camera:
-  - platform: xiaomi_cloud_map_extractor
-    host: !secret xiaomi_vacuum_host
-    token: !secret xiaomi_vacuum_token
-    username: !secret xiaomi_cloud_username
-    password: !secret xiaomi_cloud_password
-    colors:
-      color_path: [255, 255, 255]
-    draw: ["all"]
-    map_transformation:
-      scale: 1
-      trim:
-        top: 20
-        bottom: 20
-        left: 20
-        right: 20
-    auto_update: true
-    scan_interval:
-      seconds: 600 #10minutes
-    attributes:
-      - calibration_points
-      - rooms
-      - room_numbers
-      - path
-      - vacuum_room
-      - vacuum_room_name
-      - map_name
-      - cleaned_rooms
-      - zones
-
-#######
-####### Siemens Home Connect section
-####### https://www.home-assistant.io/integrations/home_connect/
-## home_connect:
-##  client_id: !secret siemens_client_id
-##  client_secret: !secret siemens_client_secret
-###### Einde Home Connect
-
 # Example configuration.yaml entry for the Telegram Bot
 telegram_bot:
   - platform: polling
@@ -176,13 +134,7 @@ notify:
 spotcast:
   sp_dc: !secret sp_dc
   sp_key: !secret sp_key
-#######
-####### Spotify integarion
-####### https://www.home-assistant.io/integrations/spotify
-#######
-## spotify:
-##  client_id: !secret spotify_client_id
-##  client_secret: !secret spotify_client_secret
+
 
 #####################################
 ## Google Calendar integratie
@@ -192,11 +144,10 @@ spotcast:
 ##  client_secret: !secret googlecalendar_client_secret
 ##  calendar_access: read_write
 
-#####################################
-## Withings Weegschaal configuratie
-## https://www.home-assistant.io/integrations/withings/
-#####################################
-## withings:
-##  client_id: !secret withings_CLIENT_ID
-##  client_secret: !secret withings_CONSUMER_SECRET
 
+#####################################
+## Home Connect Alt HACS integratie
+#####################################
+home_connect_alt:
+  client_id: !secret home_connect_client_id
+  client_secret: !secret home_connect_client_secret

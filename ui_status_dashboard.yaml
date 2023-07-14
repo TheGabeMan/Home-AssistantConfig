@@ -255,9 +255,6 @@ views:
         hours_to_show: 14000
         refresh_interval: 0
         title: Voordeur batterij
-      - type: entities
-        entities:
-          - entity: sensor.unavailable_entities
   - title: vCenter
     path: vcenter
     badges: []
