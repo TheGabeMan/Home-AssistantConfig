@@ -1,2 +1,7 @@
 sensor.s0tool_versie_github:
   friendly_name: 'S0tool GitHub Versie'
+
+sensor.airco_bas:
+  device_class: energy
+
+  

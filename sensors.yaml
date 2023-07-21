@@ -306,3 +306,12 @@
   name: computers bureau
   unit_prefix: k
   round: 2
+
+###################################
+## Totaal inkomende energy voor SANKEY card
+###################################
+- platform: template
+  sensors:
+    total_incoming_energy:
+      value_template: >-
+        {{ states('sensor.power_usage')|float(0) + states('sensor.inverter_goodwe')|float(0) }}

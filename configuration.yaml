@@ -126,6 +126,23 @@ notify:
     vapid_pub_key: !secret vapid_pub_key
     vapid_prv_key: !secret vapid_prv_key
     vapid_email: !secret vapid_email
+  
+  ## Een groep om later aan te refereren in automations
+  - platform: group
+    name: MobieleNotificaties
+    services:
+      - service: mobile_app_telefoonbas
+      - service: mobile_app_telefoondaan
+      - service: mobile_app_telefoongabrie
+
+  - platform: group
+    name: AlleNotificaties
+    services:
+      - service: lgtv
+#      - service: mobile_app_telefoonbas
+#      - service: mobile_app_telefoondaan
+      - service: mobile_app_telefoongabrie
+
 
 #######
 ####### Spotcast
