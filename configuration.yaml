@@ -3,8 +3,6 @@ default_config:
 
 homeassistant:
   customize: !include customize.yaml
-  # latitude: !secret latitude
-  # longitude: !secret longitude
   country: NL
 
 frontend:
@@ -31,24 +29,24 @@ switch: !include switch.yaml
 ####### Special theme for tablet
 ####### Extra entries for https://github.com/matt8707/hass-config
 #######
-template: !include sidebar.yaml
-lovelace:
-  mode: storage
-  resources:
-    - url: /hacsfiles/button-card/button-card.js
-      type: module
-    - url: /hacsfiles/lovelace-layout-card/layout-card.js
-      type: module
-    - url: /hacsfiles/swipe-card/swipe-card.js
-      type: module
-  dashboards:
-    lovelace-matt8707:
-      mode: yaml
-      title: matt8707
-      filename: ui_matt8707.yaml
-      show_in_sidebar: true
-      require_admin: false
-      icon: mdi:tools
+# template: !include sidebar.yaml
+# lovelace:
+#   mode: storage
+#   resources:
+#     - url: /hacsfiles/button-card/button-card.js
+#       type: module
+#     - url: /hacsfiles/lovelace-layout-card/layout-card.js
+#       type: module
+#     - url: /hacsfiles/swipe-card/swipe-card.js
+#       type: module
+#   dashboards:
+#     lovelace-matt8707:
+#       mode: yaml
+#       title: matt8707
+#       filename: ui_matt8707.yaml
+#       show_in_sidebar: true
+#       require_admin: false
+#       icon: mdi:tools
 
   ####### End Special
 
@@ -103,7 +101,6 @@ logger:
 ### Text to speech
 tts:
   - platform: google_translate
-    ### service_name: google_say
 
 # Example configuration.yaml entry for the Telegram Bot
 telegram_bot:
@@ -142,6 +139,7 @@ notify:
 #      - service: mobile_app_telefoonbas
 #      - service: mobile_app_telefoondaan
       - service: mobile_app_telefoongabrie
+      - service: mobile_app_kiosk
 
 
 #######
@@ -151,15 +149,6 @@ notify:
 spotcast:
   sp_dc: !secret sp_dc
   sp_key: !secret sp_key
-
-
-#####################################
-## Google Calendar integratie
-#####################################
-## google:
-##  client_id: !secret googlecalendar_client_id
-##  client_secret: !secret googlecalendar_client_secret
-##  calendar_access: read_write
 
 
 #####################################
