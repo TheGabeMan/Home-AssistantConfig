@@ -1127,6 +1127,10 @@
     data:
       message: Naar bed gaan gestart
       title: Bedtijd
+  - service: light.turn_on
+    data: {}
+    target:
+      device_id: b7125a2c255c7161289d3c3b3d86cedc
   - service: light.turn_off
     data: {}
     target:
@@ -1135,6 +1139,10 @@
       - tuin
       - 7ed3a9f5218c404ba791bca0ead7c973
       entity_id: light.led_bank_level_light_color_on_off
+  - service: light.turn_on
+    data: {}
+    target:
+      device_id: dfd58c0a195722d15246db03cc7e5e33
   - service: climate.set_preset_mode
     data:
       preset_mode: asleep
@@ -1160,8 +1168,8 @@
         domain: binary_sensor
       - type: is_open
         condition: device
-        device_id: 44f63afd99da90ef87cd36dfa12a2375
-        entity_id: binary_sensor.ewelink_ds01_4c3f2622_ias_zone
+        device_id: 7338d750f6e91f795e92e075c03b2197
+        entity_id: 67115dff02ef9557bf52019cfa4c4ace
         domain: binary_sensor
       - type: is_open
         condition: device
@@ -1180,12 +1188,6 @@
         message: Controleer voordeur, achterdeur, garagepoort en schuifpui.
     - service: script.scr021_flash_gang_lamp
       data: {}
-  - service: light.turn_on
-    data:
-      brightness: 75
-      color_temp: 369
-    target:
-      device_id: b7125a2c255c7161289d3c3b3d86cedc
   - delay:
       hours: 0
       minutes: 2
@@ -1195,6 +1197,10 @@
     data: {}
     target:
       area_id: b8b10b1ded3841c5b073de7cfb6139de
+  - service: light.turn_off
+    data: {}
+    target:
+      device_id: dfd58c0a195722d15246db03cc7e5e33
   mode: parallel
   max: 3
 - id: '1645049096652'
@@ -2086,13 +2092,14 @@
   description: ''
   trigger:
   - platform: time
-    at: '11:00:00'
+    at: '11:59:00'
   condition: []
   action:
   - service: switch.toggle
     data: {}
     target:
-      entity_id: switch.dishwasher_program_eco50
+      entity_id:
+      - switch.dishwasher_program_quick65
   - service: notify.mobile_app_telefoongabrie
     data:
       message: Afwasmachine aan
@@ -2189,4 +2196,21 @@
       title: Persoon herkend
       data:
         image: https://tm9yn346vuh18k59ti8annjka1bjkqbj.ui.nabu.casa/local/tmp/snapshot-doorbell.jpg
+  mode: single
+- id: '1690050646004'
+  alias: Test bedlamp
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 98736e93c97a5b7c3d5ff3ced7ec0d45
+    type: action
+    subtype: single
+    discovery_id: 0x00124b00251985b1 action_single
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      device_id: b7125a2c255c7161289d3c3b3d86cedc
   mode: single
