@@ -26,31 +26,6 @@ sensor: !include sensors.yaml
 switch: !include switch.yaml
 
 #######
-####### Special theme for tablet
-####### Extra entries for https://github.com/matt8707/hass-config
-#######
-# template: !include sidebar.yaml
-# lovelace:
-#   mode: storage
-#   resources:
-#     - url: /hacsfiles/button-card/button-card.js
-#       type: module
-#     - url: /hacsfiles/lovelace-layout-card/layout-card.js
-#       type: module
-#     - url: /hacsfiles/swipe-card/swipe-card.js
-#       type: module
-#   dashboards:
-#     lovelace-matt8707:
-#       mode: yaml
-#       title: matt8707
-#       filename: ui_matt8707.yaml
-#       show_in_sidebar: true
-#       require_admin: false
-#       icon: mdi:tools
-
-  ####### End Special
-
-#######
 ####### Recorder entries gaan naar een MariaDB
 #######
 recorder:
@@ -87,6 +62,10 @@ logbook:
       - sensor.internet_time
       - sensor.time_date
       - sensor.time
+      - sensor.total_incoming_energy
+      - binary_sensor.water_sensor_status
+      - binary_sensor.opentherm_flame_state
+      - binary_sensor.auxiliary_dhw_state
 
 #######
 ####### Configureer logging levels
@@ -108,13 +87,17 @@ telegram_bot:
     api_key: !secret telegram_api_key
     allowed_chat_ids:
       - 17513465
+      - -897405316
 
 # Example configuration.yaml entry for the notifier
 notify:
   - name: Telegram
     platform: telegram
     chat_id: 17513465
-  # End of telegram configuration
+
+  - name: HomeGroupTelegram
+    platform: telegram
+    chat_id: -897405316
 
   #### Chrome push notifications: https://www.home-assistant.io/integrations/html5
   #### Reference email van firebase: firebase-adminsdk-ok1nu@homeass-chromenotify.iam.gserviceaccount.com
@@ -123,7 +106,7 @@ notify:
     vapid_pub_key: !secret vapid_pub_key
     vapid_prv_key: !secret vapid_prv_key
     vapid_email: !secret vapid_email
-  
+
   ## Een groep om later aan te refereren in automations
   - platform: group
     name: MobieleNotificaties
@@ -136,11 +119,10 @@ notify:
     name: AlleNotificaties
     services:
       - service: lgtv
-#      - service: mobile_app_telefoonbas
-#      - service: mobile_app_telefoondaan
+      - service: mobile_app_telefoonbas
+      - service: mobile_app_telefoondaan
       - service: mobile_app_telefoongabrie
       - service: mobile_app_kiosk
-
 
 #######
 ####### Spotcast
@@ -149,7 +131,6 @@ notify:
 spotcast:
   sp_dc: !secret sp_dc
   sp_key: !secret sp_key
-
 
 #####################################
 ## Home Connect Alt HACS integratie

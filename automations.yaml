@@ -97,17 +97,7 @@
       message: Er is iemand aan de voordeur!
   - service: script.scr001_flashlightzolderbas
     data: {}
-  - service: notify.mobile_app_telefoongabrie
-    data:
-      title: Deurbel
-      message: Er is iemand aan de voordeur!
-      data:
-        tts: 0
-        priority: high
-  - service: notify.mobile_app_telefoonbas
-    data:
-      message: Er is iemand aan de voordeur!
-  - service: notify.mobile_app_telefoondaan
+  - service: notify.AlleNotificaties
     data:
       title: Deurbel
       message: Er is iemand aan de voordeur!
@@ -519,19 +509,28 @@
       event_type: mobile_app_notification_action
       event_data:
         action: airco_uit
+    timeout:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
   - alias: perform action
     choose:
-    - conditions: '{{ wait.trigger.event.data.action == ''airco_aan'' }}'
-      sequence:
-      - service: notify.mobile_app_telefoonbas
-        data:
-          message: Airco blijft aan
-    - conditions: '{{ wait.trigger.event.data.action == ''airco_uit'' }}'
+    - conditions: '{{ wait.trigger is none or wait.trigger.event.data.action == ''airco_uit''
+        }}'
       sequence:
       - service: climate.turn_off
         data: {}
         target:
           entity_id: climate.airco_bas
+      - service: notify.mobile_app_telefoonbas
+        data:
+          message: Na 15min wachten op antwoord, airco uitgezet
+    - conditions: '{{ wait.trigger.event.data.action == ''airco_aan'' }}'
+      sequence:
+      - service: notify.mobile_app_telefoonbas
+        data:
+          message: Airco blijft aan
   mode: single
 - id: '1627152076049'
   alias: AUT028 Gabrie zone De Heeg met Airco aan
@@ -1138,7 +1137,7 @@
       - 23e6c7fb9f204e3eb18fe60dcaf3c181
       - tuin
       - 7ed3a9f5218c404ba791bca0ead7c973
-      entity_id: light.led_bank_level_light_color_on_off
+      device_id: ad71aedd70d6e6cb098662f2c4045ceb
   - service: light.turn_on
     data: {}
     target:
@@ -1330,6 +1329,13 @@
       lifetime: 2
       text: Droger is klaar
       screen_time: 15
+  - service: notify.mobile_app_telefoonbas
+    data:
+      title: Droger is klaar!
+      message: De droger is klaar
+      data:
+        tts: 0
+        priority: high
   mode: single
 - id: '1664779991828'
   alias: AUT055 Slaapkamer licht bij wekker
@@ -1679,7 +1685,13 @@
       title: Airco lager om 2u
   - service: climate.set_temperature
     data:
-      temperature: 20
+      temperature: 19
+    target:
+      device_id: a5cbe79e266846ddf54c5fb4a2b7157c
+    enabled: false
+  - service: climate.set_hvac_mode
+    data:
+      hvac_mode: 'off'
     target:
       device_id: a5cbe79e266846ddf54c5fb4a2b7157c
   mode: single
@@ -2092,7 +2104,7 @@
   description: ''
   trigger:
   - platform: time
-    at: '11:59:00'
+    at: '10:00:00'
   condition: []
   action:
   - service: switch.toggle
@@ -2102,7 +2114,7 @@
       - switch.dishwasher_program_quick65
   - service: notify.mobile_app_telefoongabrie
     data:
-      message: Afwasmachine aan
+      message: Afwasmachine automatisch gestart
       title: Afwasmachine aan
   - service: automation.turn_off
     data:
@@ -2110,6 +2122,17 @@
     target:
       entity_id:
       - automation.aut063_afwasmachine_starten
+  - if:
+    - type: is_open
+      condition: device
+      device_id: d6e3e6cbfcfba0e951e1b02a850103fd
+      entity_id: 78f4821b9d95ab894d73aaa3b612e619
+      domain: binary_sensor
+    then:
+    - service: notify.allenotificaties
+      data:
+        message: Afwasmachine kan niet starten omdat de klep nog open staat! Svp klep
+          sluiten.
   mode: single
 - id: '1689620301055'
   alias: AUT074 Camera snapshot
@@ -2132,6 +2155,12 @@
       title: Voordeur
       data:
         image: https://tm9yn346vuh18k59ti8annjka1bjkqbj.ui.nabu.casa/local/tmp/snapshot-doorbell.jpg
+  - service: notify.homegrouptelegram
+    data:
+      message: Er is iemand aan de voordeur
+      data:
+        photo:
+        - file: /config/www/tmp/snapshot-doorbell.jpg
   - service: notify.telegram
     data:
       message: Er is iemand aan de voordeur
@@ -2140,7 +2169,7 @@
         - file: /config/www/tmp/snapshot-doorbell.jpg
   mode: single
 - id: '1689744313161'
-  alias: AUT075 Goedemorgen
+  alias: AUT076 Goedemorgen
   description: Tussen 6 en 9 automatisch gordijnen open
   trigger:
   - platform: state
@@ -2166,36 +2195,6 @@
     target:
       device_id:
       - 44b1d58487b404c5363bf0acf7d932c8
-  - service: motion_blinds.set_absolute_position
-    data:
-      absolute_position: 60
-    target:
-      device_id:
-      - cd131e52c35e0c8e68e4d81337749c3f
-      - 66a3fee2bfc323a1bd5ce11f04e06d0b
-  mode: single
-- id: '1689765609631'
-  alias: AUT075 Persoon gezien
-  description: ''
-  trigger:
-  - type: turned_on
-    platform: device
-    device_id: 343f3303284261db218a4317b481d4c9
-    entity_id: c72210d6e0893821b89aa9da75615173
-    domain: binary_sensor
-  condition: []
-  action:
-  - service: camera.snapshot
-    data:
-      filename: /config/www/tmp/snapshot-doorbell.jpg
-    target:
-      entity_id: camera.reo01_snapshots_main
-  - service: notify.mobile_app_telefoongabrie
-    data:
-      message: Persoon herkend
-      title: Persoon herkend
-      data:
-        image: https://tm9yn346vuh18k59ti8annjka1bjkqbj.ui.nabu.casa/local/tmp/snapshot-doorbell.jpg
   mode: single
 - id: '1690050646004'
   alias: Test bedlamp
@@ -2213,4 +2212,39 @@
     data: {}
     target:
       device_id: b7125a2c255c7161289d3c3b3d86cedc
+  mode: single
+- id: '1697789344218'
+  alias: AUT075 camera beweging
+  description: Stuur telefoon notificatie bij camera beweging
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.reo01_person
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+    enabled: false
+  - service: camera.snapshot
+    data:
+      filename: /config/www/tmp/snapshot-doorbell.jpg
+    target:
+      entity_id: camera.reo01_snapshots_main
+  - service: notify.telegram
+    data:
+      message: Beweging gedetecteerd
+      data:
+        photo:
+        - file: /config/www/tmp/snapshot-doorbell.jpg
+  - wait_for_trigger: []
+    timeout:
+      hours: 0
+      minutes: 2
+      seconds: 0
+      milliseconds: 0
   mode: single

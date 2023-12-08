@@ -1,82 +1,6 @@
 - id: '1670145489984'
-  name: SCE001 Winter werkdag
+  name: werkdag
   entities:
-    light.kerstboom_light:
-      supported_color_modes:
-      - brightness
-      off_with_transition: false
-      off_brightness:
-      friendly_name: Kerstboom Light
-      supported_features: 40
-      color_mode: xy
-      brightness: 61
-      hs_color:
-      - 225.176
-      - 100
-      rgb_color:
-      - 0
-      - 63
-      - 255
-      xy_color:
-      - 0
-      - 0
-      state: 'on'
-    light.led_bank_level_light_color_on_off:
-      min_color_temp_kelvin: 2000
-      max_color_temp_kelvin: 6535
-      min_mireds: 153
-      max_mireds: 500
-      effect_list:
-      - colorloop
-      supported_color_modes:
-      - color_temp
-      - xy
-      color_mode: xy
-      brightness: 207
-      hs_color:
-      - 44.722
-      - 84.706
-      rgb_color:
-      - 255
-      - 200
-      - 39
-      xy_color:
-      - 0.507988
-      - 0.450996
-      off_with_transition: false
-      off_brightness:
-      friendly_name: LED-Bank level, light_color, on_off
-      supported_features: 44
-      state: 'on'
-    light.ikea_of_sweden_tradfri_bulb_gu10_cws_345lm_1339b7fe_level_light_color_on_off:
-      min_color_temp_kelvin: 2202
-      max_color_temp_kelvin: 4000
-      min_mireds: 250
-      max_mireds: 454
-      effect_list:
-      - colorloop
-      supported_color_modes:
-      - color_temp
-      - xy
-      off_with_transition: false
-      off_brightness:
-      friendly_name: backlight
-      supported_features: 44
-      color_mode: color_temp
-      brightness: 107
-      color_temp_kelvin: 2624
-      color_temp: 381
-      hs_color:
-      - 28.567
-      - 68.208
-      rgb_color:
-      - 255
-      - 163
-      - 81
-      xy_color:
-      - 0.534
-      - 0.387
-      state: 'on'
     light.computerlamp:
       min_color_temp_kelvin: 2000
       max_color_temp_kelvin: 6535
@@ -86,8 +10,6 @@
       - brightness
       - color_temp
       - hs
-      friendly_name: Computerlamp
-      supported_features: 0
       color_mode: color_temp
       brightness: 255
       color_temp_kelvin: 4926
@@ -102,63 +24,9 @@
       xy_color:
       - 0.375
       - 0.35
+      friendly_name: Computerlamp
+      supported_features: 0
       state: 'on'
-    climate.airco_woonkamer:
-      hvac_modes:
-      - 'off'
-      - heat
-      - dry
-      - cool
-      - fan_only
-      - heat_cool
-      min_temp: 16
-      max_temp: 30
-      target_temp_step: 0.5
-      fan_modes:
-      - LOW
-      - LOW_MID
-      - MID
-      - MID_HIGH
-      - HIGH
-      - NATURE
-      swing_modes:
-      - VerticalOff
-      - VerticalTop
-      - VerticalMiddleTop1
-      - VerticalMiddleTop2
-      - VerticalMiddleBottom2
-      - VerticalMiddleBottom1
-      - VerticalBottom
-      - VerticalSwing
-      - VerticalOff
-      - HorizontalOff
-      - HorizontalLeft
-      - HorizontalMiddleLeft
-      - HorizontalCenter
-      - HorizontalMiddleRight
-      - HorizontalRight
-      - HorizontalLeftHalf
-      - HorizontalRightHalf
-      - HorizontalSwing
-      current_temperature: 23.5
-      temperature: 30
-      fan_mode: HIGH
-      swing_mode: VerticalTop
-      swing_mode_horizontal: HorizontalMiddleRight
-      swing_mode_vertical: VerticalTop
-      friendly_name: Airco Woonkamer
-      supported_features: 41
-      state: heat
-    switch.airco_woonkamer_jet_mode:
-      device_class: switch
-      icon: mdi:turbine
-      friendly_name: Airco Woonkamer Jet mode
-      state: 'off'
-    switch.airco_woonkamer_display_light:
-      device_class: switch
-      icon: mdi:wall-sconce-round
-      friendly_name: Airco Woonkamer Display light
-      state: 'off'
     cover.rollerblind_0001:
       current_position: 40
       device_class: shade
@@ -171,149 +39,7 @@
       friendly_name: RollerBlind 0002
       supported_features: 15
       state: open
-  icon: mdi:sun-snowflake
-  metadata: {}
-- id: '1670145624262'
-  name: SCE002 Zomer
-  entities:
-    light.computerlamp:
-      min_color_temp_kelvin: 2000
-      max_color_temp_kelvin: 6535
-      min_mireds: 153
-      max_mireds: 500
-      supported_color_modes:
-      - brightness
-      - color_temp
-      - hs
-      friendly_name: Computerlamp
-      supported_features: 0
-      color_mode: color_temp
-      brightness: 255
-      color_temp_kelvin: 4926
-      color_temp: 203
-      hs_color:
-      - 26.931
-      - 20.257
-      rgb_color:
-      - 255
-      - 226
-      - 203
-      xy_color:
-      - 0.375
-      - 0.35
-      state: 'on'
-    cover.rollerblind_0001:
-      current_position: 50
-      device_class: shade
-      friendly_name: RollerBlind 0001
-      supported_features: 15
-      state: open
-    cover.rollerblind_0002:
-      current_position: 50
-      device_class: shade
-      friendly_name: RollerBlind 0002
-      supported_features: 15
-      state: open
-  icon: mdi:sun-thermometer-outline
-  metadata: {}
-- id: '1670145955311'
-  name: SEC003 TV Kijken
-  entities:
-    light.computerlamp:
-      min_color_temp_kelvin: 2000
-      max_color_temp_kelvin: 6535
-      min_mireds: 153
-      max_mireds: 500
-      supported_color_modes:
-      - brightness
-      - color_temp
-      - hs
-      friendly_name: Computerlamp
-      supported_features: 0
-      state: 'off'
-    light.led_bank_level_light_color_on_off:
-      min_color_temp_kelvin: 2000
-      max_color_temp_kelvin: 6535
-      min_mireds: 153
-      max_mireds: 500
-      effect_list:
-      - colorloop
-      supported_color_modes:
-      - color_temp
-      - xy
-      off_with_transition: false
-      off_brightness: 254
-      friendly_name: LED-Bank level, light_color, on_off
-      supported_features: 44
-      color_mode: xy
-      brightness: 191
-      hs_color:
-      - 113.6
-      - 88.235
-      rgb_color:
-      - 54
-      - 255
-      - 30
-      xy_color:
-      - 0.190433
-      - 0.720073
-      state: 'on'
-    light.ikea_of_sweden_tradfri_bulb_gu10_cws_345lm_1339b7fe_level_light_color_on_off:
-      min_color_temp_kelvin: 2202
-      max_color_temp_kelvin: 4000
-      min_mireds: 250
-      max_mireds: 454
-      effect_list:
-      - colorloop
-      supported_color_modes:
-      - color_temp
-      - xy
-      off_with_transition: false
-      off_brightness:
-      friendly_name: backlight
-      supported_features: 44
-      color_mode: color_temp
-      brightness: 110
-      color_temp_kelvin: 2624
-      color_temp: 381
-      hs_color:
-      - 28.567
-      - 68.208
-      rgb_color:
-      - 255
-      - 163
-      - 81
-      xy_color:
-      - 0.534
-      - 0.387
-      state: 'on'
-    light.muurlamp:
-      min_color_temp_kelvin: 2000
-      max_color_temp_kelvin: 6535
-      min_mireds: 153
-      max_mireds: 500
-      supported_color_modes:
-      - brightness
-      - color_temp
-      - hs
-      friendly_name: Muurlamp
-      supported_features: 0
-      color_mode: color_temp
-      brightness: 76
-      color_temp_kelvin: 2320
-      color_temp: 431
-      hs_color:
-      - 29.393
-      - 79.466
-      rgb_color:
-      - 255
-      - 151
-      - 52
-      xy_color:
-      - 0.567
-      - 0.389
-      state: 'on'
-  icon: mdi:television
+  icon: mdi:desktop-classic
   metadata: {}
 - id: '1675973399117'
   name: Filmavond
@@ -514,35 +240,6 @@
       - 0.507988
       - 0.450996
       state: 'on'
-    light.ikea_of_sweden_tradfri_bulb_gu10_cws_345lm_1339b7fe_level_light_color_on_off:
-      min_color_temp_kelvin: 2202
-      max_color_temp_kelvin: 4000
-      min_mireds: 250
-      max_mireds: 454
-      effect_list:
-      - colorloop
-      supported_color_modes:
-      - color_temp
-      - xy
-      off_with_transition: false
-      off_brightness:
-      friendly_name: backlight
-      supported_features: 44
-      color_mode: color_temp
-      brightness: 107
-      color_temp_kelvin: 2624
-      color_temp: 381
-      hs_color:
-      - 28.567
-      - 68.208
-      rgb_color:
-      - 255
-      - 163
-      - 81
-      xy_color:
-      - 0.534
-      - 0.387
-      state: 'on'
     light.tv_lamp:
       min_color_temp_kelvin: 2000
       max_color_temp_kelvin: 6535
@@ -552,6 +249,9 @@
       - brightness
       - color_temp
       - hs
+      icon: mdi:ceiling-light
+      friendly_name: TV lamp
+      supported_features: 0
       color_mode: color_temp
       brightness: 51
       color_temp_kelvin: 3378
@@ -566,9 +266,6 @@
       xy_color:
       - 0.464
       - 0.377
-      icon: mdi:ceiling-light
-      friendly_name: TV lamp
-      supported_features: 0
       state: 'on'
     cover.rollerblind_0001:
       current_position: 0
@@ -582,5 +279,49 @@
       friendly_name: RollerBlind 0002
       supported_features: 15
       state: closed
+    light.tvbacklight:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      min_mireds: 250
+      max_mireds: 454
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      friendly_name: TVBacklight
+      supported_features: 44
+      color_mode: color_temp
+      brightness: 110
+      color_temp_kelvin: 2702
+      color_temp: 370
+      hs_color:
+      - 28.391
+      - 65.659
+      rgb_color:
+      - 255
+      - 166
+      - 87
+      xy_color:
+      - 0.526
+      - 0.387
+      state: 'on'
+    select.tvbacklight_effect:
+      options:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      assumed_state: true
+      icon: mdi:palette
+      friendly_name: TVBacklight Effect
+      state: unknown
   icon: mdi:lightbulb-night
   metadata: {}
