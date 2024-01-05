@@ -476,11 +476,11 @@
         endif %}\n"
   mode: single
 - id: '1627120739713'
-  alias: AUT027 Bas uit zone De Heeg met Airco aan
+  alias: AUT027 Violet uit zone De Heeg met Airco aan
   description: ''
   trigger:
   - platform: zone
-    entity_id: device_tracker.telefoonbas
+    entity_id: device_tracker.telefoonviolet
     event: leave
     zone: zone.de_heeg
   condition:
@@ -516,8 +516,10 @@
       milliseconds: 0
   - alias: perform action
     choose:
-    - conditions: '{{ wait.trigger is none or wait.trigger.event.data.action == ''airco_uit''
-        }}'
+    - conditions:
+      - condition: template
+        value_template: '{{ wait.trigger is none or wait.trigger.event.data.action
+          == ''airco_uit'' }}'
       sequence:
       - service: climate.turn_off
         data: {}
@@ -526,7 +528,9 @@
       - service: notify.mobile_app_telefoonbas
         data:
           message: Na 15min wachten op antwoord, airco uitgezet
-    - conditions: '{{ wait.trigger.event.data.action == ''airco_aan'' }}'
+    - conditions:
+      - condition: template
+        value_template: '{{ wait.trigger.event.data.action == ''airco_aan'' }}'
       sequence:
       - service: notify.mobile_app_telefoonbas
         data:
@@ -1511,6 +1515,12 @@
     platform: device
     type: remote_button_short_press
     subtype: button
+  - type: battery_level
+    platform: device
+    device_id: 6fb4a5ee2841f4d23e3791b6ff8acf33
+    entity_id: 716b489298b625ff46c7021563f454f2
+    domain: sensor
+    above: 5
   condition: []
   action:
   - if:
@@ -1608,35 +1618,6 @@
     data:
       message: Nog niet lang genoeg tanden gepoetst vandaag.
       title: Tandenborstel
-  mode: single
-- id: '1670854752289'
-  alias: AUT063 Kerstboom snake Sav / Daan
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - device_tracker.unifi_a2_d6_5e_58_72_97_default
-    to: home
-  - platform: state
-    entity_id:
-    - device_tracker.oneplus_7pro_2
-    to: home
-  condition:
-  - condition: or
-    conditions:
-    - condition: device
-      type: is_on
-      device_id: 9f86591ca886ebefbe5b17418d98a5a0
-      entity_id: light.kerstboom
-      domain: light
-    - condition: device
-      type: is_on
-      device_id: 20b0ed73838e3b5528a8fd508a0688bf
-      entity_id: light.kerstslinger
-      domain: light
-  action:
-  - service: script.scr027_kerstslinger_en_kerstboom_aan_met_rainbow_effect
-    data: {}
   mode: single
 - id: '1671143588337'
   alias: AUT064 Bas verlaat werkzone
@@ -2104,7 +2085,7 @@
   description: ''
   trigger:
   - platform: time
-    at: '10:00:00'
+    at: 01:00:00
   condition: []
   action:
   - service: switch.toggle
@@ -2195,6 +2176,8 @@
     target:
       device_id:
       - 44b1d58487b404c5363bf0acf7d932c8
+  - service: script.scr030_kerstslinger_en_kerstboom_aan_met_vaste_kleur
+    data: {}
   mode: single
 - id: '1690050646004'
   alias: Test bedlamp

@@ -168,38 +168,24 @@
       unit_of_measurement: "degrees"
       value_template: "{{ state_attr('climate.airco_daan', 'temperature') }}"
 
-- platform: systemmonitor
-  resources:
-    - type: disk_use_percent
-      arg: /
-    - type: disk_use
-      arg: /
-    - type: disk_free
-      arg: /
-    - type: memory_use_percent
-    - type: memory_use
-    - type: memory_free
-    - type: swap_use_percent
-    - type: swap_use
-    - type: swap_free
-    - type: processor_use
+
 
 ### https://github.com/heyajohnny/afvalinfo
 ### Afvalinfo configuratie:
-- platform: afvalinfo
-  resources: # (at least 1 required)
-    - gft
-    - restafval
-    - trash_type_today
-    - trash_type_tomorrow
-    - kerstboom
-    - papier
-  location: maastricht # (required, default = sliedrecht) name of the 'gemeente'
-  postcode: 6228GG # (required, default = 3361AB)
-  streetnumber: 177 # (required, default = 1)
-  dateformat: "%d-%m-%Y" # (optional, default = %d-%m-%Y) day-month-year
-  locale: "nl" # (optional, default = 'en')
-  timespanindays: 14 # (optional, default = 365) number of days to look into the future
+# - platform: afvalinfo
+#   resources: # (at least 1 required)
+#     - gft
+#     - restafval
+#     - trash_type_today
+#     - trash_type_tomorrow
+#     - kerstboom
+#     - papier
+#   location: maastricht # (required, default = sliedrecht) name of the 'gemeente'
+#   postcode: 6228GG # (required, default = 3361AB)
+#   streetnumber: 177 # (required, default = 1)
+#   dateformat: "%d-%m-%Y" # (optional, default = %d-%m-%Y) day-month-year
+#   locale: "nl" # (optional, default = 'en')
+#   timespanindays: 14 # (optional, default = 365) number of days to look into the future
 
 ## Sensor om de attributen van sun.sun in automations te kunnen gebruiken
 - platform: template
@@ -296,7 +282,6 @@
         {%- endif -%}
       friendly_name: Current Electricity Rate
       unit_of_measurement: EUR/kWh
-
 
 ###################################
 ## Stopcontact07 geschikt maken voor energy dashboard

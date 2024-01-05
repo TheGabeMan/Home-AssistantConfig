@@ -303,11 +303,11 @@ scr027_kerstslinger_en_kerstboom_aan_met_rainbow_effect:
   sequence:
   - service: mqtt.publish
     data:
-      topic: zigbee2mqtt/kerstslinger/set
+      topic: zigbee2mqtt/kerst slinger/set
       payload: '{"effect":{"effect":"rainbow","speed":60}}'
   - service: mqtt.publish
     data:
-      topic: zigbee2mqtt/kerstboom/set
+      topic: zigbee2mqtt/kerst_boom/set
       payload: '{"effect":{"effect":"rainbow","speed":60}}'
   mode: single
   icon: mdi:string-lights
@@ -331,3 +331,26 @@ reset_bronwater:
       entity_id: counter.bronwater
   mode: single
   icon: mdi:bottle-soda-classic-outline
+scr030_kerstslinger_en_kerstboom_aan_met_vaste_kleur:
+  alias: SCR030 KerstSlinger en kerstboom aan met vaste kleur Chocolate1
+  sequence:
+  - service: mqtt.publish
+    data:
+      qos: 0
+      topic: zigbee2mqtt/kerst slinger/set
+      payload: '{"state": "TOGGLE"}'
+  - service: mqtt.publish
+    data:
+      qos: 0
+      topic: zigbee2mqtt/kerst_boom/set
+      payload: '{"state": "TOGGLE"}'
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/kerst slinger/set
+      payload: '{"effect":{"effect":"steady","speed":100,"colors":[{"r":255,"g":127,"b":36}]}}'
+  - service: mqtt.publish
+    data:
+      topic: zigbee2mqtt/kerst_boom/set
+      payload: '{"effect":{"effect":"steady","speed":100,"colors":[{"r":255,"g":127,"b":36}]}}'
+  mode: single
+  icon: mdi:string-lights
