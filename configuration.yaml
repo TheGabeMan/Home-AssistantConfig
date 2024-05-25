@@ -131,10 +131,3 @@ notify:
 spotcast:
   sp_dc: !secret sp_dc
   sp_key: !secret sp_key
-
-#####################################
-## Home Connect Alt HACS integratie
-#####################################
-home_connect_alt:
-  client_id: !secret home_connect_client_id
-  client_secret: !secret home_connect_client_secret

@@ -31,7 +31,7 @@ scr004_flashlightbureau:
     data: {}
     target:
       device_id:
-      - 44b1d58487b404c5363bf0acf7d932c8
+      - dfd58c0a195722d15246db03cc7e5e33
   - repeat:
       count: '3'
       sequence:
@@ -164,24 +164,19 @@ scr013_ik_ga_naar_bed:
 scr014_bas_vertraagd_led_slang_uit:
   alias: SCR014 Bas vertraagd LED Slang uit
   sequence:
-  - type: turn_on
-    device_id: 3b5ccf9a9f01cd0429958a4d12623ea1
-    entity_id: switch.tz3000_g5xawfcq_ts0121_b3b93afe_on_off
-    domain: switch
   - delay:
       hours: 0
       minutes: 0
       seconds: 30
       milliseconds: 0
-  - type: turn_off
-    device_id: 3b5ccf9a9f01cd0429958a4d12623ea1
-    entity_id: switch.tz3000_g5xawfcq_ts0121_b3b93afe_on_off
-    domain: switch
   - service: light.turn_off
     target:
-      device_id:
-      - 76b327b9329cc08343049931bb61b716
-      - 38fbf0caec931547b7491e450a4046d2
+      area_id: 37d65e06028c11ebb6270dd149645529
+    data: {}
+  - type: turn_off
+    device_id: f1f326c75f8408e04137655f8c12f1e6
+    entity_id: 5ac405f604a0434da4a0cfbcec05a411
+    domain: switch
   mode: single
 scr015_bank_led_instellen:
   alias: SCR015 Bank LED instellen
@@ -226,9 +221,9 @@ scr018_achterkamer_spots:
   - service: light.turn_on
     target:
       device_id:
-      - 54382fc554a265abdd703d4d38dd6bd8
-      - 836fa2cb9a00c58f3881acc332cf5d3a
-      - dfd58c0a195722d15246db03cc7e5e33
+      - 5ab69baff1fe8b0aea29e1cf2bb64074
+      - a44be660505ac3e01fba0ac380020e71
+      - 8baebf71c697ebc5b5c5bcd78c149730
     data:
       brightness: 3
       color_temp: 462
@@ -354,3 +349,62 @@ scr030_kerstslinger_en_kerstboom_aan_met_vaste_kleur:
       payload: '{"effect":{"effect":"steady","speed":100,"colors":[{"r":255,"g":127,"b":36}]}}'
   mode: single
   icon: mdi:string-lights
+scr031_spotjes_op_juiste_kleur:
+  alias: SCR031 Spotjes op juiste kleur
+  sequence:
+  - service: light.turn_on
+    metadata: {}
+    data:
+      color_temp: 500
+      brightness: 102
+    target:
+      entity_id: light.spotjes
+  mode: single
+  icon: mdi:lightbulb-spot
+scr032_spotjes_video_opname:
+  alias: SCR032 Spotjes video opname
+  sequence:
+  - service: light.turn_on
+    metadata: {}
+    data:
+      color_temp: 153
+      brightness: 255
+    target:
+      entity_id: light.spotjes
+  mode: single
+  icon: mdi:lightbulb-spot
+scr033_cast_reolink_naar_nest_hub:
+  alias: SCR033 Cast Reolink naar Nest Hub
+  fields:
+    media_player:
+      selector:
+        entity: {}
+      name: media_player
+      description: Target media player
+      default: media_player.keuken
+      required: true
+  sequence:
+  - if:
+    - condition: template
+      value_template: '{{ states(media_player) != ''unavailable'' and states(media_player)
+        != ''unknown'' }}'
+      alias: Test if media_player is available
+    then:
+    - service: dash_cast.load_url
+      data:
+        url: rtsp://admin:enGo28dWC8yMJWNqrKUT@192.168.0.131:554/Preview_01_main
+        entity_id: '{{ media_player }}'
+      alias: Cast stream to media_player
+  mode: single
+  icon: mdi:walk
+scr034_stuur_reolink_naar_keukenhub:
+  alias: SCR034 Stuur ReoLink naar KeukenHub
+  sequence:
+  - service: media_player.play_media
+    metadata: {}
+    data:
+      media_content_id: rtsp://admin:enGo28dWC8yMJWNqrKUT@reo01.intern.vanzanten.be:554/Preview_01_main
+      media_content_type: video
+    target:
+      device_id: 4b909be751f2ce1ab2dbea238d94ec43
+  mode: single

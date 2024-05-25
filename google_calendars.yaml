@@ -68,3 +68,9 @@
     ignore_availability: true
     name: 2021 FIA Formula One World Championship Race Calendar
 
+
+- cal_id: 372129ce15ae495d7a21c14a24f777773bbcb8dba7d0606c52b20a3fd1ceee2b@group.calendar.google.com
+  entities:
+  - device_id: inrng_2024_pro_cycling_calendar
+    ignore_availability: true
+    name: '//INRNG: 2024 Pro Cycling calendar'

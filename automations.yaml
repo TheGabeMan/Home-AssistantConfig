@@ -420,9 +420,9 @@
   description: ''
   trigger:
   - platform: device
-    type: turned_on
-    device_id: 9e08752dd655d0868f90742b6e2eb1a4
-    entity_id: light.bfda04a861ee67ba30erzs
+    type: changed_states
+    device_id: ad60897a5f8a13a48700df33d49a02f6
+    entity_id: a1a4dd9e2a41e3ac861add4c46b4c654
     domain: light
   condition: []
   action:
@@ -435,9 +435,9 @@
   description: ''
   trigger:
   - platform: device
-    type: turned_off
-    device_id: 9e08752dd655d0868f90742b6e2eb1a4
-    entity_id: light.bfda04a861ee67ba30erzs
+    type: changed_states
+    device_id: ad60897a5f8a13a48700df33d49a02f6
+    entity_id: a1a4dd9e2a41e3ac861add4c46b4c654
     domain: light
   condition: []
   action:
@@ -922,7 +922,7 @@
         priority: high
   mode: single
 - id: '1641128829998'
-  alias: AUT047 Douche langer dan 5min30
+  alias: AUT047 Douche langer dan 7min30
   description: Notificatie wanneer er warm water gevraagd wordt
   trigger:
   - platform: state
@@ -932,18 +932,19 @@
     to: 'on'
     for:
       hours: 0
-      minutes: 5
+      minutes: 7
       seconds: 30
   condition: []
   action:
   - service: notify.mobile_app_telefoongabrie
     data:
-      message: Douche langer dan 5min30
-      title: Douche langer dan 5min30
+      message: Douche langer dan 7min30
+      title: Douche langer dan 7min30
   - service: scene.create
     data:
       scene_id: lamp_before
-      snapshot_entities: light.badkamerlamp
+      snapshot_entities:
+      - light.badkamerlamp
   - service: script.scr022_flashlightbadkamer
     data: {}
   - delay:
@@ -1130,10 +1131,15 @@
     data:
       message: Naar bed gaan gestart
       title: Bedtijd
+  - type: turn_off
+    device_id: bec437e218433cf7387f0f9d02fd8198
+    entity_id: 29d821c8514f809d8001b1278e020a44
+    domain: remote
   - service: light.turn_on
     data: {}
     target:
-      device_id: b7125a2c255c7161289d3c3b3d86cedc
+      device_id:
+      - 05f0b298a36afde8ccbaa3ff906a7ee5
   - service: light.turn_off
     data: {}
     target:
@@ -1142,10 +1148,6 @@
       - tuin
       - 7ed3a9f5218c404ba791bca0ead7c973
       device_id: ad71aedd70d6e6cb098662f2c4045ceb
-  - service: light.turn_on
-    data: {}
-    target:
-      device_id: dfd58c0a195722d15246db03cc7e5e33
   - service: climate.set_preset_mode
     data:
       preset_mode: asleep
@@ -1200,19 +1202,8 @@
     data: {}
     target:
       area_id: b8b10b1ded3841c5b073de7cfb6139de
-  - service: light.turn_off
-    data: {}
-    target:
-      device_id: dfd58c0a195722d15246db03cc7e5e33
   mode: parallel
   max: 3
-- id: '1645049096652'
-  alias: S0tool update
-  description: ''
-  use_blueprint:
-    path: huizebruin/S0tool update.yaml
-    input:
-      notify_device: e91c5a930a66474099be7a69b9c17b5a
 - id: '1645981284580'
   alias: AUT052 Smoke detectors
   description: ''
@@ -1355,13 +1346,6 @@
     entity_id: person.gabrie_van_zanten
     state: home
   action:
-  - service: light.turn_on
-    data:
-      brightness: 1
-      color_temp: 172
-    target:
-      device_id:
-      - b7125a2c255c7161289d3c3b3d86cedc
   - service: light.turn_on
     data:
       transition: 60
@@ -1808,14 +1792,22 @@
     domain: sensor
     below: 100
   action:
+  - service: light.turn_on
+    metadata: {}
+    data:
+      brightness: 255
+    target:
+      entity_id: light.aanrecht
   - type: turn_on
     device_id: 8dd49e0e268a9e0bc723401332d9a6d0
     entity_id: light.tz3210_agjx0pxt_ts0501b_light
     domain: light
+    enabled: false
   - type: turn_on
     device_id: 3715da8d1c163d25b3c844fee1bcb703
     entity_id: light.aanrecht_rechts_light_2
     domain: light
+    enabled: false
   - wait_for_trigger:
     - type: no_motion
       platform: device
@@ -1824,16 +1816,23 @@
       domain: binary_sensor
       for:
         hours: 0
-        minutes: 1
+        minutes: 2
         seconds: 0
   - type: turn_off
     device_id: 8dd49e0e268a9e0bc723401332d9a6d0
     entity_id: light.tz3210_agjx0pxt_ts0501b_light
     domain: light
+    enabled: false
   - type: turn_off
     device_id: 3715da8d1c163d25b3c844fee1bcb703
     entity_id: light.aanrecht_rechts_light_2
     domain: light
+    enabled: false
+  - service: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.aanrecht
   mode: single
 - id: '1676042684370'
   alias: Wasdroger Starten
@@ -1986,7 +1985,7 @@
           device_id: b70f9b0e9dddc713e7d46292ca0edd5e
   mode: single
 - id: '1684271709406'
-  alias: ZZew Automation
+  alias: ZZ Voorbeeld Notify met antwoord
   description: ''
   trigger:
   - platform: time
@@ -2015,18 +2014,22 @@
     continue_on_timeout: false
   - alias: Perform Action
     choose:
-    - conditions: '{{ wait.trigger.event.data.action == ''lamp_aan'' }}'
+    - conditions:
+      - condition: template
+        value_template: '{{ wait.trigger.event.data.action == ''lamp_aan'' }}'
       sequence:
       - service: light.turn_on
         data: {}
         target:
-          entity_id: light.computerlamp
-    - conditions: '{{ wait.trigger.event.data.action == ''lamp_uit'' }}'
+          entity_id: light.tafellamp
+    - conditions:
+      - condition: template
+        value_template: '{{ wait.trigger.event.data.action == ''lamp_uit'' }}'
       sequence:
       - service: light.turn_off
         data: {}
         target:
-          entity_id: light.computerlamp
+          entity_id: light.tafellamp
   mode: single
 - id: '1687804459571'
   alias: AUT072 Bestellen bronwater
@@ -2081,11 +2084,11 @@
           entity_id: climate.airco_bas
   mode: single
 - id: '1689572136834'
-  alias: AUT073 Afwasmachine starten
+  alias: AUT073 Vaatwasser starten
   description: ''
   trigger:
   - platform: time
-    at: 01:00:00
+    at: 02:00:00
   condition: []
   action:
   - service: switch.toggle
@@ -2175,7 +2178,7 @@
     data: {}
     target:
       device_id:
-      - 44b1d58487b404c5363bf0acf7d932c8
+      - dfd58c0a195722d15246db03cc7e5e33
   - service: script.scr030_kerstslinger_en_kerstboom_aan_met_vaste_kleur
     data: {}
   mode: single
@@ -2228,6 +2231,93 @@
     timeout:
       hours: 0
       minutes: 2
+      seconds: 0
+      milliseconds: 0
+  mode: single
+- id: '1704873940298'
+  alias: AUT077 Vaatwasser bij veel zon
+  description: Start vaatwasser als 15min lang meer dan 1000 KWh opgevangen wordt.
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.inverter_goodwe
+    above: '1000'
+    for: 00:15:00
+  condition: []
+  action:
+  - service: switch.toggle
+    data: {}
+    target:
+      entity_id:
+      - switch.dishwasher_program_quick65
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      title: Vaatwasser gestart
+      message: De ZON !!! Vaatwasser gestart
+      data:
+        tts: 0
+        priority: high
+  - service: esphome.ulanzi_del_screen
+    data:
+      icon_name: weather_sunny
+  - service: esphome.ulanzi_add_screen
+    data:
+      alarm: true
+      text: '>1000 W zon -> vaatwasser gestart'
+      lifetime: 2
+      icon_name: weather_sunny
+      screen_time: 2
+  - service: automation.turn_off
+    data:
+      stop_actions: false
+    target:
+      entity_id:
+      - automation.aut077_vaatwasser_bij_veel_zon
+  mode: single
+- id: '1707431177031'
+  alias: AUT078 Vaatwasser op tijdstip
+  description: Start de vaatwasser op tijdstip via UI in te stellen
+  trigger:
+  - platform: time
+    at: input_datetime.vaatwasser_starttijd
+  condition: []
+  action:
+  - service: switch.toggle
+    data: {}
+    target:
+      entity_id: switch.dishwasher_program_quick65
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      message: Afwasmachine automatisch gestart via UI
+      title: Afwasmachine aan
+  mode: single
+- id: '1713293987640'
+  alias: AUT079 ReoLink cast naar Hub
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.reo01_person
+    from: 'off'
+    to: 'on'
+  condition: []
+  action:
+  - service: script.scr033_cast_reolink_naar_nest_hub
+    metadata: {}
+    data: {}
+  - alias: Wacht op geen persoon
+    wait_for_trigger:
+    - type: turned_off
+      platform: device
+      device_id: 343f3303284261db218a4317b481d4c9
+      entity_id: c72210d6e0893821b89aa9da75615173
+      domain: binary_sensor
+      for:
+        hours: 0
+        minutes: 1
+        seconds: 0
+    timeout:
+      hours: 0
+      minutes: 10
       seconds: 0
       milliseconds: 0
   mode: single
