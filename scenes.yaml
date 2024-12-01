@@ -169,18 +169,6 @@
       friendly_name: boekenkastspot
       supported_features: 44
       state: 'on'
-    select.boekenkastspot_effect:
-      options:
-      - blink
-      - breathe
-      - okay
-      - channel_change
-      - finish_effect
-      - stop_effect
-      assumed_state: true
-      icon: mdi:palette
-      friendly_name: boekenkastspot Effect
-      state: unknown
     switch.boekenkastspot_do_not_disturb:
       friendly_name: boekenkastspot Do not disturb
       state: 'off'
@@ -219,65 +207,6 @@
     switch.tafelspot_do_not_disturb:
       friendly_name: tafelspot Do not disturb
       state: 'off'
-    light.tvbacklight:
-      min_color_temp_kelvin: 2000
-      max_color_temp_kelvin: 6535
-      min_mireds: 153
-      max_mireds: 500
-      effect_list:
-      - blink
-      - breathe
-      - okay
-      - channel_change
-      - finish_effect
-      - stop_effect
-      supported_color_modes:
-      - color_temp
-      - xy
-      effect:
-      color_mode: color_temp
-      brightness: 168
-      color_temp_kelvin: 2702
-      color_temp: 370
-      hs_color:
-      - 28.391
-      - 65.659
-      rgb_color:
-      - 255
-      - 166
-      - 87
-      xy_color:
-      - 0.526
-      - 0.387
-      friendly_name: TVBacklight
-      supported_features: 44
-      state: 'on'
-    select.tvbacklight_effect:
-      options:
-      - blink
-      - breathe
-      - okay
-      - channel_change
-      - finish_effect
-      - stop_effect
-      assumed_state: true
-      icon: mdi:palette
-      friendly_name: TVBacklight Effect
-      state: unknown
-    remote.google_tv:
-      activity_list:
-      current_activity: com.google.android.apps.tv.launcherx
-      friendly_name: Google TV
-      supported_features: 4
-      state: 'on'
-    media_player.google_tv:
-      assumed_state: true
-      device_class: tv
-      friendly_name: Google TV
-      supported_features: 22457
-      app_id: com.google.android.apps.tv.launcherx
-      app_name: com.google.android.apps.tv.launcherx
-      state: 'on'
     light.staande_lamp:
       min_color_temp_kelvin: 2000
       max_color_temp_kelvin: 6535
@@ -303,22 +232,10 @@
       friendly_name: staande lamp
       supported_features: 44
       state: 'off'
-    select.staande_lamp_effect:
-      options:
-      - blink
-      - breathe
-      - okay
-      - channel_change
-      - finish_effect
-      - stop_effect
-      assumed_state: true
-      icon: mdi:palette
-      friendly_name: staande lamp Effect
-      state: unknown
     switch.staande_lamp_do_not_disturb:
       friendly_name: staande lamp Do not disturb
       state: 'on'
-    light.tafellamp:
+    light.led_smart_backlight:
       min_color_temp_kelvin: 2000
       max_color_temp_kelvin: 6535
       min_mireds: 153
@@ -326,17 +243,21 @@
       supported_color_modes:
       - color_temp
       - hs
-      color_mode:
-      brightness:
-      color_temp_kelvin:
-      color_temp:
-      hs_color:
-      rgb_color:
-      xy_color:
-      icon: mdi:spotlight-beam
-      friendly_name: Tafellamp
+      friendly_name: LED SMART Backlight
       supported_features: 0
-      state: 'off'
+      color_mode: hs
+      brightness: 148
+      hs_color:
+      - 47.131
+      - 98.78
+      rgb_color:
+      - 255
+      - 200
+      - 3
+      xy_color:
+      - 0.514
+      - 0.457
+      state: 'on'
   icon: mdi:video-vintage
   metadata:
     cover.gordijnen:
@@ -354,12 +275,11 @@
       supported_color_modes:
       - color_temp
       - xy
-      off_with_transition: false
-      off_brightness:
-      friendly_name: LED-Bank level, light_color, on_off
-      supported_features: 44
+      effect:
       color_mode: xy
       brightness: 97
+      color_temp_kelvin:
+      color_temp:
       hs_color:
       - 44.722
       - 84.706
@@ -370,6 +290,10 @@
       xy_color:
       - 0.507988
       - 0.450996
+      off_with_transition: false
+      off_brightness:
+      friendly_name: LED-Bank level, light_color, on_off
+      supported_features: 44
       state: 'on'
     light.tv_lamp:
       min_color_temp_kelvin: 2000
@@ -377,12 +301,8 @@
       min_mireds: 153
       max_mireds: 500
       supported_color_modes:
-      - brightness
       - color_temp
       - hs
-      icon: mdi:ceiling-light
-      friendly_name: TV lamp
-      supported_features: 0
       color_mode: color_temp
       brightness: 51
       color_temp_kelvin: 3378
@@ -397,6 +317,9 @@
       xy_color:
       - 0.464
       - 0.377
+      icon: mdi:ceiling-light
+      friendly_name: TV lamp
+      supported_features: 0
       state: 'on'
     cover.rollerblind_0001:
       current_position: 0
@@ -410,49 +333,28 @@
       friendly_name: RollerBlind 0002
       supported_features: 15
       state: closed
-    light.tvbacklight:
-      min_color_temp_kelvin: 2202
-      max_color_temp_kelvin: 4000
-      min_mireds: 250
-      max_mireds: 454
-      effect_list:
-      - blink
-      - breathe
-      - okay
-      - channel_change
-      - finish_effect
-      - stop_effect
+    light.led_smart_backlight:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
       supported_color_modes:
       - color_temp
-      - xy
-      friendly_name: TVBacklight
-      supported_features: 44
-      color_mode: color_temp
-      brightness: 110
-      color_temp_kelvin: 2702
-      color_temp: 370
+      - hs
+      friendly_name: LED SMART Backlight
+      supported_features: 0
+      color_mode: hs
+      brightness: 149
       hs_color:
-      - 28.391
-      - 65.659
+      - 47.131
+      - 98.78
       rgb_color:
       - 255
-      - 166
-      - 87
+      - 200
+      - 3
       xy_color:
-      - 0.526
-      - 0.387
+      - 0.514
+      - 0.457
       state: 'on'
-    select.tvbacklight_effect:
-      options:
-      - blink
-      - breathe
-      - okay
-      - channel_change
-      - finish_effect
-      - stop_effect
-      assumed_state: true
-      icon: mdi:palette
-      friendly_name: TVBacklight Effect
-      state: unknown
   icon: mdi:lightbulb-night
   metadata: {}

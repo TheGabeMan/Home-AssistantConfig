@@ -5,46 +5,39 @@ scr001_flashlightzolderbas:
       count: '8'
       sequence:
       - delay: '0.6'
-      - service: light.toggle
-        data: {}
+      - data: {}
         target:
           device_id:
           - 76b327b9329cc08343049931bb61b716
           - 38fbf0caec931547b7491e450a4046d2
-      - type: toggle
-        device_id: f1f326c75f8408e04137655f8c12f1e6
-        entity_id: switch.0xcc86ecfffe3ab9b3
-        domain: switch
+        action: light.toggle
+      - action: switch.toggle
+        metadata: {}
+        data: {}
+        target:
+          entity_id: switch.powerplug_led_slang_vi
   mode: restart
-scr002_spotify_my_top_songs_2019:
-  alias: SCR002 Spotify 1 kopje koffie
-  sequence:
-  - service: spotcast.start
-    data:
-      entity_id: media_player.keuken
-      uri: spotify:track:7oIj1naWSVgDmruBrkT3Cw
-  mode: single
 scr004_flashlightbureau:
   alias: SCR004_FlashLightBureau
   sequence:
-  - service: light.toggle
-    data: {}
+  - data: {}
     target:
       device_id:
       - dfd58c0a195722d15246db03cc7e5e33
+    action: light.toggle
   - repeat:
       count: '3'
       sequence:
       - delay:
           hours: 0
           minutes: 0
-          seconds: 1
+          seconds: 2
           milliseconds: 0
-      - service: light.toggle
-        data: {}
+      - data: {}
         target:
           device_id:
-          - 44b1d58487b404c5363bf0acf7d932c8
+          - dfd58c0a195722d15246db03cc7e5e33
+        action: light.toggle
   mode: restart
 rolgordijnen_omlaag:
   alias: SCR005 Gordijnen dicht
@@ -408,3 +401,36 @@ scr034_stuur_reolink_naar_keukenhub:
     target:
       device_id: 4b909be751f2ce1ab2dbea238d94ec43
   mode: single
+scr035_a_itho_fan_op_75:
+  alias: SCR035-A ITHO fan op 75%
+  sequence:
+  - action: fan.set_percentage
+    metadata: {}
+    data:
+      percentage: 75
+    target:
+      device_id: bd6f8bbe3d01ab061647577e2b42ecb8
+  description: ''
+  icon: mdi:fan-speed-3
+scr035_b_itho_fan_op_50:
+  alias: SCR035-B ITHO fan op 50%
+  sequence:
+  - action: fan.set_percentage
+    metadata: {}
+    data:
+      percentage: 50
+    target:
+      device_id: bd6f8bbe3d01ab061647577e2b42ecb8
+  description: ''
+  icon: mdi:fan-speed-2
+scr035_c_itho_fan_op_25:
+  alias: SCR035-C ITHO fan op 25%
+  sequence:
+  - action: fan.set_percentage
+    metadata: {}
+    data:
+      percentage: 25
+    target:
+      device_id: bd6f8bbe3d01ab061647577e2b42ecb8
+  description: ''
+  icon: mdi:fan-speed-1

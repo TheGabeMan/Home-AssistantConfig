@@ -168,8 +168,6 @@
       unit_of_measurement: "degrees"
       value_template: "{{ state_attr('climate.airco_daan', 'temperature') }}"
 
-
-
 ## Sensor om de attributen van sun.sun in automations te kunnen gebruiken
 - platform: template
   sensors:
@@ -282,3 +280,21 @@
     total_incoming_energy:
       value_template: >-
         {{ states('sensor.power_usage')|float(0) + states('sensor.inverter_goodwe')|float(0) }}
+
+###################################
+## Verbruikt dan wadroger meer dan 5W, dan is ie actief
+###################################
+- platform: template
+  sensors:
+    wasdroger_actief:
+      friendly_name: wasdroger loopt
+      value_template: "{{ states('sensor.wassensor.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_electrical_measurement') | int(0) > 5.0 }}"
+
+###################################
+## Verbruikt dan wadroger meer dan 5W, dan is ie actief
+###################################
+- platform: template
+  sensors:
+    wasmachine_actief:
+      friendly_name: wasmachine loopt
+      value_template: "{{ states('sensor.powerplug002_wasmachine_energy_power') | int(0) > 5.0 }}"

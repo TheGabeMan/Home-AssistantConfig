@@ -44,12 +44,6 @@
     - light.bedlampje
 
 - platform: group
-  name: KamerBas
-  entities:
-    - light.led_bas_bed
-    - light.led_bas_bureau
-
-- platform: group
   name: Tuinverlichting
   entities:
     - light.twinkley_tuinslinger

@@ -101,11 +101,11 @@ notify:
 
   #### Chrome push notifications: https://www.home-assistant.io/integrations/html5
   #### Reference email van firebase: firebase-adminsdk-ok1nu@homeass-chromenotify.iam.gserviceaccount.com
-  - platform: html5
-    name: GabrieChrome
-    vapid_pub_key: !secret vapid_pub_key
-    vapid_prv_key: !secret vapid_prv_key
-    vapid_email: !secret vapid_email
+##  - platform: html5
+##    name: GabrieChrome
+##    vapid_pub_key: !secret vapid_pub_key
+##    vapid_prv_key: !secret vapid_prv_key
+##    vapid_email: !secret vapid_email
 
   ## Een groep om later aan te refereren in automations
   - platform: group
@@ -128,6 +128,6 @@ notify:
 ####### Spotcast
 ####### https://github.com/fondberg/spotcast
 #######
-spotcast:
-  sp_dc: !secret sp_dc
-  sp_key: !secret sp_key
+# spotcast:
+#   sp_dc: !secret sp_dc
+#   sp_key: !secret sp_key

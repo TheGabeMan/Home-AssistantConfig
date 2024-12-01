@@ -1,40 +1,41 @@
 - id: '1606080091705'
   alias: AUT001 Garagepoort staat te lang open
   description: Verstuur een melding als de garagepoort te lang open staat.
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.poortcontact_contact
+  triggers:
+  - entity_id: binary_sensor.poortcontact_contact
     from: 'off'
     to: 'on'
-    for: 0:05:00
-  condition: []
-  action:
-  - service: tts.google_translate_say
-    data:
+    for: 0:10:00
+    trigger: state
+  conditions: []
+  actions:
+  - data:
       entity_id: media_player.keukenhub,media_player.kamer_gabrie, media_player.woonkamer
       message: De garagepoort is al langer dan 5 minuten open.
       language: nl
-  - service: notify.mobile_app_telefoongabrie
-    data:
+    action: tts.google_translate_say
+    enabled: true
+  - data:
       title: Garagepoort Open
-      message: De garagepoort is al langer dan 5 minuten open.
+      message: De garagepoort is al langer dan 10 minuten open.
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_telefoonbas
-    data:
+    action: notify.mobile_app_telefoongabrie
+  - data:
       title: Garagepoort Open
-      message: De garagepoort is al langer dan 5 minuten open.
+      message: De garagepoort is al langer dan 10 minuten open.
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_telefoondaan
-    data:
+    action: notify.mobile_app_telefoonbas
+  - data:
       title: Garagepoort Open
-      message: De garagepoort is al langer dan 5 minuten open.
+      message: De garagepoort is al langer dan 10 minuten open.
       data:
         tts: 0
         priority: high
+    action: notify.mobile_app_telefoondaan
   mode: single
 - id: '1606553772210'
   alias: AUT003 Wasmachine is klaar
@@ -181,15 +182,19 @@
 - id: '1608073935353'
   alias: AUT009 - Stofzuiger - Stofzuigen
   description: Weekschema voor stofzuiger start
-  trigger:
-  - platform: time
-    at: input_datetime.vacuum_schedule_start_time
-  condition: []
-  action:
-  - service: vacuum.start
-    data: {}
+  triggers:
+  - at: input_datetime.vacuum_schedule_start_time
+    trigger: time
+  conditions: []
+  actions:
+  - data: {}
     target:
       device_id: 387b43192bc11123698944cd03bdb904
+    action: vacuum.start
+  - device_id: 1c0ce252318ce8e902d944bc4f630d9a
+    domain: vacuum
+    entity_id: c35d8e882b0b5cc5d161bb2d01db27d4
+    type: clean
   mode: single
 - id: '1608149259701'
   alias: AUT010 Wekker Bas
@@ -339,13 +344,13 @@
 - id: '1611696927118'
   alias: AUT014 Licht aan woonkamer bij beweging
   description: Wanneer lampen uit zijn in woonkamer en er beweging is, licht aan
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - binary_sensor.motionwoonkamer_occupancy
     to: 'on'
     from: 'off'
-  condition:
+    trigger: state
+  conditions:
   - condition: state
     entity_id: sun.sun
     state: below_horizon
@@ -357,47 +362,58 @@
     - condition: state
       entity_id: vacuum.roborock_s5_max
       state: unavailable
+    - condition: state
+      entity_id: vacuum.q8max
+      state: idle
+    - condition: state
+      entity_id: vacuum.q8max
+      state: unavailable
   - condition: state
     entity_id: light.woonkamertotaal
     state: 'off'
-  action:
-  - service: light.turn_on
-    data: {}
+  actions:
+  - data: {}
     target:
       device_id:
       - dfd58c0a195722d15246db03cc7e5e33
       - 8dd49e0e268a9e0bc723401332d9a6d0
+    action: light.turn_on
   - wait_for_trigger:
-    - platform: state
-      entity_id:
+    - entity_id:
       - binary_sensor.motionwoonkamer_occupancy
       from: 'on'
       to: 'off'
+      trigger: state
   - delay: 1
-  - service: light.turn_off
-    target:
+  - target:
       area_id:
       - 23e6c7fb9f204e3eb18fe60dcaf3c181
       - 7ed3a9f5218c404ba791bca0ead7c973
     data: {}
+    action: light.turn_off
   mode: single
 - id: '1612781258481'
   alias: AUT015 Stofzuiger heeft gelopen
   description: Melding als de stofzuiger gelopen heeft.
-  trigger:
-  - platform: state
-    entity_id: vacuum.roborock_s5_max
+  triggers:
+  - entity_id: vacuum.roborock_s5_max
     to: docked
     from: returning
-  condition: []
-  action:
-  - service: notify.mobile_app_telefoongabrie
-    data:
+    trigger: state
+  - trigger: state
+    entity_id:
+    - vacuum.q8max
+    to: docked
+    from: returning
+  conditions: []
+  actions:
+  - data:
       message: Stofzuiger heeft gelopen
+    action: notify.mobile_app_telefoongabrie
   mode: single
 - id: '1619197239154'
   alias: AUT020 TV Notificatie
-  description: ''
+  description: Melding op TV
   trigger:
   - type: opened
     platform: device
@@ -406,14 +422,14 @@
     domain: binary_sensor
   condition: []
   action:
-  - service: notify.lgtv
-    data:
+  - data:
       message: De garagepoort is open!
       title: Poort
       data:
         duration: 10
         fontsize: small
         position: bottom-right
+    action: notify.lgtv
   mode: single
 - id: '1621101748225'
   alias: AUT036 TuinSchijnwerper gaat aan
@@ -623,43 +639,6 @@
     data:
       message: jaloezieën onder de 10% accu
       title: jaloezieën opladen
-  mode: single
-- id: '1632911745565'
-  alias: AUT035 Koffiezetapparaat gaat uit (Stroom)
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.coffee_machine
-    from: 'on'
-    to: 'off'
-    for:
-      hours: 0
-      minutes: 6
-      seconds: 30
-  condition: []
-  action:
-  - service: notify.mobile_app_telefoongabrie
-    data:
-      message: De koffie springt uit
-  - service: notify.lgtv
-    data:
-      message: De koffie springt uit
-      title: Koffie
-  - service: notify.gabriechrome
-    data:
-      message: De koffie springt uit
-      title: De koffie springt uit
-  - service: tts.cloud_say
-    data:
-      message: De koffie wordt koud!
-      entity_id: media_player.keuken
-  - service: esphome.ulanzi_add_screen
-    data:
-      alarm: true
-      icon_name: coffee_hot
-      lifetime: 2
-      text: Koffie!!!
-      screen_time: 10
   mode: single
 - id: '1633772441628'
   alias: AUT038-1 Badkamer lamp hard aan
@@ -1024,34 +1003,6 @@
     default: []
   mode: restart
   max_exceeded: silent
-- id: '1641853856806'
-  alias: AUT049-aan Voordeurlamp
-  description: ''
-  trigger:
-  - platform: time
-    at: '21:00:00'
-  condition: []
-  action:
-  - service: light.turn_on
-    target:
-      device_id: 97497fba42099be65878acee4699431a
-    data:
-      color_temp: 500
-      brightness: 15
-  mode: single
-- id: '1641853907085'
-  alias: AUT049-uit Voordeurlamp
-  description: ''
-  trigger:
-  - platform: time
-    at: 00:00:00
-  condition: []
-  action:
-  - service: light.turn_off
-    target:
-      device_id: 97497fba42099be65878acee4699431a
-    data: {}
-  mode: single
 - id: '1642262339885'
   alias: AUT008-Z Airco Bas uit zomer
   description: ''
@@ -1089,121 +1040,6 @@
       message: Airco Bas uit Zomer
       title: Airco Bas uit Zomer
   mode: single
-- id: '1644784971435'
-  alias: AUT050 Donatie ontvangen
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: sensor.donaties
-  condition:
-  - condition: not
-    conditions:
-    - condition: state
-      entity_id: sensor.donaties
-      state: unknown
-  action:
-  - service: notify.mobile_app_oneplus7progabrie
-    data:
-      title: Donatie ontvangen
-      message: Dontatie totaalbedrag is gewijzigd van {{ trigger.from_state.state
-        }} Euro naar {{ trigger.to_state.state }} Euro
-      data:
-        tts: 0
-        priority: high
-  - service: spotcast.start
-    data:
-      entity_id: media_player.keuken
-      uri: spotify:track:29FNeqjOV2kPWGS55qhtGB?si=cee549ceabb04429
-  mode: single
-- id: '1644948767535'
-  alias: AUT051 Button bedtijd
-  description: ''
-  trigger:
-  - platform: device
-    domain: mqtt
-    device_id: 98736e93c97a5b7c3d5ff3ced7ec0d45
-    type: action
-    subtype: single
-    discovery_id: 0x00124b00251985b1 action_single
-  condition: []
-  action:
-  - service: notify.mobile_app_telefoongabrie
-    data:
-      message: Naar bed gaan gestart
-      title: Bedtijd
-  - type: turn_off
-    device_id: bec437e218433cf7387f0f9d02fd8198
-    entity_id: 29d821c8514f809d8001b1278e020a44
-    domain: remote
-  - service: light.turn_on
-    data: {}
-    target:
-      device_id:
-      - 05f0b298a36afde8ccbaa3ff906a7ee5
-  - service: light.turn_off
-    data: {}
-    target:
-      area_id:
-      - 23e6c7fb9f204e3eb18fe60dcaf3c181
-      - tuin
-      - 7ed3a9f5218c404ba791bca0ead7c973
-      device_id: ad71aedd70d6e6cb098662f2c4045ceb
-  - service: climate.set_preset_mode
-    data:
-      preset_mode: asleep
-    target:
-      entity_id: climate.anna
-  - device_id: cd131e52c35e0c8e68e4d81337749c3f
-    domain: cover
-    entity_id: cover.rollerblind_0001
-    type: set_position
-    position: 1
-  - device_id: 66a3fee2bfc323a1bd5ce11f04e06d0b
-    domain: cover
-    entity_id: cover.rollerblind_0002
-    type: set_position
-    position: 1
-  - if:
-    - condition: or
-      conditions:
-      - type: is_open
-        condition: device
-        device_id: 1a47684b388f2c7c12da76802f2f0384
-        entity_id: binary_sensor.ewelink_ds01_f8283622_ias_zone
-        domain: binary_sensor
-      - type: is_open
-        condition: device
-        device_id: 7338d750f6e91f795e92e075c03b2197
-        entity_id: 67115dff02ef9557bf52019cfa4c4ace
-        domain: binary_sensor
-      - type: is_open
-        condition: device
-        device_id: 6405932b9a8d29f992617daef045f87d
-        entity_id: acffde27f089dabee5d3de9242928d46
-        domain: binary_sensor
-      - type: is_open
-        condition: device
-        device_id: 52873fd3d21cdb8514eafe0fd3791d0c
-        entity_id: binary_sensor.achterdeur_ias_zone
-        domain: binary_sensor
-    then:
-    - service: notify.mobile_app_telefoongabrie
-      data:
-        title: Deur nog open
-        message: Controleer voordeur, achterdeur, garagepoort en schuifpui.
-    - service: script.scr021_flash_gang_lamp
-      data: {}
-  - delay:
-      hours: 0
-      minutes: 2
-      seconds: 0
-      milliseconds: 0
-  - service: light.turn_off
-    data: {}
-    target:
-      area_id: b8b10b1ded3841c5b073de7cfb6139de
-  mode: parallel
-  max: 3
 - id: '1645981284580'
   alias: AUT052 Smoke detectors
   description: ''
@@ -1244,7 +1080,7 @@
       language: nl
   mode: single
 - id: '1658215056692'
-  alias: AUT045-G ZOMER Start Airco Woonkamer automatisch
+  alias: AUT045-ON ZOMER Start Airco Woonkamer automatisch
   description: Start airco op stand koelen bij een kamertemperatuur van meer dan 24
     graden en Gabrie thuis is.
   trigger:
@@ -1270,7 +1106,7 @@
       device_id: fac9b00a382db56093a1982fdba8c5d3
   - service: climate.set_fan_mode
     data:
-      fan_mode: MID
+      fan_mode: medium
     target:
       device_id: fac9b00a382db56093a1982fdba8c5d3
   - service: climate.set_swing_mode
@@ -1286,58 +1122,54 @@
 - id: '1659281927114'
   alias: AUT054 Droger is klaar
   description: Notificatie als de droger klaar is
-  trigger:
-  - platform: numeric_state
-    entity_id: sensor.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_electrical_measurement
+  triggers:
+  - entity_id: sensor.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_electrical_measurement
     below: '20'
     for:
       hours: 0
       minutes: 20
       seconds: 0
-  condition: []
-  action:
-  - service: notify.telegram
-    data:
+    trigger: numeric_state
+  conditions: []
+  actions:
+  - data:
       message: De droger is klaar
-  - service: notify.mobile_app_telefoongabrie
-    data:
+    action: notify.telegram
+  - data:
       title: Droger is klaar!
       message: De droger is klaar
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_telefoondaan
-    data:
+    action: notify.mobile_app_telefoongabrie
+  - data:
       title: Droger is klaar!
       message: De droger is klaar
       data:
         tts: 0
         priority: high
-  - service: notify.gabriechrome
-    data:
-      message: De droger is klaar
-      title: Droger is klaar
-  - service: esphome.ulanzi_add_screen
-    data:
+    action: notify.mobile_app_telefoondaan
+  - data:
       alarm: false
       icon_name: dryer
       lifetime: 2
       text: Droger is klaar
       screen_time: 15
-  - service: notify.mobile_app_telefoonbas
-    data:
+    action: esphome.ulanzi_add_screen
+  - data:
       title: Droger is klaar!
       message: De droger is klaar
       data:
         tts: 0
         priority: high
+    action: notify.mobile_app_telefoonbas
   mode: single
 - id: '1664779991828'
   alias: AUT055 Slaapkamer licht bij wekker
   description: ''
   trigger:
   - platform: template
-    value_template: '{{now().strftime("%a %h %d %H:%M %Z %Y") == (((state_attr(''sensor.telefoongabrie_next_alarm'',
+    value_template: '{{now().strftime("%a %h %d %H:%M %Z %Y") == (((state_attr(''sensor.telefoongabrie_next_alarm_2'',
       ''Time in Milliseconds'') | int / 1000)) | timestamp_custom(''%a %h %d %H:%M
       %Z %Y''))}}'
     alias: When Gabrie's Phone Alarm goes off
@@ -1346,8 +1178,7 @@
     entity_id: person.gabrie_van_zanten
     state: home
   action:
-  - service: light.turn_on
-    data:
+  - data:
       transition: 60
       brightness: 83
       rgb_color:
@@ -1357,16 +1188,17 @@
     target:
       device_id:
       - b7125a2c255c7161289d3c3b3d86cedc
+    action: light.turn_on
   - delay:
       hours: 0
       minutes: 5
       seconds: 0
       milliseconds: 0
-  - service: light.turn_off
-    data: {}
+  - data: {}
     target:
       device_id:
       - b7125a2c255c7161289d3c3b3d86cedc
+    action: light.turn_off
   mode: restart
 - id: '1666213701591'
   alias: AUT067 bronwater is scanned
@@ -1409,13 +1241,14 @@
     entity_id: switch.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_on_off
     domain: switch
   action:
-  - service: notify.telegram
-    data:
-      message: De droger is klaar
+  - data:
+      message: Droger uit na 1 uur niet gebruik, check of echt wel klaar is ivm probleem
+    action: notify.telegram
   - type: turn_off
     device_id: 1b85b6bc49ee10b4df0bf814890df5fc
     entity_id: switch.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_on_off
     domain: switch
+    enabled: false
   mode: single
 - id: '1666255767369'
   alias: AUT057 Wasmachine uit na een uur
@@ -1493,20 +1326,14 @@
 - id: '1668982038857'
   alias: AUT060 Button Bas licht aan/uit
   description: ''
-  trigger:
+  triggers:
   - device_id: dfd41e66356502c5c4802fe6adb11a9b
     domain: zha
-    platform: device
     type: remote_button_short_press
     subtype: button
-  - type: battery_level
-    platform: device
-    device_id: 6fb4a5ee2841f4d23e3791b6ff8acf33
-    entity_id: 716b489298b625ff46c7021563f454f2
-    domain: sensor
-    above: 5
-  condition: []
-  action:
+    trigger: device
+  conditions: []
+  actions:
   - if:
     - condition: device
       type: is_off
@@ -1514,16 +1341,17 @@
       entity_id: light.led_bas_bureau
       domain: light
     then:
-    - service: light.turn_on
-      data: {}
+    - data: {}
       target:
         device_id:
         - 76b327b9329cc08343049931bb61b716
         - 38fbf0caec931547b7491e450a4046d2
-    - service: switch.turn_on
-      data: {}
+      action: light.turn_on
+    - data: {}
       target:
-        entity_id: switch.0xcc86ecfffe3ab9b3
+        entity_id:
+        - switch.powerplug_led_slang_vi
+      action: switch.turn_on
     else:
     - if:
       - condition: device
@@ -1532,16 +1360,17 @@
         entity_id: light.led_bas_bureau
         domain: light
       then:
-      - service: light.turn_off
-        data: {}
+      - data: {}
         target:
           device_id:
           - 38fbf0caec931547b7491e450a4046d2
           - 76b327b9329cc08343049931bb61b716
-      - service: switch.turn_off
-        data: {}
+        action: light.turn_off
+      - data: {}
         target:
-          entity_id: switch.0xcc86ecfffe3ab9b3
+          entity_id:
+          - switch.powerplug_led_slang_vi
+        action: switch.turn_off
   mode: single
 - id: '1669579904471'
   alias: AUT061 Woonkamer temp 22
@@ -1864,22 +1693,14 @@
     entity_id:
     - sensor.openweathermap_condition
   action:
-  - service: esphome.ulanzi_del_screen
-    data:
+  - data:
       icon_name: weather_*
-  - service: esphome.ulanzi_screen
-    data:
+    action: esphome.ulanzi_del_screen
+  - data:
       icon_name: weather_{{ trigger.to_state.state }}
       text: '{{ trigger.to_state.state }} {{ states(''sensor.openweathermap_temperature'')
         |default(0) | float | round(0) }}°C'
-  - service: notify.mobile_app_telefoongabrie
-    data:
-      title: AUT068 Weerupdate klok
-      message: AUT068 Weerupdate klok
-      data:
-        tts: 0
-        priority: high
-    enabled: false
+    action: esphome.ulanzi_screen
 - id: '1680340852705'
   alias: AUT069 Ulanzi klok Afvalwijzer GFT
   description: AUT069 Ulanzi klok Afvalwijzer GFT
@@ -2320,4 +2141,254 @@
       minutes: 10
       seconds: 0
       milliseconds: 0
+  mode: single
+- id: '1719478124282'
+  alias: AUT045-Off Airco stoppen als temp woonkamer onder 23 gaat
+  description: Start airco op stand koelen bij een kamertemperatuur van meer dan 24
+    graden en Gabrie thuis is.
+  trigger:
+  - type: temperature
+    platform: device
+    device_id: 3667d1f5372390ea6b5a97ce1c603c8c
+    entity_id: sensor.anna_temperature
+    domain: sensor
+    below: 23
+  condition:
+  - condition: state
+    entity_id: person.gabrie_van_zanten
+    state: home
+    enabled: false
+  - condition: time
+    before: '22:00:00'
+    after: 09:00:00
+    enabled: false
+  - condition: state
+    entity_id: climate.airco_woonkamer
+    state: cool
+  action:
+  - service: climate.set_hvac_mode
+    target:
+      device_id:
+      - fac9b00a382db56093a1982fdba8c5d3
+    data:
+      hvac_mode: 'off'
+  - service: notify.mobile_app_telefoongabrie
+    data:
+      message: Woonkamer airco automatisch uit (<23)
+      title: Woonkamer airco automatisch uit (<23)
+  mode: single
+- id: '1720081308975'
+  alias: AUT003 Berichtje als wasmachine klaar is
+  description: Bericht als de wasmachine klaar is
+  triggers:
+  - entity_id: sensor.wasmachine_actief
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    from: 'True'
+    to: 'False'
+    trigger: state
+  conditions: []
+  actions:
+  - data:
+      message: De wasmachine is klaar
+    action: notify.telegram
+  - data:
+      title: Wasmachine is klaar!
+      message: De wasmachine is klaar
+      data:
+        tts: 0
+        priority: high
+    action: notify.mobile_app_telefoongabrie
+  - data:
+      title: Wasmachine is klaar!
+      message: De wasmachine is klaar
+      data:
+        tts: 0
+        priority: high
+    action: notify.mobile_app_telefoonbas
+  - data:
+      title: Wasmachine is klaar!
+      message: De wasmachine is klaar
+      data:
+        tts: 0
+        priority: high
+    action: notify.mobile_app_telefoondaan
+  - data:
+      alarm: false
+      icon_name: washing_machine
+      lifetime: 2
+      text: Wasmachine is klaar
+      screen_time: 15
+    action: esphome.ulanzi_add_screen
+  mode: single
+- id: '1725316205134'
+  alias: AUT080 Bedtijd starten
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: 98736e93c97a5b7c3d5ff3ced7ec0d45
+    type: action
+    subtype: single
+  condition: []
+  action:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      area_id:
+      - 23e6c7fb9f204e3eb18fe60dcaf3c181
+      - tuin
+      - 7ed3a9f5218c404ba791bca0ead7c973
+  - data:
+      message: Naar bed gaan gestart
+      title: Bedtijd
+    action: notify.mobile_app_telefoongabrie
+  - type: turn_off
+    device_id: bec437e218433cf7387f0f9d02fd8198
+    entity_id: 29d821c8514f809d8001b1278e020a44
+    domain: remote
+  - data: {}
+    target:
+      device_id:
+      - 05f0b298a36afde8ccbaa3ff906a7ee5
+    action: light.turn_on
+    enabled: false
+  - data:
+      preset_mode: asleep
+    target:
+      entity_id: climate.anna
+    action: climate.set_preset_mode
+  - action: climate.set_hvac_mode
+    metadata: {}
+    data:
+      hvac_mode: 'off'
+    target:
+      device_id: fac9b00a382db56093a1982fdba8c5d3
+  - device_id: cd131e52c35e0c8e68e4d81337749c3f
+    domain: cover
+    entity_id: cover.rollerblind_0001
+    type: set_position
+    position: 1
+  - device_id: 66a3fee2bfc323a1bd5ce11f04e06d0b
+    domain: cover
+    entity_id: cover.rollerblind_0002
+    type: set_position
+    position: 1
+  - if:
+    - condition: or
+      conditions:
+      - type: is_open
+        condition: device
+        device_id: 7338d750f6e91f795e92e075c03b2197
+        entity_id: 67115dff02ef9557bf52019cfa4c4ace
+        domain: binary_sensor
+      - type: is_open
+        condition: device
+        device_id: 52873fd3d21cdb8514eafe0fd3791d0c
+        entity_id: binary_sensor.achterdeur_ias_zone
+        domain: binary_sensor
+    - type: is_open
+      condition: device
+      device_id: 7338d750f6e91f795e92e075c03b2197
+      entity_id: 67115dff02ef9557bf52019cfa4c4ace
+      domain: binary_sensor
+    - type: is_open
+      condition: device
+      device_id: 52873fd3d21cdb8514eafe0fd3791d0c
+      entity_id: dab01c05888a5929f969bc0256050c90
+      domain: binary_sensor
+    - type: is_open
+      condition: device
+      device_id: a9702d1effcdbf85114ea25eed39b172
+      entity_id: 60818070f43bdbd75fa73462e56f4bac
+      domain: binary_sensor
+    then:
+    - data:
+        title: Deur nog open
+        message: Controleer voordeur, achterdeur, garagepoort en schuifpui.
+      action: notify.mobile_app_telefoongabrie
+    - data: {}
+      action: script.scr021_flash_gang_lamp
+  - delay:
+      hours: 0
+      minutes: 2
+      seconds: 30
+      milliseconds: 0
+  - data: {}
+    target:
+      area_id: b8b10b1ded3841c5b073de7cfb6139de
+    action: light.turn_off
+  mode: parallel
+  max: 3
+- id: '1725349408763'
+  alias: AUT035B Koffie gaat uit
+  description: ''
+  triggers:
+  - entity_id: binary_sensor.coffee_machine
+    from: 'on'
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 6
+      seconds: 30
+    trigger: state
+  conditions: []
+  actions:
+  - data:
+      message: De koffie springt uit
+    action: notify.mobile_app_telefoongabrie
+  - data:
+      message: De koffie springt uit
+      title: Koffie
+    action: notify.lgtv
+  - data:
+      message: De koffie wordt koud!
+      entity_id: media_player.keuken
+    action: tts.cloud_say
+  - data:
+      alarm: true
+      icon_name: coffee_hot
+      lifetime: 2
+      text: Koffie!!!
+      screen_time: 10
+    action: esphome.ulanzi_add_screen
+  mode: single
+- id: '1726083859701'
+  alias: AUT081 voordeurlamp
+  description: ''
+  trigger:
+  - type: turned_on
+    platform: device
+    device_id: 343f3303284261db218a4317b481d4c9
+    entity_id: c72210d6e0893821b89aa9da75615173
+    domain: binary_sensor
+  - platform: state
+    entity_id:
+    - binary_sensor.relais001_button
+    to: 'on'
+  condition:
+  - type: is_illuminance
+    condition: device
+    device_id: f489d551955cd9d416c1c7edfd4fa6aa
+    entity_id: sensor.keukensensor_illuminance_lux
+    domain: sensor
+    below: 100
+  action:
+  - type: turn_on
+    device_id: 97497fba42099be65878acee4699431a
+    entity_id: 5cecd94cd847c42fb38102f13d00428d
+    domain: light
+    brightness_pct: 50
+  - delay:
+      hours: 0
+      minutes: 3
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: 97497fba42099be65878acee4699431a
+    entity_id: 5cecd94cd847c42fb38102f13d00428d
+    domain: light
   mode: single
