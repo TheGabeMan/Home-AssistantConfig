@@ -1,46 +1,52 @@
 - id: '1670145489984'
   name: werkdag
   entities:
-    cover.rollerblind_0001:
+    cover.blind_left:
       current_position: 40
       device_class: shade
-      friendly_name: RollerBlind 0001
+      friendly_name: blind left
       supported_features: 15
       state: open
-    cover.rollerblind_0002:
+    cover.blind_right:
       current_position: 40
       device_class: shade
-      friendly_name: RollerBlind 0002
+      friendly_name: blind right
       supported_features: 15
       state: open
-    light.tafellamp:
+    light.werkplek:
       min_color_temp_kelvin: 2000
-      max_color_temp_kelvin: 6535
+      max_color_temp_kelvin: 6500
       min_mireds: 153
       max_mireds: 500
       supported_color_modes:
       - color_temp
       - hs
       color_mode: color_temp
-      brightness: 145
-      color_temp_kelvin: 3003
-      color_temp: 333
+      brightness: 198
+      color_temp_kelvin: 6535
+      color_temp: 153
       hs_color:
-      - 27.82
-      - 56.814
+      - 54.768
+      - 1.6
       rgb_color:
       - 255
-      - 177
-      - 110
+      - 255
+      - 251
       xy_color:
-      - 0.496
-      - 0.383
+      - 0.325
+      - 0.333
       icon: mdi:spotlight-beam
-      friendly_name: Tafellamp
+      friendly_name: Werkplek
       supported_features: 0
       state: 'on'
   icon: mdi:desktop-classic
-  metadata: {}
+  metadata:
+    cover.blind_left:
+      entity_only: true
+    cover.blind_right:
+      entity_only: true
+    light.werkplek:
+      entity_only: true
 - id: '1675973399117'
   name: Filmavond
   entities:
@@ -321,16 +327,16 @@
       friendly_name: TV lamp
       supported_features: 0
       state: 'on'
-    cover.rollerblind_0001:
+    cover.blind_left:
       current_position: 0
       device_class: shade
-      friendly_name: RollerBlind 0001
+      friendly_name: Blind Left
       supported_features: 15
       state: closed
-    cover.rollerblind_0002:
+    cover.blind_right:
       current_position: 0
       device_class: shade
-      friendly_name: RollerBlind 0002
+      friendly_name: Blind Right
       supported_features: 15
       state: closed
     light.led_smart_backlight:

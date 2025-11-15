@@ -42,46 +42,39 @@ scr004_flashlightbureau:
 rolgordijnen_omlaag:
   alias: SCR005 Gordijnen dicht
   sequence:
-  - device_id: cd131e52c35e0c8e68e4d81337749c3f
-    domain: cover
-    entity_id: cover.rollerblind_0001
-    type: set_position
-    position: 2
-  - device_id: 66a3fee2bfc323a1bd5ce11f04e06d0b
-    domain: cover
-    entity_id: cover.rollerblind_0002
-    type: set_position
-    position: 2
+  - action: cover.close_cover
+    metadata: {}
+    data: {}
+    target:
+      device_id:
+      - e7680b4e4246c3ff3c6e254e1b9ecd9d
+      - 2676c14df386a6dfbc95c12a49ba136e
   mode: single
   icon: hass:blinds
 scr006_gordijnen_overdag:
   alias: SCR006 Gordijnen overdag
   sequence:
-  - device_id: cd131e52c35e0c8e68e4d81337749c3f
-    domain: cover
-    entity_id: cover.rollerblind_0001
-    type: set_position
-    position: 60
-  - device_id: 66a3fee2bfc323a1bd5ce11f04e06d0b
-    domain: cover
-    entity_id: cover.rollerblind_0002
-    type: set_position
-    position: 60
+  - action: cover.set_cover_position
+    metadata: {}
+    data:
+      position: 45
+    target:
+      device_id:
+      - e7680b4e4246c3ff3c6e254e1b9ecd9d
+      - 2676c14df386a6dfbc95c12a49ba136e
   mode: single
   icon: hass:blinds
 scr007_gordijnen_veel_licht:
   alias: SCR007 Gordijnen veel licht
   sequence:
-  - device_id: cd131e52c35e0c8e68e4d81337749c3f
-    domain: cover
-    entity_id: cover.rollerblind_0001
-    type: set_position
-    position: 90
-  - device_id: 66a3fee2bfc323a1bd5ce11f04e06d0b
-    domain: cover
-    entity_id: cover.rollerblind_0002
-    type: set_position
-    position: 90
+  - action: cover.set_cover_position
+    metadata: {}
+    data:
+      position: 90
+    target:
+      device_id:
+      - e7680b4e4246c3ff3c6e254e1b9ecd9d
+      - 2676c14df386a6dfbc95c12a49ba136e
   mode: single
   icon: hass:blinds
 scr008_badkamer_fellicht:
@@ -277,14 +270,14 @@ scr023_kerstslinger_aan_met_snake_effect:
 scr025_kerstslinger_aan_aimee_setting:
   alias: SCR025 kerstverlichting aan Aimee setting
   sequence:
-  - service: mqtt.publish
-    data:
-      topic: zigbee2mqtt/kerstboom/set
+  - data:
+      topic: zigbee2mqtt/kerst_boom/set
       payload: '{"color":{"h":45,"s":100,"b":48}}'
-  - service: mqtt.publish
-    data:
-      topic: zigbee2mqtt/kerstslinger/set
+    action: mqtt.publish
+  - data:
+      topic: zigbee2mqtt/kerst slinger/set
       payload: '{"color":{"h":45,"s":100,"b":48}}'
+    action: mqtt.publish
   mode: single
 scr027_kerstslinger_en_kerstboom_aan_met_rainbow_effect:
   alias: SCR027 KerstSlinger en kerstboom aan met rainbow effect
@@ -322,24 +315,33 @@ reset_bronwater:
 scr030_kerstslinger_en_kerstboom_aan_met_vaste_kleur:
   alias: SCR030 KerstSlinger en kerstboom aan met vaste kleur Chocolate1
   sequence:
-  - service: mqtt.publish
-    data:
+  - action: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.kerst_slinger
+      - light.kerst_boom
+  - data:
       qos: 0
       topic: zigbee2mqtt/kerst slinger/set
       payload: '{"state": "TOGGLE"}'
-  - service: mqtt.publish
-    data:
+    action: mqtt.publish
+    enabled: false
+  - data:
       qos: 0
       topic: zigbee2mqtt/kerst_boom/set
       payload: '{"state": "TOGGLE"}'
-  - service: mqtt.publish
-    data:
+    action: mqtt.publish
+    enabled: false
+  - data:
       topic: zigbee2mqtt/kerst slinger/set
       payload: '{"effect":{"effect":"steady","speed":100,"colors":[{"r":255,"g":127,"b":36}]}}'
-  - service: mqtt.publish
-    data:
+    action: mqtt.publish
+  - data:
       topic: zigbee2mqtt/kerst_boom/set
       payload: '{"effect":{"effect":"steady","speed":100,"colors":[{"r":255,"g":127,"b":36}]}}'
+    action: mqtt.publish
   mode: single
   icon: mdi:string-lights
 scr031_spotjes_op_juiste_kleur:
@@ -366,41 +368,6 @@ scr032_spotjes_video_opname:
       entity_id: light.spotjes
   mode: single
   icon: mdi:lightbulb-spot
-scr033_cast_reolink_naar_nest_hub:
-  alias: SCR033 Cast Reolink naar Nest Hub
-  fields:
-    media_player:
-      selector:
-        entity: {}
-      name: media_player
-      description: Target media player
-      default: media_player.keuken
-      required: true
-  sequence:
-  - if:
-    - condition: template
-      value_template: '{{ states(media_player) != ''unavailable'' and states(media_player)
-        != ''unknown'' }}'
-      alias: Test if media_player is available
-    then:
-    - service: dash_cast.load_url
-      data:
-        url: rtsp://admin:enGo28dWC8yMJWNqrKUT@192.168.0.131:554/Preview_01_main
-        entity_id: '{{ media_player }}'
-      alias: Cast stream to media_player
-  mode: single
-  icon: mdi:walk
-scr034_stuur_reolink_naar_keukenhub:
-  alias: SCR034 Stuur ReoLink naar KeukenHub
-  sequence:
-  - service: media_player.play_media
-    metadata: {}
-    data:
-      media_content_id: rtsp://admin:enGo28dWC8yMJWNqrKUT@reo01.intern.vanzanten.be:554/Preview_01_main
-      media_content_type: video
-    target:
-      device_id: 4b909be751f2ce1ab2dbea238d94ec43
-  mode: single
 scr035_a_itho_fan_op_75:
   alias: SCR035-A ITHO fan op 75%
   sequence:
@@ -434,3 +401,133 @@ scr035_c_itho_fan_op_25:
       device_id: bd6f8bbe3d01ab061647577e2b42ecb8
   description: ''
   icon: mdi:fan-speed-1
+scr036_anna_home:
+  alias: SCR036 Anna Home
+  sequence:
+  - action: climate.set_preset_mode
+    metadata: {}
+    data:
+      preset_mode: home
+    target:
+      device_id: 3667d1f5372390ea6b5a97ce1c603c8c
+  description: Anna Thermostaat aanzetten
+  icon: mdi:thermometer-plus
+scr014_b_vi_verlichting_uit:
+  alias: SCR014-B Vi verlichting uit
+  sequence:
+  - target:
+      area_id: 37d65e06028c11ebb6270dd149645529
+    data: {}
+    action: light.turn_off
+  - type: turn_off
+    device_id: f1f326c75f8408e04137655f8c12f1e6
+    entity_id: 5ac405f604a0434da4a0cfbcec05a411
+    domain: switch
+  mode: single
+  description: ''
+  icon: mdi:lamps
+scr037_woonkamer_op_19:
+  sequence:
+  - action: climate.set_temperature
+    target:
+      device_id: 3667d1f5372390ea6b5a97ce1c603c8c
+    data:
+      temperature: 19
+      hvac_mode: heat
+  - action: climate.set_temperature
+    metadata: {}
+    data:
+      temperature: 30
+      hvac_mode: heat
+    target:
+      device_id: fac9b00a382db56093a1982fdba8c5d3
+  alias: SCR037 warm woonkamer snel op
+  description: ''
+scr038_start_laden_bmw:
+  sequence:
+  - action: zaptec.authorize_charging
+    metadata: {}
+    data:
+      device_id: abacb9013ca8c00e0884c0d583cd7dfe
+  - action: zaptec.authorize_charging
+    metadata: {}
+    data:
+      device_id: abacb9013ca8c00e0884c0d583cd7dfe
+  alias: SCR038 Start laden BMW
+  description: ''
+scr039_voorverwarmen_bmw:
+  sequence:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.i4_edrive35_climate
+  - action: notify.mobile_app_telefoongabrie
+    metadata: {}
+    data:
+      message: Voorverwarmen BMW gestart
+      title: BMW
+  alias: SCR039 Voorverwarmen BMW
+  description: ''
+scr042_keuken_stofzuigen:
+  sequence:
+  - action: vacuum.send_command
+    metadata: {}
+    data:
+      command: app_segment_clean
+      params: 16
+    target:
+      device_id: 1c0ce252318ce8e902d944bc4f630d9a
+  alias: SCR042 Keuken stofzuigen
+  description: ''
+scr043_woonkamer_stofzuigen_duplicate:
+  sequence:
+  - action: vacuum.send_command
+    metadata: {}
+    data:
+      command: app_segment_clean
+      params: 17
+    target:
+      device_id: 1c0ce252318ce8e902d944bc4f630d9a
+  alias: SCR043 Woonkamer stofzuigen
+  description: ''
+scr050_overgordijnen_dicht:
+  sequence:
+  - action: cover.close_cover
+    metadata: {}
+    data: {}
+    target:
+      device_id: f0b7d4f4541321474d282da40c8747a9
+  - action: cover.close_cover
+    metadata: {}
+    data: {}
+    target:
+      device_id:
+      - e7680b4e4246c3ff3c6e254e1b9ecd9d
+      - 2676c14df386a6dfbc95c12a49ba136e
+  alias: SCR050 Overgordijnen dicht
+  mode: single
+  icon: hass:blinds
+  description: ''
+scr051_alle_gordijnen_overdag:
+  sequence:
+  - action: cover.set_cover_position
+    metadata: {}
+    data:
+      position: 45
+    target:
+      device_id:
+      - e7680b4e4246c3ff3c6e254e1b9ecd9d
+      - 2676c14df386a6dfbc95c12a49ba136e
+    enabled: false
+  - action: cover.set_cover_position
+    metadata: {}
+    data:
+      position: 90
+    target:
+      device_id:
+      - f0b7d4f4541321474d282da40c8747a9
+  alias: SCR051 Alle Gordijnen overdag
+  mode: single
+  icon: hass:blinds
+  description: ''

@@ -42,13 +42,9 @@
 ### EINDE Toegevoegd om Airco in Energy dashboard te krijgen
 #####################################################
 
-###### Bitcoin Sensor
-###### https://www.home-assistant.io/integrations/bitcoin/
-- platform: bitcoin
-  currency: EUR
-  display_options:
-    - exchangerate
-    - trade_volume_btc
+- platform: integration
+  source: sensor.s0tool_versie_github
+  name: "S0tool GitHub Versie"
 
 #################################
 ###### Sensor for vacuum cleaner
@@ -246,7 +242,7 @@
   sensors:
     bmw_tanken:
       friendly_name: "BMW Tanken"
-      value_template: "{{ states('sensor.218i_remaining_range_fuel') | float(0) < 75  }}"
+      value_template: "{{ states('sensor.state_of_charge_predicted_on_integration_side') | float(0) < 15  }}"
       icon_template: mdi:gas-station
 
 ###################################
@@ -298,3 +294,161 @@
     wasmachine_actief:
       friendly_name: wasmachine loopt
       value_template: "{{ states('sensor.powerplug002_wasmachine_energy_power') | int(0) > 5.0 }}"
+
+###################################
+## Energy Zero tarieven
+## https://student-techlife.com/2023/01/11/energyzero-market-prices-with-new-integration-in-home-assistant/
+###################################
+
+- platform: template
+  sensors:
+    energyzero_allin_energy_current_price:
+      friendly_name: EnergyZero all-in current energy price
+      unit_of_measurement: "€/kWh"
+      # state_class: measurement
+      value_template: >
+        {% set energy_tax = 0.1312 %}
+        {% set purch_costs = 0.0484 %}
+        {% set current_price = states('sensor.energyzero_today_energy_current_hour_price') | float | default(None) %}
+        {{ (current_price + energy_tax + purch_costs) | round(2) }}
+
+- platform: template
+  sensors:
+    energyzero_allin_gas_current_price:
+      friendly_name: EnergyZero all-in current gas price
+      unit_of_measurement: "€/m³"
+      # state_class: measurement
+      value_template: >
+        {% set energy_tax = 0.7065 %}
+        {% set purch_costs = 0.05911 %}
+        {% set current_price = states('sensor.energyzero_today_gas_current_hour_price') | float | default(None) %}
+        {{ (current_price + energy_tax + purch_costs) | round(4) }}
+
+###################################
+## Kleenex Pollen Radar
+## https://github.com/MarcoGos/kleenex_pollenradar
+###################################
+- platform: template
+  sensors:
+    tree_pollen_day_0:
+      friendly_name: Tree pollen today
+      unit_of_measurement: ppm
+      value_template: >
+        {{ states('sensor.kleenex_pollen_radar_pollenmaastricht_trees') }}
+
+- platform: template
+  sensors:
+    tree_pollen_day_1:
+      friendly_name: Tree pollen tomorrow
+      unit_of_measurement: ppm
+      value_template: >
+        {{ state_attr('sensor.kleenex_pollen_radar_pollenmaastricht_trees', 'forecast')[0].value }}
+
+- platform: template
+  sensors:
+    tree_pollen_day_2:
+      friendly_name: Tree pollen day after tomorrow
+      unit_of_measurement: ppm
+      value_template: >
+        {{ state_attr('sensor.kleenex_pollen_radar_pollenmaastricht_trees', 'forecast')[1].value }}
+
+###################################
+## Hazelaar info
+###################################
+
+- platform: template
+  sensors:
+    tree_pollen_hazelaar_day_0:
+      friendly_name: Hazelaar pollen today
+      unit_of_measurement: ppm
+      value_template: >
+        {{ state_attr('sensor.kleenex_pollen_radar_pollenmaastricht_trees', 'details')[0].value }}
+
+- platform: template
+  sensors:
+    tree_pollen_hazelaar_day_1:
+      friendly_name: Hazelaar pollen tomorrow
+      unit_of_measurement: ppm
+      value_template: >
+        {{ state_attr('sensor.kleenex_pollen_radar_pollenmaastricht_trees', 'forecast')[0].details[0].value }}
+
+- platform: template
+  sensors:
+    tree_pollen_hazelaar_day_2:
+      friendly_name: Hazelaar pollen day after tomorrow
+      unit_of_measurement: ppm
+      value_template: >
+        {{ state_attr('sensor.kleenex_pollen_radar_pollenmaastricht_trees', 'forecast')[1].details[0].value }}
+
+###################################
+## Els info
+###################################
+
+- platform: template
+  sensors:
+    tree_pollen_els_day_0:
+      friendly_name: Els pollen today
+      unit_of_measurement: ppm
+      value_template: >
+        {{ state_attr('sensor.kleenex_pollen_radar_pollenmaastricht_trees', 'details')[3].value }}
+
+- platform: template
+  sensors:
+    tree_pollen_els_day_1:
+      friendly_name: Els pollen tomorrow
+      unit_of_measurement: ppm
+      value_template: >
+        {{ state_attr('sensor.kleenex_pollen_radar_pollenmaastricht_trees', 'forecast')[0].details[3].value }}
+
+- platform: template
+  sensors:
+    tree_pollen_els_day_2:
+      friendly_name: Els pollen day after tomorrow
+      unit_of_measurement: ppm
+      value_template: >
+        {{ state_attr('sensor.kleenex_pollen_radar_pollenmaastricht_trees', 'forecast')[1].details[3].value }}
+
+###################################
+## Berk info
+###################################
+
+- platform: template
+  sensors:
+    tree_pollen_berk_day_0:
+      friendly_name: Berk pollen today
+      unit_of_measurement: ppm
+      value_template: >
+        {{ state_attr('sensor.kleenex_pollen_radar_pollenmaastricht_trees', 'details')[7].value }}
+
+- platform: template
+  sensors:
+    tree_pollen_berk_day_1:
+      friendly_name: Berk pollen tomorrow
+      unit_of_measurement: ppm
+      value_template: >
+        {{ state_attr('sensor.kleenex_pollen_radar_pollenmaastricht_trees', 'forecast')[0].details[7].value }}
+
+- platform: template
+  sensors:
+    tree_pollen_berk_day_2:
+      friendly_name: Berk pollen day after tomorrow
+      unit_of_measurement: ppm
+      value_template: >
+        {{ state_attr('sensor.kleenex_pollen_radar_pollenmaastricht_trees', 'forecast')[1].details[7].value }}
+
+##################
+## HA en Database snapshot
+##################
+- platform: template
+  sensors:
+    esxi_homeassistant_snapshot:
+      friendly_name: Home Assistant VM Snapshot
+      value_template: >
+        {{ state_attr('sensor.esxi_vm_homeassistant', 'snapshots') }}
+
+- platform: template
+  sensors:
+    esxi_database_snapshot:
+      friendly_name: Home Assistant Database VM Snapshot
+      value_template: >
+        {{ state_attr('sensor.esxi_vm_databases', 'snapshots') }}

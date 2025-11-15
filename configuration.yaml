@@ -2,8 +2,8 @@
 default_config:
 
 homeassistant:
-  customize: !include customize.yaml
   country: NL
+  packages: !include_dir_merge_named packages/
 
 frontend:
   themes: !include_dir_merge_named themes/
@@ -13,6 +13,7 @@ frontend:
   #######
   extra_module_url:
     - /hacsfiles/lovelace-card-mod/card-mod.js
+    - /hacsfiles/bar-card/bar-card.js
   ######
 
 group: !include groups.yaml
@@ -82,12 +83,12 @@ tts:
   - platform: google_translate
 
 # Example configuration.yaml entry for the Telegram Bot
-telegram_bot:
-  - platform: polling
-    api_key: !secret telegram_api_key
-    allowed_chat_ids:
-      - 17513465
-      - -897405316
+#telegram_bot:
+#  - platform: polling
+#    api_key: !secret telegram_api_key
+#    allowed_chat_ids:
+#      - 17513465
+#      - -897405316
 
 # Example configuration.yaml entry for the notifier
 notify:
@@ -101,11 +102,11 @@ notify:
 
   #### Chrome push notifications: https://www.home-assistant.io/integrations/html5
   #### Reference email van firebase: firebase-adminsdk-ok1nu@homeass-chromenotify.iam.gserviceaccount.com
-##  - platform: html5
-##    name: GabrieChrome
-##    vapid_pub_key: !secret vapid_pub_key
-##    vapid_prv_key: !secret vapid_prv_key
-##    vapid_email: !secret vapid_email
+  ##  - platform: html5
+  ##    name: GabrieChrome
+  ##    vapid_pub_key: !secret vapid_pub_key
+  ##    vapid_prv_key: !secret vapid_prv_key
+  ##    vapid_email: !secret vapid_email
 
   ## Een groep om later aan te refereren in automations
   - platform: group
@@ -123,7 +124,6 @@ notify:
       - service: mobile_app_telefoondaan
       - service: mobile_app_telefoongabrie
       - service: mobile_app_kiosk
-
 #######
 ####### Spotcast
 ####### https://github.com/fondberg/spotcast
@@ -131,3 +131,4 @@ notify:
 # spotcast:
 #   sp_dc: !secret sp_dc
 #   sp_key: !secret sp_key
+

@@ -29,87 +29,46 @@
         tts: 0
         priority: high
     action: notify.mobile_app_telefoonbas
-  - data:
-      title: Garagepoort Open
-      message: De garagepoort is al langer dan 10 minuten open.
-      data:
-        tts: 0
-        priority: high
-    action: notify.mobile_app_telefoondaan
-  mode: single
-- id: '1606553772210'
-  alias: AUT003 Wasmachine is klaar
-  description: Notificatie als de wasmachine klaar is
-  trigger:
-  - platform: numeric_state
-    entity_id: sensor.powerplug002_wasmachine_energy_power
-    below: '20'
-    for: 00:04:00
-  condition: []
-  action:
-  - service: notify.telegram
+  - action: notify.mobile_app_pixel_8a
     data:
-      message: De wasmachine is klaar
-  - service: notify.mobile_app_telefoongabrie
-    data:
-      title: Wasmachine is klaar!
-      message: De wasmachine is klaar
-      data:
-        tts: 0
-        priority: high
-  - service: notify.mobile_app_telefoonbas
-    data:
-      title: Wasmachine is klaar!
-      message: De wasmachine is klaar
-      data:
-        tts: 0
-        priority: high
-  - service: notify.mobile_app_telefoondaan
-    data:
-      title: Wasmachine is klaar!
-      message: De wasmachine is klaar
-      data:
-        tts: 0
-        priority: high
-  - service: notify.gabriechrome
-    data:
-      message: De wasmachine is klaar
-      title: Wasmachine is klaar
-  - service: esphome.ulanzi_add_screen
-    data:
-      alarm: false
-      icon_name: washing_machine
-      lifetime: 2
-      text: Wasmachine is klaar
-      screen_time: 15
+      message: Garagepoort langer dan 5min open
+      title: Garagepoort langer dan 5min open
   mode: single
 - id: '1606679482142'
   alias: AUT004 Deurbel
   description: Notificaties wanneer de deurbel gedrukt wordt
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - binary_sensor.relais001_button
     to: 'on'
-  condition: []
-  action:
-  - service: notify.telegram
-    data:
+    trigger: state
+    enabled: false
+  - type: turned_on
+    device_id: 3fefdc742a4117f83dbb2f935e5e9ec8
+    entity_id: 2f2f00b683d04f8c9cd03eaff704e15a
+    domain: binary_sensor
+    trigger: device
+  conditions: []
+  actions:
+  - data:
       message: Er is iemand aan de voordeur!
-  - service: script.scr001_flashlightzolderbas
+    action: notify.telegram
+  - data: {}
+    action: script.scr001_flashlightzolderbas
+  - action: script.scr004_flashlightbureau
     data: {}
-  - service: notify.AlleNotificaties
-    data:
+  - data:
       title: Deurbel
       message: Er is iemand aan de voordeur!
       data:
         tts: 0
         priority: high
-  - delay:
-      hours: 0
-      minutes: 2
-      seconds: 0
-      milliseconds: 0
+    action: notify.AlleNotificaties
+  - action: tts.cloud_say
+    data:
+      cache: true
+      entity_id: media_player.woonkamer
+      message: De deurbel
   mode: single
 - id: '1607202607844'
   alias: AUT005 NFC opent Garage
@@ -187,14 +146,17 @@
     trigger: time
   conditions: []
   actions:
-  - data: {}
-    target:
-      device_id: 387b43192bc11123698944cd03bdb904
-    action: vacuum.start
   - device_id: 1c0ce252318ce8e902d944bc4f630d9a
     domain: vacuum
     entity_id: c35d8e882b0b5cc5d161bb2d01db27d4
     type: clean
+  - action: vacuum.send_command
+    metadata: {}
+    data:
+      command: app_segment_clean
+      params: 16,17
+    target:
+      device_id: 1c0ce252318ce8e902d944bc4f630d9a
   mode: single
 - id: '1608149259701'
   alias: AUT010 Wekker Bas
@@ -258,33 +220,29 @@
 - id: '1608627667363'
   alias: AUT012 Zonne-energie
   description: Verstuur een melding als 10min lang meer dan 1000 KWh opgevangen wordt.
-  trigger:
-  - platform: numeric_state
-    entity_id: sensor.inverter_goodwe
+  triggers:
+  - entity_id: sensor.inverter_goodwe
     above: '1000'
     for: 00:15:00
-  condition: []
-  action:
-  - service: script.scr004_flashlightbureau
-    data: {}
+    trigger: numeric_state
+  conditions: []
+  actions:
+  - data: {}
     enabled: false
-  - service: notify.mobile_app_telefoongabrie
-    data:
+    action: script.scr004_flashlightbureau
+  - data:
       title: Zonne-energie is hoog
       message: We vangen 15min meer dan 1000 KWh.
       data:
         tts: 0
         priority: high
-  - service: esphome.ulanzi_del_screen
+    action: notify.mobile_app_telefoongabrie
+  - action: mqtt.publish
+    metadata: {}
     data:
-      icon_name: weather_sunny
-  - service: esphome.ulanzi_add_screen
-    data:
-      alarm: true
-      text: Meer dan 1000W zonne energie
-      lifetime: 2
-      icon_name: weather_sunny
-      screen_time: 2
+      topic: awtrix_clock/notify
+      payload: '{"text": "Meer dan 1000W zonne-energie", "duration": 20, "icon":52156,
+        "textCase":2}'
   mode: single
 - id: '1609788866232'
   alias: AUT013 Garagepoort staat open zonder beweging
@@ -434,32 +392,32 @@
 - id: '1621101748225'
   alias: AUT036 TuinSchijnwerper gaat aan
   description: ''
-  trigger:
-  - platform: device
-    type: changed_states
+  triggers:
+  - type: turned_on
     device_id: ad60897a5f8a13a48700df33d49a02f6
     entity_id: a1a4dd9e2a41e3ac861add4c46b4c654
     domain: light
-  condition: []
-  action:
-  - service: notify.mobile_app_telefoongabrie
-    data:
+    trigger: device
+  conditions: []
+  actions:
+  - data:
       message: Tuinschijnwerper aan
+    action: notify.mobile_app_telefoongabrie
   mode: single
 - id: '1621101774011'
   alias: AUT037 TuinSchijnwerper gaat uit
   description: ''
-  trigger:
-  - platform: device
-    type: changed_states
+  triggers:
+  - type: turned_off
     device_id: ad60897a5f8a13a48700df33d49a02f6
     entity_id: a1a4dd9e2a41e3ac861add4c46b4c654
     domain: light
-  condition: []
-  action:
-  - service: notify.mobile_app_telefoongabrie
-    data:
+    trigger: device
+  conditions: []
+  actions:
+  - data:
       message: Tuinschijnwerper uit
+    action: notify.mobile_app_telefoongabrie
   mode: single
 - id: '1626101175510'
   alias: AUT025 Melding als Sonoff offline gaat
@@ -475,21 +433,6 @@
     data:
       message: Sonoff Bridge ging offline
       title: Sonoff Bridge
-  mode: single
-- id: '1627112926743'
-  alias: AUT026 In of uit zone De Heeg
-  trigger:
-  - platform: zone
-    entity_id: device_tracker.telefoondaan, device_tracker.telefoonbas
-    zone: zone.de_heeg
-    event: enter
-  action:
-  - service: notify.telegram
-    data_template:
-      message: "{% if (trigger.event) == \"leave\" %}\n  {{ trigger.to_state.attributes.friendly_name
-        }} heeft {{ trigger.zone.attributes.friendly_name }} verlaten. AUT026\n{%
-        else %}\n  {{ trigger.to_state.attributes.friendly_name }} komt thuis AUT026\n{%
-        endif %}\n"
   mode: single
 - id: '1627120739713'
   alias: AUT027 Violet uit zone De Heeg met Airco aan
@@ -626,19 +569,21 @@
 - id: '1631381030277'
   alias: AUT031 jaloezieën onder 20% battterij
   description: ''
-  trigger:
-  - platform: numeric_state
-    entity_id: sensor.rollerblind_0001_battery
+  triggers:
+  - entity_id:
+    - sensor.blind_left_battery
     below: '20'
-  - platform: numeric_state
-    entity_id: sensor.rollerblind_0002_battery
+    trigger: numeric_state
+  - entity_id:
+    - sensor.blind_right_battery
     below: '20'
-  condition: []
-  action:
-  - service: notify.telegram
-    data:
+    trigger: numeric_state
+  conditions: []
+  actions:
+  - data:
       message: jaloezieën onder de 10% accu
       title: jaloezieën opladen
+    action: notify.telegram
   mode: single
 - id: '1633772441628'
   alias: AUT038-1 Badkamer lamp hard aan
@@ -791,9 +736,8 @@
 - id: '1638541896008'
   alias: AUT019 Oven gereed
   description: Notificatie als de oven gereed is
-  trigger:
-  - platform: numeric_state
-    entity_id: sensor.oven_program_progress
+  triggers:
+  - entity_id: sensor.oven_program_progress
     for:
       hours: 0
       minutes: 0
@@ -801,61 +745,66 @@
       milliseconds: 0
     above: '98'
     below: '100'
-  condition: []
-  action:
-  - service: notify.telegram
-    data:
-      message: AUT019 Oven programma klaar
-  - service: notify.mobile_app_telefoongabrie
-    data:
+    trigger: numeric_state
+  conditions: []
+  actions:
+  - data:
       title: AUT019 Oven programma klaar
       message: AUT019 Oven programma klaar
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_telefoondaan
+    action: notify.mobile_app_telefoongabrie
+  - action: notify.mobile_app_pixel_8a
     data:
+      message: Oven is klaar!
+      title: Oven is klaar!
+      data:
+        tts: 0
+        priority: high
+  - data:
       title: AUT019 Oven programma klaar
       message: AUT019 Oven programma klaar
       data:
         tts: 0
         priority: high
-  - service: notify.mobile_app_telefoonbas
-    data:
-      title: AUT019 Oven programma klaar
-      message: AUT019 Oven programma klaar
-      data:
-        tts: 0
-        priority: high
-  - service: notify.lgtv
-    data:
+    action: notify.mobile_app_telefoonbas
+  - data:
       message: AUT019 Oven programma klaar
       title: AUT019 Oven programma klaar
+    action: notify.lgtv
   mode: single
 - id: '1639776256652'
   alias: AUT045-A 7u Anna Home Away
   description: Check om 7u of Gabrie thuis is en zet bij thuis zijn de CV op HOME
-  trigger:
-  - platform: time
-    at: 07:00:00
-  condition: []
-  action:
+  triggers:
+  - at: 07:00:00
+    trigger: time
+  conditions:
+  - condition: numeric_state
+    entity_id: sensor.anna_temperature
+    below: 18
+  actions:
   - choose:
     - alias: Ga naar home als Gabrie thuis is
       conditions:
       - condition: state
         entity_id: device_tracker.telefoongabrie
         state: home
+        enabled: false
+      - condition: state
+        entity_id: device_tracker.gabpixel7
+        state: home
       sequence:
-      - service: climate.set_preset_mode
-        target:
+      - target:
           device_id: 3667d1f5372390ea6b5a97ce1c603c8c
         data:
           preset_mode: home
-      - service: notify.mobile_app_telefoongabrie
-        data:
+        action: climate.set_preset_mode
+      - data:
           title: Thermostaat AUT045
           message: Thermostaat op HOME
+        action: notify.mobile_app_telefoongabrie
     - alias: Ga naar away als Gabrie niet thuis is
       conditions:
       - condition: not
@@ -864,15 +813,15 @@
           entity_id: device_tracker.telefoongabrie
           state: home
       sequence:
-      - service: climate.set_preset_mode
-        target:
+      - target:
           device_id: 3667d1f5372390ea6b5a97ce1c603c8c
         data:
           preset_mode: away
-      - service: notify.mobile_app_telefoongabrie
-        data:
+        action: climate.set_preset_mode
+      - data:
           title: Thermostaat AUT045
           message: Thermo gaat naar "away" stand.
+        action: notify.mobile_app_telefoongabrie
     default: []
   mode: single
 - id: '1641035998188'
@@ -1120,7 +1069,7 @@
       title: Woonkamer airco automatisch aan
   mode: single
 - id: '1659281927114'
-  alias: AUT054 Droger is klaar
+  alias: AUT054-A Droger is klaar
   description: Notificatie als de droger klaar is
   triggers:
   - entity_id: sensor.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_electrical_measurement
@@ -1130,7 +1079,10 @@
       minutes: 20
       seconds: 0
     trigger: numeric_state
-  conditions: []
+  conditions:
+  - condition: state
+    entity_id: input_boolean.wasdroger_aan_uit
+    state: 'on'
   actions:
   - data:
       message: De droger is klaar
@@ -1148,14 +1100,7 @@
       data:
         tts: 0
         priority: high
-    action: notify.mobile_app_telefoondaan
-  - data:
-      alarm: false
-      icon_name: dryer
-      lifetime: 2
-      text: Droger is klaar
-      screen_time: 15
-    action: esphome.ulanzi_add_screen
+    action: notify.mobile_app_pixel_8a
   - data:
       title: Droger is klaar!
       message: De droger is klaar
@@ -1163,43 +1108,16 @@
         tts: 0
         priority: high
     action: notify.mobile_app_telefoonbas
+  - action: mqtt.publish
+    data:
+      topic: awtrix_clock/notify
+      payload: '{"text": "Droger is klaar", "duration": 20, "icon":37472}'
+  - action: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.wasdroger_aan_uit
   mode: single
-- id: '1664779991828'
-  alias: AUT055 Slaapkamer licht bij wekker
-  description: ''
-  trigger:
-  - platform: template
-    value_template: '{{now().strftime("%a %h %d %H:%M %Z %Y") == (((state_attr(''sensor.telefoongabrie_next_alarm_2'',
-      ''Time in Milliseconds'') | int / 1000)) | timestamp_custom(''%a %h %d %H:%M
-      %Z %Y''))}}'
-    alias: When Gabrie's Phone Alarm goes off
-  condition:
-  - condition: state
-    entity_id: person.gabrie_van_zanten
-    state: home
-  action:
-  - data:
-      transition: 60
-      brightness: 83
-      rgb_color:
-      - 255
-      - 244
-      - 217
-    target:
-      device_id:
-      - b7125a2c255c7161289d3c3b3d86cedc
-    action: light.turn_on
-  - delay:
-      hours: 0
-      minutes: 5
-      seconds: 0
-      milliseconds: 0
-  - data: {}
-    target:
-      device_id:
-      - b7125a2c255c7161289d3c3b3d86cedc
-    action: light.turn_off
-  mode: restart
 - id: '1666213701591'
   alias: AUT067 bronwater is scanned
   description: ''
@@ -1432,21 +1350,6 @@
       message: Nog niet lang genoeg tanden gepoetst vandaag.
       title: Tandenborstel
   mode: single
-- id: '1671143588337'
-  alias: AUT064 Bas verlaat werkzone
-  description: ''
-  trigger:
-  - platform: zone
-    entity_id: device_tracker.telefoonbas
-    event: leave
-    zone: zone.workbas
-  condition: []
-  action:
-  - service: notify.mobile_app_telefoonbas
-    data:
-      title: U verlaat zone Bas Work!
-      message: Airco ??
-  mode: single
 - id: '1671144424420'
   alias: AUT008-W Airco Bas lager winter
   description: ''
@@ -1489,60 +1392,18 @@
     target:
       device_id: a5cbe79e266846ddf54c5fb4a2b7157c
   mode: single
-- id: '1671238057508'
-  alias: AUT065A Brushtime reached
-  description: ''
-  trigger:
-  - platform: numeric_state
-    entity_id: sensor.smart_series_7000_e67b_time
-    above: 10
-  condition: []
-  action:
-  - service: input_boolean.turn_on
-    data: {}
-    target:
-      entity_id: input_boolean.brushenough
-  mode: single
-- id: '1671238406936'
-  alias: AUT065B Brushtime reset
-  description: ''
-  trigger:
-  - platform: time
-    at: 01:00:00
-  condition: []
-  action:
-  - service: input_boolean.turn_off
-    data: {}
-    target:
-      entity_id:
-      - input_boolean.brushenough
-  mode: single
-- id: '1671238513639'
-  alias: AUT065C Brushtime check
-  description: ''
-  trigger:
-  - platform: time
-    at: 09:30:00
-  condition:
-  - condition: state
-    entity_id: input_boolean.brushenough
-    state: 'off'
-  action:
-  - service: notify.mobile_app_telefoongabrie
-    data:
-      message: Nog geen tanden gepoetst
-      title: Nog geen tanden gepoetst
-  mode: single
 - id: '1672844773503'
   alias: AUT045-C Anna temp reached
   description: Als de ANNA op de ingesteld temp uitgekomen is, dan ANNA uit en Airco
     aan
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - climate.anna
     attribute: current_temperature
-  condition:
+    trigger: state
+    from: '19'
+    to: '19.1'
+  conditions:
   - condition: state
     entity_id: climate.anna
     attribute: preset_mode
@@ -1550,36 +1411,37 @@
   - condition: template
     value_template: '{{ state_attr("climate.anna","current_temperature") |int >= state_attr("climate.anna","temperature")
       | int}}'
-  action:
-  - service: notify.telegram
-    data:
+    enabled: false
+  actions:
+  - data:
       message: Overschakelen van Anna op Airco, ingestelde temperatuur van {{ state_attr("climate.anna","temperature")
         }} bereikt. Gemeten temperatuur is {{state_attr("climate.anna","current_temperature")}}
-  - service: notify.mobile_app_telefoongabrie
-    data:
+    action: notify.telegram
+  - data:
       title: ANNA naar Airco over
       message: Overschakelen van Anna op Airco, ingestelde temperatuur van {{ state_attr("climate.anna","temperature")
         }} bereikt. Gemeten temperatuur is {{state_attr("climate.anna","current_temperature")}}
-  - service: climate.turn_on
-    data: {}
+    action: notify.mobile_app_telefoongabrie
+  - data: {}
     target:
       device_id: fac9b00a382db56093a1982fdba8c5d3
-  - service: climate.set_temperature
-    data:
+    action: climate.turn_on
+  - data:
       temperature: '{{ state_attr("climate.anna","temperature") |int +4 }}'
       hvac_mode: heat_cool
     target:
       device_id: fac9b00a382db56093a1982fdba8c5d3
-  - service: climate.set_fan_mode
-    data:
+    action: climate.set_temperature
+  - data:
       fan_mode: MID
     target:
       device_id: fac9b00a382db56093a1982fdba8c5d3
-  - service: climate.set_preset_mode
-    data:
+    action: climate.set_fan_mode
+  - data:
       preset_mode: away
     target:
       device_id: 3667d1f5372390ea6b5a97ce1c603c8c
+    action: climate.set_preset_mode
   mode: single
 - id: '1673337482297'
   alias: TEST Mobile Notifications
@@ -1607,26 +1469,26 @@
 - id: '1675865973206'
   alias: AUT066 aanrecht motion
   description: ''
-  trigger:
+  triggers:
   - type: motion
-    platform: device
     device_id: f489d551955cd9d416c1c7edfd4fa6aa
     entity_id: binary_sensor.keukensensor_occupancy
     domain: binary_sensor
-  condition:
+    trigger: device
+  conditions:
   - type: is_illuminance
     condition: device
     device_id: f489d551955cd9d416c1c7edfd4fa6aa
-    entity_id: sensor.keukensensor_illuminance_lux
+    entity_id: sensor.keukensensor_illuminance
     domain: sensor
     below: 100
-  action:
-  - service: light.turn_on
-    metadata: {}
+  actions:
+  - metadata: {}
     data:
       brightness: 255
     target:
       entity_id: light.aanrecht
+    action: light.turn_on
   - type: turn_on
     device_id: 8dd49e0e268a9e0bc723401332d9a6d0
     entity_id: light.tz3210_agjx0pxt_ts0501b_light
@@ -1639,7 +1501,6 @@
     enabled: false
   - wait_for_trigger:
     - type: no_motion
-      platform: device
       device_id: f489d551955cd9d416c1c7edfd4fa6aa
       entity_id: binary_sensor.keukensensor_occupancy
       domain: binary_sensor
@@ -1647,6 +1508,7 @@
         hours: 0
         minutes: 2
         seconds: 0
+      trigger: device
   - type: turn_off
     device_id: 8dd49e0e268a9e0bc723401332d9a6d0
     entity_id: light.tz3210_agjx0pxt_ts0501b_light
@@ -1657,11 +1519,11 @@
     entity_id: light.aanrecht_rechts_light_2
     domain: light
     enabled: false
-  - service: light.turn_off
-    metadata: {}
+  - metadata: {}
     data: {}
     target:
       entity_id: light.aanrecht
+    action: light.turn_off
   mode: single
 - id: '1676042684370'
   alias: Wasdroger Starten
@@ -1688,81 +1550,63 @@
 - id: '1680336115875'
   alias: AUT068 Ulanzi klok Weather
   description: weather with icon per condition
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - sensor.openweathermap_condition
-  action:
-  - data:
-      icon_name: weather_*
-    action: esphome.ulanzi_del_screen
-  - data:
-      icon_name: weather_{{ trigger.to_state.state }}
-      text: '{{ trigger.to_state.state }} {{ states(''sensor.openweathermap_temperature'')
-        |default(0) | float | round(0) }}°C'
-    action: esphome.ulanzi_screen
+    trigger: state
+  actions:
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      topic: awtrix_clock/notify
+      payload: "{\"text\": \"{{ trigger.to_state.state }} {{ states('sensor.openweathermap_temperature')\n
+        \   |default(0) | float | round(0) }}°C\", \"duration\": 20, \"icon\":52156}"
 - id: '1680340852705'
   alias: AUT069 Ulanzi klok Afvalwijzer GFT
   description: AUT069 Ulanzi klok Afvalwijzer GFT
-  trigger:
-  - platform: time
-    at:
+  triggers:
+  - at:
     - 07:00:00
     - 07:30:00
     - 08:00:00
     - 08:30:00
     - 09:00:00
     - '11:00:00'
-  condition:
+    trigger: time
+  conditions:
   - condition: state
     entity_id: sensor.afvalinfo_trash_type_today
     state: gft
-  action:
-  - service: esphome.ulanzi_del_screen
+  actions:
+  - action: mqtt.publish
     data:
-      icon_name: wastegreen
-  - service: esphome.ulanzi_screen
-    data:
-      icon_name: wastegreen
-      text: Vandaag Groen container
+      topic: awtrix_clock/notify
+      payload: '{"text": "Vandaag Groen container", "duration": 20, "icon":57303,
+        "scrollSpeed": 50}'
   mode: single
 - id: '1680341405285'
   alias: AUT070 Ulanzi klok Afvalwijzer Restafval
   description: AUT070 Ulanzi klok Afvalwijzer Restafval
-  trigger:
-  - platform: time
-    at:
+  triggers:
+  - at:
     - 07:00:00
     - 07:30:00
     - 08:00:00
     - 08:30:00
     - 09:00:00
     - '11:00:00'
-  condition:
+    trigger: time
+  conditions:
   - condition: state
     entity_id: sensor.afvalinfo_trash_type_today
     state: restafval
-  action:
-  - service: esphome.ulanzi_del_screen
+  actions:
+  - action: mqtt.publish
+    metadata: {}
     data:
-      icon_name: wasteblue
-  - service: esphome.ulanzi_screen
-    data:
-      icon_name: wasteblue
-      text: Vandaag restafval
-  mode: single
-- id: '1683321025671'
-  alias: AUT071 BMW Update
-  description: ''
-  trigger:
-  - platform: time_pattern
-    minutes: '30'
-  condition: []
-  action:
-  - service: homeassistant.update_entity
-    data: {}
-    target:
-      entity_id: sensor.218i_remaining_range_fuel
+      payload: '{"text": "Vandaag restafval", "duration": 20, "icon":63584, "scrollSpeed":
+        50}'
+      topic: awtrix_clock/notify
   mode: single
 - id: '1684098132427'
   alias: Test mobile yes/no
@@ -1904,85 +1748,72 @@
         target:
           entity_id: climate.airco_bas
   mode: single
-- id: '1689572136834'
-  alias: AUT073 Vaatwasser starten
-  description: ''
-  trigger:
-  - platform: time
-    at: 02:00:00
-  condition: []
-  action:
-  - service: switch.toggle
-    data: {}
-    target:
-      entity_id:
-      - switch.dishwasher_program_quick65
-  - service: notify.mobile_app_telefoongabrie
-    data:
-      message: Afwasmachine automatisch gestart
-      title: Afwasmachine aan
-  - service: automation.turn_off
-    data:
-      stop_actions: false
-    target:
-      entity_id:
-      - automation.aut063_afwasmachine_starten
-  - if:
-    - type: is_open
-      condition: device
-      device_id: d6e3e6cbfcfba0e951e1b02a850103fd
-      entity_id: 78f4821b9d95ab894d73aaa3b612e619
-      domain: binary_sensor
-    then:
-    - service: notify.allenotificaties
-      data:
-        message: Afwasmachine kan niet starten omdat de klep nog open staat! Svp klep
-          sluiten.
-  mode: single
 - id: '1689620301055'
   alias: AUT074 Camera snapshot
   description: Stuur telefoon notificatie bij camera snapshot
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - binary_sensor.relais001_button
     to: 'on'
-  condition: []
-  action:
-  - service: camera.snapshot
-    data:
-      filename: /config/www/tmp/snapshot-doorbell.jpg
+    trigger: state
+    enabled: false
+  - type: turned_on
+    device_id: 3fefdc742a4117f83dbb2f935e5e9ec8
+    entity_id: 2f2f00b683d04f8c9cd03eaff704e15a
+    domain: binary_sensor
+    trigger: device
+  conditions: []
+  actions:
+  - data:
+      filename: /config/www/tmp/snapshot-garage.jpg
     target:
       entity_id: camera.reo01_snapshots_main
-  - service: notify.AlleNotificaties
-    data:
+    action: camera.snapshot
+  - data:
+      filename: /config/www/tmp/snapshot-frontdoor.jpg
+    target:
+      entity_id:
+      - camera.reolinkdoorbell_fluent
+    action: camera.snapshot
+  - data:
       message: Voordeur camera
       title: Voordeur
       data:
         image: https://tm9yn346vuh18k59ti8annjka1bjkqbj.ui.nabu.casa/local/tmp/snapshot-doorbell.jpg
-  - service: notify.homegrouptelegram
-    data:
-      message: Er is iemand aan de voordeur
+    action: notify.AlleNotificaties
+  - data:
+      message: Er is iemand aan de voordeur - garage cam
       data:
         photo:
-        - file: /config/www/tmp/snapshot-doorbell.jpg
-  - service: notify.telegram
-    data:
-      message: Er is iemand aan de voordeur
+        - file: /config/www/tmp/snapshot-garage.jpg
+      title: Er is iemand aan de voordeur - garage cam
+    action: notify.homegrouptelegram
+  - data:
+      message: Er is iemand aan de voordeur - bel cam
       data:
         photo:
-        - file: /config/www/tmp/snapshot-doorbell.jpg
+        - file: /config/www/tmp/snapshot-frontdoor.jpg
+      title: Er is iemand aan de voordeur - bel cam
+    action: notify.homegrouptelegram
+  - data:
+      message: Er is iemand aan de voordeur - beide
+      data:
+        photo:
+        - file: /config/www/tmp/snapshot-garage.jpg
+        - file: /config/www/tmp/snapshot-frontdoor.jpg
+      title: Er is iemand aan de voordeur - beide
+    action: notify.telegram
   mode: single
 - id: '1689744313161'
   alias: AUT076 Goedemorgen
   description: Tussen 6 en 9 automatisch gordijnen open
-  trigger:
-  - platform: state
-    entity_id:
+  triggers:
+  - entity_id:
     - binary_sensor.motionwoonkamer_occupancy
     to: 'on'
     from: 'off'
-  condition:
+    trigger: state
+  conditions:
   - condition: state
     entity_id: light.woonkamertotaal
     state: 'off'
@@ -1990,18 +1821,19 @@
     after: 06:00:00
     before: 09:00:00
   - condition: device
-    device_id: 2cfb950c8bdd9e29cc6e74e4d6e6b4fd
+    device_id: d3390de1ca628a6a4cf28f116537427f
     domain: device_tracker
-    entity_id: f749c261bfd41d1bd8461189c15a1745
+    entity_id: ed4413962d957c80600902be174484af
     type: is_home
-  action:
-  - service: light.turn_on
-    data: {}
+  actions:
+  - data: {}
     target:
       device_id:
       - dfd58c0a195722d15246db03cc7e5e33
-  - service: script.scr030_kerstslinger_en_kerstboom_aan_met_vaste_kleur
-    data: {}
+    action: light.turn_on
+  - data: {}
+    action: script.scr030_kerstslinger_en_kerstboom_aan_met_vaste_kleur
+    enabled: false
   mode: single
 - id: '1690050646004'
   alias: Test bedlamp
@@ -2058,89 +1890,58 @@
 - id: '1704873940298'
   alias: AUT077 Vaatwasser bij veel zon
   description: Start vaatwasser als 15min lang meer dan 1000 KWh opgevangen wordt.
-  trigger:
-  - platform: numeric_state
-    entity_id: sensor.inverter_goodwe
+  triggers:
+  - entity_id: sensor.inverter_goodwe
     above: '1000'
     for: 00:15:00
-  condition: []
-  action:
-  - service: switch.toggle
-    data: {}
-    target:
-      entity_id:
-      - switch.dishwasher_program_quick65
-  - service: notify.mobile_app_telefoongabrie
+    trigger: numeric_state
+  conditions:
+  - condition: state
+    entity_id: sensor.dishwasher_door
+    state: closed
+  actions:
+  - action: home_connect.set_program_and_options
     data:
+      device_id: d6e3e6cbfcfba0e951e1b02a850103fd
+      affects_to: selected_program
+      program: dishcare_dishwasher_program_quick_65
+  - data:
       title: Vaatwasser gestart
       message: De ZON !!! Vaatwasser gestart
       data:
         tts: 0
         priority: high
-  - service: esphome.ulanzi_del_screen
+    action: notify.mobile_app_telefoongabrie
+  - action: mqtt.publish
+    metadata: {}
     data:
-      icon_name: weather_sunny
-  - service: esphome.ulanzi_add_screen
-    data:
-      alarm: true
-      text: '>1000 W zon -> vaatwasser gestart'
-      lifetime: 2
-      icon_name: weather_sunny
-      screen_time: 2
-  - service: automation.turn_off
-    data:
+      topic: awtrix_clock/notify
+      payload: '{"text": "Vaatwasser aan > 1000 W", "duration": 20, "icon":37472,
+        "scrollSpeed": 50}'
+  - data:
       stop_actions: false
     target:
       entity_id:
       - automation.aut077_vaatwasser_bij_veel_zon
+    action: automation.turn_off
   mode: single
 - id: '1707431177031'
   alias: AUT078 Vaatwasser op tijdstip
   description: Start de vaatwasser op tijdstip via UI in te stellen
-  trigger:
-  - platform: time
-    at: input_datetime.vaatwasser_starttijd
-  condition: []
-  action:
-  - service: switch.toggle
-    data: {}
-    target:
-      entity_id: switch.dishwasher_program_quick65
-  - service: notify.mobile_app_telefoongabrie
+  triggers:
+  - at: input_datetime.vaatwasser_starttijd
+    trigger: time
+  conditions: []
+  actions:
+  - action: home_connect.set_program_and_options
     data:
+      device_id: d6e3e6cbfcfba0e951e1b02a850103fd
+      affects_to: selected_program
+      program: dishcare_dishwasher_program_quick_65
+  - data:
       message: Afwasmachine automatisch gestart via UI
       title: Afwasmachine aan
-  mode: single
-- id: '1713293987640'
-  alias: AUT079 ReoLink cast naar Hub
-  description: ''
-  trigger:
-  - platform: state
-    entity_id:
-    - binary_sensor.reo01_person
-    from: 'off'
-    to: 'on'
-  condition: []
-  action:
-  - service: script.scr033_cast_reolink_naar_nest_hub
-    metadata: {}
-    data: {}
-  - alias: Wacht op geen persoon
-    wait_for_trigger:
-    - type: turned_off
-      platform: device
-      device_id: 343f3303284261db218a4317b481d4c9
-      entity_id: c72210d6e0893821b89aa9da75615173
-      domain: binary_sensor
-      for:
-        hours: 0
-        minutes: 1
-        seconds: 0
-    timeout:
-      hours: 0
-      minutes: 10
-      seconds: 0
-      milliseconds: 0
+    action: notify.mobile_app_telefoongabrie
   mode: single
 - id: '1719478124282'
   alias: AUT045-Off Airco stoppen als temp woonkamer onder 23 gaat
@@ -2208,32 +2009,30 @@
         tts: 0
         priority: high
     action: notify.mobile_app_telefoonbas
-  - data:
+  - action: notify.mobile_app_pixel_8a
+    data:
+      message: Wasmachine is klaar!
       title: Wasmachine is klaar!
-      message: De wasmachine is klaar
       data:
         tts: 0
         priority: high
-    action: notify.mobile_app_telefoondaan
-  - data:
-      alarm: false
-      icon_name: washing_machine
-      lifetime: 2
-      text: Wasmachine is klaar
-      screen_time: 15
-    action: esphome.ulanzi_add_screen
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      topic: awtrix_clock/notify
+      payload: '{"text": "Wasmachine is klaar", "duration": 20, "icon":37472, "textCase":2}'
   mode: single
 - id: '1725316205134'
   alias: AUT080 Bedtijd starten
   description: ''
-  trigger:
-  - platform: device
-    domain: mqtt
+  triggers:
+  - domain: mqtt
     device_id: 98736e93c97a5b7c3d5ff3ced7ec0d45
     type: action
     subtype: single
-  condition: []
-  action:
+    trigger: device
+  conditions: []
+  actions:
   - action: light.turn_off
     metadata: {}
     data: {}
@@ -2267,16 +2066,20 @@
       hvac_mode: 'off'
     target:
       device_id: fac9b00a382db56093a1982fdba8c5d3
-  - device_id: cd131e52c35e0c8e68e4d81337749c3f
-    domain: cover
-    entity_id: cover.rollerblind_0001
-    type: set_position
-    position: 1
-  - device_id: 66a3fee2bfc323a1bd5ce11f04e06d0b
-    domain: cover
-    entity_id: cover.rollerblind_0002
-    type: set_position
-    position: 1
+  - action: cover.close_cover
+    metadata: {}
+    data: {}
+    target:
+      device_id:
+      - e7680b4e4246c3ff3c6e254e1b9ecd9d
+      - 2676c14df386a6dfbc95c12a49ba136e
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.kerst_boom
+      - light.kerst_slinger
   - if:
     - condition: or
       conditions:
@@ -2348,35 +2151,30 @@
       message: De koffie wordt koud!
       entity_id: media_player.keuken
     action: tts.cloud_say
-  - data:
-      alarm: true
-      icon_name: coffee_hot
-      lifetime: 2
-      text: Koffie!!!
-      screen_time: 10
-    action: esphome.ulanzi_add_screen
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      topic: awtrix_clock/notify
+      payload: '{"text": "Koffie!!!", "duration": 20, "icon":19700, "textCase":2}'
   mode: single
 - id: '1726083859701'
   alias: AUT081 voordeurlamp
   description: ''
-  trigger:
+  triggers:
   - type: turned_on
-    platform: device
     device_id: 343f3303284261db218a4317b481d4c9
     entity_id: c72210d6e0893821b89aa9da75615173
     domain: binary_sensor
-  - platform: state
-    entity_id:
+    trigger: device
+  - entity_id:
     - binary_sensor.relais001_button
     to: 'on'
-  condition:
-  - type: is_illuminance
-    condition: device
-    device_id: f489d551955cd9d416c1c7edfd4fa6aa
-    entity_id: sensor.keukensensor_illuminance_lux
-    domain: sensor
+    trigger: state
+  conditions:
+  - condition: numeric_state
+    entity_id: sensor.keukensensor_illuminance
     below: 100
-  action:
+  actions:
   - type: turn_on
     device_id: 97497fba42099be65878acee4699431a
     entity_id: 5cecd94cd847c42fb38102f13d00428d
@@ -2391,4 +2189,549 @@
     device_id: 97497fba42099be65878acee4699431a
     entity_id: 5cecd94cd847c42fb38102f13d00428d
     domain: light
+  mode: single
+- id: '1735333069299'
+  alias: AUT082 AWTRIX Meteorologisk institutt (Met.no)
+  description: AUT082 Weather forecast to Ulanzi
+  triggers:
+  - minutes: /5
+    trigger: time_pattern
+  conditions: []
+  actions:
+  - data:
+      qos: '0'
+      retain: false
+      topic: awtrix_565c3c/custom/weather1
+      payload: "{ \"text\": \"{{ state_attr('weather.huis','temperature') }}{{ state_attr('weather.huis','temperature_unit')
+        }}\",\n \"icon\": \"{{ states('sensor.name_icon_weather') }}\",\n \"repeat\":
+        2,\n \"duration\": 5\n }"
+    action: mqtt.publish
+  - data:
+      qos: '0'
+      retain: false
+      topic: awtrix_565c3c/custom/weather2
+      payload: '{ "text": "{{ state_attr(''weather.huis'', ''humidity'') }}%", "icon":
+        "2423", "repeat": 2,           "duration": 5         }'
+    action: mqtt.publish
+  - data:
+      qos: '0'
+      retain: false
+      topic: awtrix_565c3c/custom/weather3
+      payload: '{  "text": "{{ state_attr(''weather.huis'', ''pressure'') | round(0)}}{{
+        state_attr(''weather.huis'', ''pressure_unit'')[:3] }}",  "textCase": 2,  "icon":
+        "39912",  "repeat": 2,  "duration": 5  }'
+    action: mqtt.publish
+  - data:
+      qos: '0'
+      retain: false
+      topic: awtrix_565c3c/custom/weather4
+      payload: '{  "text": "{{ state_attr(''weather.huis'', ''wind_speed'') |round(0)
+        }}{{ state_attr(''weather.huis'', ''wind_speed_unit'')}}", "textCase": 2,  "icon":
+        "55032",  "repeat": 2,  "duration": 5 }'
+    action: mqtt.publish
+  mode: single
+- id: '1735336809460'
+  alias: AUT083 Set display time
+  description: AUT083 Set display time
+  triggers: []
+  conditions: []
+  actions:
+  - action: mqtt.publish
+    data:
+      topic: awtrix_clock/settings
+      payload: '{ "WD": false, "TIME_COL": [255,0,0], "TMODE": 0, "BRI": 25, "ABRI":
+        false, "ATRANS": false }'
+  mode: single
+- id: '1735400348995'
+  alias: AUT054-B Toggle Wasdroger is Aan
+  description: Deze zorgt voor het zetten van de boolean Wasdroger AAN
+  triggers:
+  - trigger: numeric_state
+    entity_id:
+    - sensor.wasdroger_tz3000_u5u4cakc_ts011f_1cce85fe_electrical_measurement
+    above: 100
+  conditions: []
+  actions:
+  - action: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.wasdroger_aan_uit
+  mode: single
+- id: '1738683791860'
+  alias: AUT084 Deurbel offline
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.relais001_button
+    to: unavailable
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  conditions: []
+  actions:
+  - action: notify.telegram
+    metadata: {}
+    data:
+      message: Deurbel lijkt offline te zijn
+      title: Deurbel offline
+  mode: single
+- id: '1739228038969'
+  alias: AUT085 Get Energy Prices
+  description: ''
+  triggers:
+  - trigger: time_pattern
+    hours: '*'
+  conditions: []
+  actions:
+  - action: energyzero.get_energy_prices
+    metadata: {}
+    data:
+      incl_vat: true
+      config_entry: 01JCH2X9C2FGWXM0CMGD7JA3A9
+    response_variable: response
+  mode: single
+- id: '1739311594889'
+  alias: AUT087 Beschikbaarheid laadpalen Gerst
+  description: ''
+  triggers:
+  - entity_id: sensor.aimeethuis_gabrie_van_zanten_distance
+    below: 2500
+    trigger: numeric_state
+  conditions:
+  - condition: state
+    entity_id: sensor.openlinemaastricht_gabrie_van_zanten_direction_of_travel
+    state: towards
+  actions:
+  - variables:
+      laadpalen_favoriet:
+      - sensor.vattenfall_rogge_13_sint_oedenrode
+      laadpalen_extra:
+      - sensor.vattenfall_rogge_13_sint_oedenrode_2
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ laadpalen_favoriet | select(''is_state'', ''Available'')
+          | list | length > 0 }}
+
+          '
+      sequence:
+      - variables:
+          vrije_palen: '{{ laadpalen_favoriet| select(''is_state'', ''Available'')
+            | list }}
+
+            '
+      - data:
+          title: Laadpaal Gerst beschikbaar
+          message: Er is een laadpaal op Gerst beschikbaar
+          data:
+            car_ui: true
+            importance: high
+        action: notify.mobile_app_telefoongabrie
+    - conditions:
+      - condition: template
+        value_template: '{{ laadpalen_extra | select(''is_state'', ''Available'')
+          | list | length > 0 }}
+
+          '
+      sequence:
+      - variables:
+          vrije_palen: '{{ laadpalen_extra | select(''is_state'', ''Available'') |
+            list }}
+
+            '
+      - data:
+          title: Voorkeursplekken Gerst bezet
+          message: 'beschikbare alternatieven:
+
+            {% for laadpaal in vrije_palen %} {{ states[laadpaal].name }}{% if not
+            loop.last %}\n{% endif %} {% endfor %}
+
+            '
+          data:
+            car_ui: true
+            importance: high
+        action: notify.mobile_app_telefoongabrie
+    - conditions:
+      - condition: template
+        value_template: '{{ laadpalen_favoriet | select(''is_state'', ''Available'')
+          | list | length == 0 and laadpalen_extra | select(''is_state'', ''Available'')
+          | list | length == 0 }}
+
+          '
+      sequence:
+      - data:
+          title: Geen laadplekken Gerst beschikbaar
+          message: 'Er zijn momenteel nergens vrije laadplekken beschikbaar.
+
+            '
+          data:
+            car_ui: true
+            importance: high
+        action: notify.mobile_app_telefoongabrie
+- id: '1739313216915'
+  alias: AUT088 Beschikbaarheid laadpalen kantoor Maastricht
+  description: ''
+  triggers:
+  - entity_id: sensor.openlinemaastricht_gabrie_van_zanten_distance
+    below: 1000
+    trigger: numeric_state
+  conditions:
+  - condition: state
+    entity_id: sensor.openlinemaastricht_gabrie_van_zanten_direction_of_travel
+    state: towards
+  actions:
+  - variables:
+      laadpalen_favoriet:
+      - sensor.avia_netherlands_amerikalaan_80_beek
+      - sensor.avia_netherlands_amerikalaan_80_beek_2
+      laadpalen_extra:
+      - sensor.avia_netherlands_amerikalaan_80_beek_3
+      - sensor.avia_netherlands_amerikalaan_80_beek_4
+      - sensor.avia_netherlands_amerikalaan_80_beek_5
+      - sensor.avia_netherlands_amerikalaan_80_beek_6
+      - sensor.avia_netherlands_amerikalaan_80_beek_7
+      - sensor.avia_netherlands_amerikalaan_80_beek_8
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ laadpalen_favoriet | select(''is_state'', ''Available'')
+          | list | length > 0 }}
+
+          '
+      sequence:
+      - variables:
+          vrije_palen: '{{ laadpalen_favoriet| select(''is_state'', ''Available'')
+            | list }}
+
+            '
+      - data:
+          title: OL Laadpaal Kantoor MAA beschikbaar
+          message: Er is een Open Line Laadpaal Kantoor Maastricht beschikbaar
+          data:
+            car_ui: true
+            importance: high
+        action: notify.mobile_app_telefoongabrie
+    - conditions:
+      - condition: template
+        value_template: '{{ laadpalen_extra | select(''is_state'', ''Available'')
+          | list | length > 0 }}
+
+          '
+      sequence:
+      - variables:
+          vrije_palen: '{{ laadpalen_extra | select(''is_state'', ''Available'') |
+            list }}
+
+            '
+      - data:
+          title: Bezet OL Laadpaal Kantoor MAA
+          message: 'beschikbare alternatieven:
+
+            {% for laadpaal in vrije_palen %} {{ states[laadpaal].name }}{% if not
+            loop.last %}\n{% endif %} {% endfor %}
+
+            '
+          data:
+            car_ui: true
+            importance: high
+        action: notify.mobile_app_telefoongabrie
+    - conditions:
+      - condition: template
+        value_template: '{{ laadpalen_favoriet | select(''is_state'', ''Available'')
+          | list | length == 0 and laadpalen_extra | select(''is_state'', ''Available'')
+          | list | length == 0 }}
+
+          '
+      sequence:
+      - data:
+          title: Bezet Geen Laadpalen Kantoor MAA beschikbaar
+          message: 'Er zijn momenteel geen vrije laadplekken.
+
+            '
+          data:
+            car_ui: true
+            importance: high
+        action: notify.mobile_app_telefoongabrie
+  mode: single
+- id: '1739315063067'
+  alias: AUT089 - Parkeerplaatsmelding Maastricht
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.avia_netherlands_amerikalaan_80_beek
+    to: Available
+    from: Occupied
+  - trigger: state
+    entity_id:
+    - sensor.avia_netherlands_amerikalaan_80_beek_2
+    to: Available
+    from: Occupied
+  - trigger: state
+    entity_id:
+    - sensor.avia_netherlands_amerikalaan_80_beek_3
+    to: Available
+    from: Occupied
+  - trigger: state
+    entity_id:
+    - sensor.avia_netherlands_amerikalaan_80_beek_4
+    to: Available
+    from: Occupied
+  conditions:
+  - condition: state
+    entity_id: input_boolean.parkeerplaatsmelding_maa
+    state: 'on'
+  actions:
+  - action: notify.mobile_app_telefoongabrie
+    metadata: {}
+    data:
+      title: Parkeerplaats Maastricht is vrij!
+      message: Je kunt gaan laden
+  - action: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.parkeerplaatsmelding_maa
+  mode: single
+- id: '1739315994778'
+  alias: AUT090 Parkeerplaats Gerst is vrij
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.vattenfall_rogge_13_sint_oedenrode
+    to: Available
+    from: Occupied
+  - trigger: state
+    entity_id:
+    - sensor.vattenfall_rogge_13_sint_oedenrode_2
+    to: Available
+    from: Occupied
+  conditions:
+  - condition: state
+    entity_id: input_boolean.parkeerplaatsmelding_gerst
+    state: 'on'
+  actions:
+  - action: notify.mobile_app_telefoongabrie
+    metadata: {}
+    data:
+      title: Parkeerplaats Gerst is vrij!
+      message: Je kunt gaan laden
+  - action: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.parkeerplaatsmelding_gerst
+  mode: single
+- id: '1739317204750'
+  alias: AUT091 Beschikbaarheid laadpalen Kantoor Eindhoven
+  description: ''
+  triggers:
+  - entity_id: sensor.openlineeindhoven_gabrie_van_zanten_distance
+    below: 1000
+    trigger: numeric_state
+  conditions:
+  - condition: state
+    entity_id: sensor.openlineeindhoven_gabrie_van_zanten_direction_of_travel
+    state: towards
+  actions:
+  - variables:
+      laadpalen_favoriet:
+      - sensor.ehv_eneco_hurksestraat_45_eindhoven
+      - sensor.ehv_eneco_hurksestraat_45_eindhoven_2
+      laadpalen_extra:
+      - sensor.ehv_eneco_hurksestraat_45_eindhoven_3
+      - sensor.ehv_eneco_hurksestraat_45_eindhoven_4
+      - sensor.ehv_eneco_hurksestraat_45_eindhoven_5
+      - sensor.ehv_eneco_hurksestraat_45_eindhoven_6
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ laadpalen_favoriet | select(''is_state'', ''Available'')
+          | list | length > 0 }}
+
+          '
+      sequence:
+      - variables:
+          vrije_palen: '{{ laadpalen_favoriet| select(''is_state'', ''Available'')
+            | list }}
+
+            '
+      - data:
+          title: OL Laadpaal Kantoor EHV beschikbaar
+          message: Er is een Open Line Laadpaal Kantoor Eindhoven beschikbaar
+          data:
+            car_ui: true
+            importance: high
+        action: notify.mobile_app_telefoongabrie
+    - conditions:
+      - condition: template
+        value_template: '{{ laadpalen_extra | select(''is_state'', ''Available'')
+          | list | length > 0 }}
+
+          '
+      sequence:
+      - variables:
+          vrije_palen: '{{ laadpalen_extra | select(''is_state'', ''Available'') |
+            list }}
+
+            '
+      - data:
+          title: Bezet OL Laadpaal Kantoor EHV
+          message: 'beschikbare alternatieven:
+
+            {% for laadpaal in vrije_palen %} {{ states[laadpaal].name }}{% if not
+            loop.last %}\n{% endif %} {% endfor %}
+
+            '
+          data:
+            car_ui: true
+            importance: high
+        action: notify.mobile_app_telefoongabrie
+    - conditions:
+      - condition: template
+        value_template: '{{ laadpalen_favoriet | select(''is_state'', ''Available'')
+          | list | length == 0 and laadpalen_extra | select(''is_state'', ''Available'')
+          | list | length == 0 }}
+
+          '
+      sequence:
+      - data:
+          title: Bezet Geen Laadpalen Kantoor EHV beschikbaar
+          message: 'Er zijn momenteel geen vrije laadplekken.
+
+            '
+          data:
+            car_ui: true
+            importance: high
+        action: notify.mobile_app_telefoongabrie
+  mode: single
+- id: '1739317395476'
+  alias: AUT092 Parkeerplaatsmedling kantoor EHV
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.ehv_eneco_hurksestraat_45_eindhoven
+    to: Available
+    from: Occupied
+  - trigger: state
+    entity_id:
+    - sensor.ehv_eneco_hurksestraat_45_eindhoven_2
+    to: Available
+    from: Occupied
+  - trigger: state
+    entity_id:
+    - sensor.ehv_eneco_hurksestraat_45_eindhoven_3
+    to: Available
+    from: Occupied
+  - trigger: state
+    entity_id:
+    - sensor.ehv_eneco_hurksestraat_45_eindhoven_4
+    to: Available
+    from: Occupied
+  - trigger: state
+    entity_id:
+    - sensor.ehv_eneco_hurksestraat_45_eindhoven_5
+    to: Available
+    from: Occupied
+  - trigger: state
+    entity_id:
+    - sensor.ehv_eneco_hurksestraat_45_eindhoven_6
+    to: Available
+    from: Occupied
+  conditions:
+  - condition: state
+    entity_id: input_boolean.parkeerplaatsmelding_ehv
+    state: 'on'
+  actions:
+  - action: notify.mobile_app_telefoongabrie
+    metadata: {}
+    data:
+      title: Parkeerplaats Maastricht is vrij!
+      message: Je kunt gaan laden
+  - action: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.parkeerplaatsmelding_ehv
+  mode: single
+- id: '1743087306370'
+  alias: AUT093 Waterbakje
+  description: ''
+  triggers:
+  - type: occupied
+    device_id: 6382133d0866d29218c27ccfe7a721cb
+    entity_id: c003a01844caabed7b21a7cb8fb82c91
+    domain: binary_sensor
+    trigger: device
+  conditions: []
+  actions:
+  - type: turn_on
+    device_id: 16fa8d2922e1769f3cbf8450a204947a
+    entity_id: 302d2f3b1a7ea4c84b24b7ca27525e15
+    domain: switch
+  - delay:
+      hours: 0
+      minutes: 3
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: 16fa8d2922e1769f3cbf8450a204947a
+    entity_id: 302d2f3b1a7ea4c84b24b7ca27525e15
+    domain: switch
+  mode: single
+- id: '1748363459628'
+  alias: AUT094 Authorize Charging I4
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - sensor.zag030592_charger_mode
+    from: Disconnected
+    to: Waiting
+    for:
+      hours: 0
+      minutes: 2
+      seconds: 0
+  conditions:
+  - condition: state
+    entity_id: device_tracker.i4_edrive35
+    state: home
+    enabled: false
+  actions:
+  - device_id: abacb9013ca8c00e0884c0d583cd7dfe
+    domain: button
+    entity_id: b75e74568c610222a5af715e46f19ffa
+    type: press
+  mode: single
+- id: '1750919099636'
+  alias: AUT095 Zaptec Portal
+  description: ''
+  triggers:
+  - trigger: event
+    event_type: feedreader
+  conditions: []
+  actions:
+  - action: notify.mobile_app_telefoongabrie
+    metadata: {}
+    data:
+      message: Zaptec RSS Status Update, zie https://zaptec.statuspage.io/?utm_source=embed#
+      title: Zaptec RSS Status Update
+  mode: single
+- id: '1756927691518'
+  alias: AUTO95 Update BMW integratie
+  description: ''
+  triggers:
+  - trigger: time_pattern
+    minutes: /30
+  conditions: []
+  actions:
+  - action: homeassistant.update_entity
+    data:
+      entity_id:
+      - device_tracker.i4_edrive35
   mode: single
